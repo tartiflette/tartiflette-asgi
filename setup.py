@@ -16,8 +16,9 @@ from setuptools import find_packages, setup
 
 DEPENDENCIES = ["starlette>=0.12.0.b3, <0.13"]
 DEV_DEPENDENCIES = [
-    "uvicorn>=0.7, <0.8",
     "tartiflette",
+    "uvicorn>=0.7, <0.8",
+    "requests",
     "pytest",
     "black",
     "pylint",
