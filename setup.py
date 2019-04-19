@@ -30,7 +30,7 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 
 def get_version():
-    version_file = os.path.join(CURDIR, "tartiflette_asgi", "version.py")
+    version_file = os.path.join(CURDIR, "tartiflette_starlette", "version.py")
     _version_re = re.compile(r"__version__\s+=\s+(?P<version>.*)")
     with open(version_file, "r", encoding="utf8") as f:
         match = _version_re.search(f.read())
@@ -39,11 +39,11 @@ def get_version():
 
 
 setup(
-    name="tartiflette-asgi",
+    name="tartiflette-starlette",
     version=get_version(),
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
-    description="ASGI adapter for Tartiflette",
+    description="Starlette ASGI adapter for Tartiflette",
     long_description=README,
     long_description_content_type="text/markdown",
     url="",

@@ -1,7 +1,9 @@
-# tartiflette-asgi
+# tartiflette-starlette
 
-ASGI adapter for [Tartiflette]. Requires Python 3.6+.
+[ASGI] adapter for [Tartiflette] powered by [Starlette]. Requires Python 3.6+.
 
+[asgi]: https://asgi.readthedocs.io/
+[starlette]: https://www.starlette.io
 [tartiflette]: https://tartiflette.io
 
 ## Installation
@@ -9,27 +11,25 @@ ASGI adapter for [Tartiflette]. Requires Python 3.6+.
 Coming soon!
 
 <!--
-Assuming you have [Tartiflette installed](https://tartiflette.io/docs/tutorial/install-tartiflette), you can install `tartiflette-asgi` from PyPI:
+Assuming you have [Tartiflette installed](https://tartiflette.io/docs/tutorial/install-tartiflette), you can install `tartiflette-starlette` from PyPI:
 
 ```bash
-pip install tartiflette-asgi
+pip install tartiflette-starlette
 ```
 -->
 
 ## Usage
 
-This package provides `TartifletteApp`, an ASGI3-compliant application. You can use it with any ASGI web framework, such as Starlette, Bocadillo or FastAPI.
+This package provides `TartifletteApp`, an ASGI3-compliant application. Although it uses Starlette for request handling, **you can use it with any ASGI web framework**.
 
-For example, here’s how to use it with [Starlette], which comes installed with `tartiflette-asgi`:
-
-[starlette]: https://www.starlette.io
+For the sake of example, here's how to mount an `TartifletteApp` onto a Starlette application:
 
 ```python
 # main.py
 from starlette.applications import Starlette
 from tartiflette import Resolver
 
-from tartiflette_asgi import TartifletteApp
+from tartiflette_starlette import TartifletteApp
 
 
 @Resolver("Query.hello")
@@ -48,7 +48,7 @@ app = Starlette()
 app.add_route("/graphql", TartifletteApp(sdl=sdl))
 ```
 
-Serve it using an ASGI web server such as [uvicorn]:
+You can serve it using any ASGI web server — let's use [uvicorn]:
 
 [uvicorn]: https://www.uvicorn.org
 
@@ -94,7 +94,7 @@ print(r.json())
 
 - Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) from your browser ✨
 
-![](https://github.com/florimondmanca/tartiflette-asgi/blob/master/img/graphiql.png)
+![](https://github.com/florimondmanca/tartiflette-starlette/blob/master/img/graphiql.png)
 
 It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
 

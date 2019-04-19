@@ -1,5 +1,5 @@
-import tartiflette_asgi
+import tartiflette_starlette
 
 
 def test_project():
-    assert tartiflette_asgi is not None
+    assert tartiflette_starlette is not None
