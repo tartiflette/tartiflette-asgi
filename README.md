@@ -91,9 +91,11 @@ print(r.json())
 
 - Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) ✨:
 
+![](https://github.com/florimondmanca/tartiflette-asgi/blob/master/img/graphiql.png)
+
 ## Development
 
-Setup for development:
+Create a virtualenv and install dev dependencies:
 
 ```bash
 python -m venv venv
@@ -106,3 +108,7 @@ Run tests:
 ```bash
 pytest
 ```
+
+## License
+
+MIT

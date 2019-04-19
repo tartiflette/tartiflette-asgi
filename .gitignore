@@ -18,3 +18,4 @@ var/
 .vscode
 .pytest_cache/
 debug/
+.DS_Store
