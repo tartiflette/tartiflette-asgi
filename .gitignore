@@ -17,3 +17,4 @@ var/
 .mypy_cache/
 .vscode
 .pytest_cache/
+debug/

@@ -51,4 +51,4 @@ class TartifletteApp:
         response = await handle_graphql(
             request, engine=self.engine, graphiql=self.graphiql
         )
-        await response(receive, send)
+        await response(scope, receive, send)
