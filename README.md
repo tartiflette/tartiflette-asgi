@@ -12,7 +12,7 @@ Although it relies on Starlette for HTTP request processing, **`tartiflette-star
 
 Just like Tartiflette, `tartiflette-starlette` requires Python 3.6+.
 
-Coming soon!
+PyPI package is coming soon!
 
 <!--
 Assuming you have [Tartiflette installed](https://tartiflette.io/docs/tutorial/install-tartiflette), you can install `tartiflette-starlette` from PyPI:
@@ -104,11 +104,18 @@ It's just Tartiflette from there! Learn more by reading the [Tartiflette documen
 
 ## Reference
 
-Coming soon!
+Parameters for `Tartiflette` (all parameters are keyword-only):
 
-## Development
+- `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
+- `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
+- `graphiql (bool)`: whether to serve the GraphiQL when accessing the endpoint via a web browser. Defaults to `True`.
+- `schema_name (str)`: name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
-Create a virtualenv and install dev dependencies:
+## Contributing
+
+Note: this section is targeted at maintainers and contributors.
+
+After forking and cloning the repo, create a virtual environment and install development dependencies:
 
 ```bash
 python -m venv venv
@@ -116,7 +123,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Run tests:
+To run the test suite, use:
 
 ```bash
 pytest
