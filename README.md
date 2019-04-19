@@ -1,6 +1,6 @@
 # tartiflette-asgi
 
-ASGI adapter for [Tartiflette].
+ASGI adapter for [Tartiflette] and Python 3.6+.
 
 [tartiflette]: https://tartiflette.io
 
