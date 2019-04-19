@@ -6,8 +6,8 @@ from tartiflette import Engine
 from .graphql import handle_graphql
 
 
-class TartifletteApp:
-    """ASGI application to execute GraphQL queries using Tartiflette.
+class Tartiflette:
+    """ASGI3 application to execute GraphQL queries using Tartiflette.
 
     Ships with a GraphiQL client.
 
@@ -49,6 +49,6 @@ class TartifletteApp:
     ):
         request = Request(scope, receive=receive)
         response = await handle_graphql(
-            request, engine=self.engine, graphiql=self.graphiql
+            request, engine=self.engine, enable_graphiql=self.graphiql
         )
         await response(scope, receive, send)

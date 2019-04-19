@@ -1,1 +1,1 @@
-from .app import TartifletteApp
+from .app import Tartiflette

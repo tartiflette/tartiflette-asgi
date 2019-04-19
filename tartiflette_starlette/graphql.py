@@ -26,13 +26,13 @@ async def _handle_graphiql(request: Request) -> Response:
 
 
 async def handle_graphql(
-    request: Request, engine: Engine, graphiql: bool
+    request: Request, engine: Engine, enable_graphiql: bool
 ) -> Response:
     data: dict
 
     if request.method in ("GET", "HEAD"):
         if "text/html" in request.headers.get("Accept", ""):
-            if not graphiql:
+            if not enable_graphiql:
                 return PlainTextResponse(
                     "Not Found", status_code=status.HTTP_404_NOT_FOUND
                 )

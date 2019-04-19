@@ -1,12 +1,16 @@
 # tartiflette-starlette
 
-[ASGI] adapter for [Tartiflette] powered by [Starlette]. Requires Python 3.6+.
+[ASGI] adapter for the [Tartiflette] asynchronous GraphQL engine powered by [Starlette].
+
+Although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
 
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
 [tartiflette]: https://tartiflette.io
 
 ## Installation
+
+Just like Tartiflette, `tartiflette-starlette` requires Python 3.6+.
 
 Coming soon!
 
@@ -20,20 +24,20 @@ pip install tartiflette-starlette
 
 ## Usage
 
-This package provides `TartifletteApp`, an ASGI3-compliant application. Although it uses Starlette for request handling, **you can use it with any ASGI web framework**.
+The `Tartiflette` app provided by `tartiflette-starlette` is an ASGI3-compliant application.
 
-For the sake of example, here's how to mount an `TartifletteApp` onto a Starlette application:
+As an example, let's a GraphQL endpoint to a Starlette application by mounting a `Tartiflette` instance at `/graphql`:
 
 ```python
 # main.py
 from starlette.applications import Starlette
 from tartiflette import Resolver
 
-from tartiflette_starlette import TartifletteApp
+from tartiflette_starlette import Tartiflette
 
 
 @Resolver("Query.hello")
-async def resolve_hello(parent, args, ctx, info):
+async def resolve_hello(parent, args, context, info):
     name = args["name"]
     return f"Hello, {name}!"
 
@@ -45,10 +49,10 @@ sdl = """
 """
 
 app = Starlette()
-app.add_route("/graphql", TartifletteApp(sdl=sdl))
+app.add_route("/graphql", Tartiflette(sdl=sdl))
 ```
 
-You can serve it using any ASGI web server — let's use [uvicorn]:
+Serve it using any ASGI web server — let's use [uvicorn]:
 
 [uvicorn]: https://www.uvicorn.org
 
