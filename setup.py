@@ -14,8 +14,14 @@ import re
 import os
 from setuptools import find_packages, setup
 
-DEPENDENCIES = []
-DEV_DEPENDENCIES = ["uvicorn>=0.7", "tartiflette", "pytest"]
+DEPENDENCIES = ["starlette>=0.12.0.b3, <0.13"]
+DEV_DEPENDENCIES = [
+    "uvicorn>=0.7, <0.8",
+    "tartiflette",
+    "pytest",
+    "black",
+    "pylint",
+]
 EXCLUDE_FROM_PACKAGES = ["contrib", "docs", "tests*"]
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
