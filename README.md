@@ -18,9 +18,9 @@ pip install tartiflette-asgi
 
 ## Usage
 
-You can use the `TartifletteApp` ASGI application with any ASGI web framework.
+This package provides `TartifletteApp`, an ASGI3-compliant application. You can use it with any ASGI web framework, such as Starlette, Bocadillo or FastAPI.
 
-For example, you can use [Starlette], which comes installed along with `tartiflette-asgi`:
+For example, here’s how to use it with [Starlette], which comes installed with `tartiflette-asgi`:
 
 [starlette]: https://www.starlette.io
 
@@ -33,7 +33,7 @@ from tartiflette_asgi import TartifletteApp
 
 
 @Resolver("Query.hello")
-async def resolver_hello(parent, args, ctx, info):
+async def resolve_hello(parent, args, ctx, info):
     name = args["name"]
     return f"Hello, {name}!"
 
@@ -46,10 +46,9 @@ sdl = """
 
 app = Starlette()
 app.add_route("/graphql", TartifletteApp(sdl=sdl))
-
 ```
 
-Serve the app using an ASGI web server, e.g. [uvicorn]:
+Serve it using an ASGI web server such as [uvicorn]:
 
 [uvicorn]: https://www.uvicorn.org
 
@@ -57,7 +56,7 @@ Serve the app using an ASGI web server, e.g. [uvicorn]:
 uvicorn main:app
 ```
 
-You're now ready to make queries!
+You're now ready to make GraphQL queries!
 
 - From the command line using `curl`:
 
@@ -93,11 +92,15 @@ print(r.json())
 }
 ```
 
-- Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) ✨:
+- Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) from your browser ✨
 
 ![](https://github.com/florimondmanca/tartiflette-asgi/blob/master/img/graphiql.png)
 
 It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
+
+## Reference
+
+Coming soon!
 
 ## Development
 
