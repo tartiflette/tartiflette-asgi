@@ -2,7 +2,7 @@
 
 [ASGI] adapter for the [Tartiflette] asynchronous GraphQL engine powered by [Starlette].
 
-Although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
+**Note**: although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
 
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
@@ -102,9 +102,11 @@ print(r.json())
 
 It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
 
-## Reference
+## API Reference
 
-Parameters for `Tartiflette` (all parameters are keyword-only):
+### `tartiflette_starlette.Tartiflette`
+
+**Note**: all parameters are keyword-only.
 
 - `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
@@ -113,21 +115,7 @@ Parameters for `Tartiflette` (all parameters are keyword-only):
 
 ## Contributing
 
-Note: this section is targeted at maintainers and contributors.
-
-After forking and cloning the repo, create a virtual environment and install development dependencies:
-
-```bash
-python -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
-```
-
-To run the test suite, use:
-
-```bash
-pytest
-```
+Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/florimondmanca/tartiflette-starlette/blob/master/CONTRIBUTING.md).
 
 ## License
 
