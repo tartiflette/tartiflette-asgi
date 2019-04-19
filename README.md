@@ -93,6 +93,8 @@ print(r.json())
 
 ![](https://github.com/florimondmanca/tartiflette-asgi/blob/master/img/graphiql.png)
 
+It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
+
 ## Development
 
 Create a virtualenv and install dev dependencies:
