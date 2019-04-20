@@ -1,13 +1,12 @@
+import ast
 import typing
 
 
-def _format_error(err: typing.Any) -> dict:
-    formatted_error = {"type": "internal_error", "message": "Server internal"}
-
-    if isinstance(err, Exception):
-        formatted_error["message"] = str(err)
-
-    return formatted_error
+def _format_error(error: typing.Any) -> dict:
+    try:
+        return ast.literal_eval(str(error))
+    except ValueError:
+        return {"message": "Internal Server Error"}
 
 
 def format_errors(errors: typing.Sequence[typing.Any]) -> typing.List[dict]:

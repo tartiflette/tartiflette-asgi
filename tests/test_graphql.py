@@ -68,7 +68,10 @@ def test_graphql_invalid_field(client):
         "errors": [
             {
                 "locations": [{"column": 3, "line": 1}],
-                "message": 'Cannot query field "dummy" on type "Query".',
+                "message": (
+                    "field `Query.dummy` was not found in GraphQL schema."
+                ),
+                "path": ["dummy"],
             }
         ],
     }
