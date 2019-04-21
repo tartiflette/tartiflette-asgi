@@ -1,0 +1,34 @@
+language: python
+
+cache: pip
+
+dist: xenial
+
+python:
+  - "3.6"
+  - "3.7"
+
+before_install:
+  - apt-get install cmake flex bison
+  - pip install -U pip
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - pytest
+
+before_deploy:
+  # PyPI deploy fails if there are unstaged changes
+  # Reset any unstaged changes (such as updates to Pipfile or Pipfile.lock)
+  - git checkout -- .
+
+deploy:
+  provider: pypi
+  distributions: "sdist bdist_wheel"
+  username: $PYPI_USERNAME
+  password: $PYPI_PASSWORD
+  on:
+    tags: true
+    # deploy only once
+    python: "3.7"
