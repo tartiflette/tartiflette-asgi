@@ -1,8 +1,15 @@
 # tartiflette-starlette
 
-[ASGI] adapter for the [Tartiflette] asynchronous GraphQL engine powered by [Starlette].
+[![travis](https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg)](https://travis-ci.org/tartiflette/tartiflette-starlette)
+[![black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/ambv/black)
+[![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)][pypi-url]
+![license](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Note**: although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
+[pypi-url]: https://pypi.org/project/tartiflette-starlette/
+
+[Starlette]-powered [ASGI] adapter for [Tartiflette], the Python asynchronous GraphQL engine.
+
+> **Tip**: although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
 
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
@@ -24,7 +31,7 @@ pip install tartiflette-starlette
 
 ## Usage
 
-The `Tartiflette` app provided by `tartiflette-starlette` is an ASGI3-compliant application.
+The `Tartiflette` app provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted on another ASGI application.
 
 As an example, let's a GraphQL endpoint to a Starlette application by mounting a `Tartiflette` instance at `/graphql`:
 
