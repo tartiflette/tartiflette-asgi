@@ -11,6 +11,8 @@
 
 > **Tip**: although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
 
+> ⚠️ This package is still under development. Remember to pin your dependencies!
+
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
 [tartiflette]: https://tartiflette.io

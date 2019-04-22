@@ -46,14 +46,17 @@ setup(
     zip_safe=False,
     install_requires=DEPENDENCIES,
     extras_require={"dev": DEV_DEPENDENCIES},
-    test_suite="tests.test_project",
     python_requires=">=3.6",
     # license and classifier list:
     # https://pypi.org/pypi?%3Aaction=list_classifiers
-    license="License :: OSI Approved :: MIT License",
+    license="MIT",
     classifiers=[
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
+        "Development Status :: 4 - Beta",
         "Operating System :: OS Independent",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
 )
