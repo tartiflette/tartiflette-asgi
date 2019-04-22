@@ -105,7 +105,7 @@ print(r.json())
 
 - Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) from your browser ✨
 
-![](https://github.com/florimondmanca/tartiflette-starlette/blob/master/img/graphiql.png)
+![](https://github.com/tartiflette/tartiflette-starlette/blob/master/img/graphiql.png?raw=true)
 
 It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
 
@@ -128,7 +128,7 @@ It's just Tartiflette from there! Learn more by reading the [Tartiflette documen
 
 ## Contributing
 
-Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/florimondmanca/tartiflette-starlette/blob/master/CONTRIBUTING.md).
+Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/tartiflette/tartiflette-starlette/tree/master/CONTRIBUTING.md).
 
 ## License
 
