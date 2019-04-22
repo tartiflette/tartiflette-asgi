@@ -113,12 +113,18 @@ It's just Tartiflette from there! Learn more by reading the [Tartiflette documen
 
 ### `tartiflette_starlette.Tartiflette`
 
+#### Parameters
+
 **Note**: all parameters are keyword-only.
 
 - `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
 - `graphiql (bool)`: whether to serve the GraphiQL when accessing the endpoint via a web browser. Defaults to `True`.
 - `schema_name (str)`: name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
+
+#### Methods
+
+- `__call__(scope, receive, send)`: implementation of the ASGI3 callable interface.
 
 ## Contributing
 
