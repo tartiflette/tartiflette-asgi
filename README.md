@@ -62,7 +62,7 @@ sdl = """
     }
 """
 
-app = TartifletteApp(sdl=sdl, path="/graphql)
+app = TartifletteApp(sdl=sdl, path="/graphql")
 ```
 
 ### Serving the app
