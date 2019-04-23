@@ -1,7 +1,6 @@
 import os
 import string
 
-from starlette import status
 from starlette.background import BackgroundTasks
 from starlette.requests import Request
 from starlette.responses import (
@@ -33,9 +32,7 @@ async def handle_graphql(
     if request.method in ("GET", "HEAD"):
         if "text/html" in request.headers.get("Accept", ""):
             if not enable_graphiql:
-                return PlainTextResponse(
-                    "Not Found", status_code=status.HTTP_404_NOT_FOUND
-                )
+                return PlainTextResponse("Not Found", status_code=404)
             return await _handle_graphiql(request)
 
         data = request.query_params
@@ -52,22 +49,16 @@ async def handle_graphql(
         elif "query" in request.query_params:
             data = request.query_params
         else:
-            return PlainTextResponse(
-                "Unsupported Media Type",
-                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            )
+            return PlainTextResponse("Unsupported Media Type", status_code=415)
 
     else:
-        return PlainTextResponse(
-            "Method Not Allowed", status_code=status.HTTP_405_METHOD_NOT_ALLOWED
-        )
+        return PlainTextResponse("Method Not Allowed", status_code=405)
 
     try:
         query = data["query"]
     except KeyError:
         return PlainTextResponse(
-            "No GraphQL query found in the request",
-            status_code=status.HTTP_400_BAD_REQUEST,
+            "No GraphQL query found in the request", status_code=400
         )
 
     variables = data.get("variables")
@@ -90,9 +81,7 @@ async def handle_graphql(
     has_errors = "errors" in result
     error_data = format_errors(result["errors"]) if has_errors else None
     response_data = {"data": result["data"], "errors": error_data}
-    status_code = (
-        status.HTTP_400_BAD_REQUEST if has_errors else status.HTTP_200_OK
-    )
+    status_code = 400 if has_errors else 200
 
     return JSONResponse(
         response_data, status_code=status_code, background=background
