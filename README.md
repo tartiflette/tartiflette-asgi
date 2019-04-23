@@ -33,24 +33,26 @@ pip install tartiflette-starlette
 
 ## Usage
 
-The `Tartiflette` app provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted on another ASGI application.
+The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted on another ASGI application.
 
-As an example, let's a GraphQL endpoint to a Starlette application by mounting a `Tartiflette` instance at `/graphql`:
+The following example adds a `TartifletteApp` GraphQL endpoint to a Starlette application at `/graphql`:
 
 ```python
 # main.py
 from starlette.applications import Starlette
 from tartiflette import Resolver
 
-from tartiflette_starlette import Tartiflette
+from tartiflette_starlette import TartifletteApp
 
-
+# Create a Tartiflette resolver for the `hello` field.
 @Resolver("Query.hello")
 async def resolve_hello(parent, args, context, info):
     name = args["name"]
     return f"Hello, {name}!"
 
-
+# Define the schema using an SDL string.
+# Note: Tartiflette also has support for `.graphql` files.
+# See: https://tartiflette.io/docs/api/engine
 sdl = """
     type Query {
         hello(name: String): String
@@ -58,7 +60,7 @@ sdl = """
 """
 
 app = Starlette()
-app.add_route("/graphql", Tartiflette(sdl=sdl))
+app.add_route("/graphql", TartifletteApp(sdl=sdl))
 ```
 
 Serve it using any ASGI web server — let's use [uvicorn]:
@@ -113,7 +115,7 @@ It's just Tartiflette from there! Learn more by reading the [Tartiflette documen
 
 ## API Reference
 
-### `tartiflette_starlette.Tartiflette`
+### `tartiflette_starlette.TartifletteApp`
 
 #### Parameters
 
