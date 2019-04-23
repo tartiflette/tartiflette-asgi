@@ -2,40 +2,35 @@
 
 [![travis](https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg)](https://travis-ci.org/tartiflette/tartiflette-starlette)
 [![black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/ambv/black)
-[![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)][pypi-url]
+![python](https://img.shields.io/pypi/pyversions/tartiflette-starlette.svg)]
+[![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)](https://pypi.org/project/tartiflette-starlette/)
 ![license](https://img.shields.io/badge/license-MIT-green.svg)
 
-[pypi-url]: https://pypi.org/project/tartiflette-starlette/
-
 [Starlette]-powered [ASGI] adapter for [Tartiflette], the Python asynchronous GraphQL engine.
-
-> **Tip**: although it relies on Starlette for HTTP request processing, **`tartiflette-starlette` can be used with any ASGI web framework** that supports mounting ASGI sub-applications.
-
-> ⚠️ This package is still under development. Remember to pin your dependencies!
 
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
 [tartiflette]: https://tartiflette.io
 
+> ⚠️ This package is still under development. Remember to pin your dependencies!
+
 ## Installation
 
-Just like Tartiflette, `tartiflette-starlette` requires Python 3.6+.
-
-PyPI package is coming soon!
-
-<!--
-Assuming you have [Tartiflette installed](https://tartiflette.io/docs/tutorial/install-tartiflette), you can install `tartiflette-starlette` from PyPI:
+Assuming [you have already installed Tartiflette](https://tartiflette.io/docs/tutorial/install-tartiflette), you can install `tartiflette-starlette` from PyPI:
 
 ```bash
 pip install tartiflette-starlette
 ```
--->
+
+**Note**: `tartiflette-starlette` is compatible with Starlette 0.12+.
 
 ## Usage
 
-The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted onto another ASGI application.
+The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own using any ASGI web server, or be mounted onto another ASGI application.
 
-It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
+Once a `TartifletteApp` is setup, it's just Tartiflette from there! You'll probably want to read the [Tartiflette documentation][tartiflette] and learn about engines, resolvers, mutations, etc. If you're just getting started with GraphQL APIs, we recommend you head to the [tutorial](https://tartiflette.io/docs/tutorial/getting-started).
+
+**Note**: GraphQL subscriptions are not supported yet.
 
 ### Creating a GraphQL app
 
@@ -122,7 +117,7 @@ Furthermore, you can use the built-in **GraphiQL client**: visit [http://localho
 
 ### Mouting onto an ASGI application
 
-A `TartifletteApp` can be easily mounted onto another ASGI application. This allows you to make it available along with other endpoints.
+A `TartifletteApp` can be easily mounted onto another ASGI application. This allows you to serve it along with other endpoints.
 
 The following example mounts the GraphQL app from [Creating a GraphQL app](#creating-a-graphql-app) onto a Starlette application:
 
@@ -171,7 +166,7 @@ async def resolve_whoami(parent, args, context, info) -> str:
 
 | Status code                | Description                                               |
 | -------------------------- | --------------------------------------------------------- |
-| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` and `POST`.   |
+| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` or `POST`.    |
 | 415 Unsupported Media Type | A POST request was made with an unsupported media type.   |
 | 400 Bad Request            | The GraphQL query could not be found in the request data. |
 
