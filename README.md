@@ -33,13 +33,16 @@ pip install tartiflette-starlette
 
 ## Usage
 
-The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted on another ASGI application.
+The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own by an ASGI web server, or mounted onto another ASGI application.
 
-The following example adds a `TartifletteApp` GraphQL endpoint to a Starlette application at `/graphql`:
+It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
+
+### Creating a GraphQL app
+
+The following example defines a standalone `TartifletteApp` which exposes the GraphQL endpoint at `/graphql`:
 
 ```python
-# main.py
-from starlette.applications import Starlette
+# graphql.py
 from tartiflette import Resolver
 
 from tartiflette_starlette import TartifletteApp
@@ -59,63 +62,84 @@ sdl = """
     }
 """
 
-app = Starlette()
-app.add_route("/graphql", TartifletteApp(sdl=sdl))
+app = TartifletteApp(sdl=sdl, path="/graphql)
 ```
 
-Serve it using any ASGI web server — let's use [uvicorn]:
+### Serving the app
+
+Since `TartifletteApp` is an ASGI application, it can be served using any ASGI web server, e.g. [uvicorn]:
 
 [uvicorn]: https://www.uvicorn.org
 
 ```bash
-uvicorn main:app
+uvicorn graphql:app
 ```
 
-You're now ready to make GraphQL queries!
+### Making GraphQL queries
 
-- From the command line using `curl`:
+Once the server is running, we're ready to make queries.
+
+As per the [GraphQL spec](https://graphql.org/learn/serving-over-http/#http-methods-headers-and-body), the query can be passed in various ways:
+
+- **Query string** (methods: `GET`, `POST`):
 
 ```bash
-curl -X POST \
-    -d '{"query": "query { hello(name: \"Chuck\") }"}' \
-    -H "Content-Type: application/json" \
-    http://localhost:8000/graphql
+curl 'http://localhost:8000/graphql?query=\{hello(name:"Chuck")\}'
 ```
+
+- **JSON-encoded body** (methods: `POST`):
+
+```bash
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ hello(name: \"Chuck\") }"}' \
+  http://localhost:8000/graphql
+```
+
+- **Raw body** (methods: `POST`):
+
+```bash
+curl \
+  -X POST \
+  -H "Content-Type: application/graphql" \
+  -d '{ hello(name: "Chuck") }' \
+  http://localhost:8000/graphql
+```
+
+All these requests result in the same response:
 
 ```json
-{ "data": { "hello": "Hello, Chuck!" }, "errors": null }
-```
-
-- From Python using the `requests` library:
-
-```python
-import requests
-
-r = requests.post(
-    "http://localhost:8000/graphql",
-    json={"query": "query { hello(name: 'Chuck') }"}
-)
-print(r.json())
-```
-
-```python
 {
-  "data": {
-    "hello": "Hello, Chuck!"
-  },
-  "errors": None
+  "data": { "hello": "Hello, Chuck!" },
+  "errors": null
 }
 ```
 
-- Using the built-in **GraphiQL client** by visiting [http://localhost:8000/graphql](http://localhost:8000/graphql) from your browser ✨
+Furthermore, you can use **GraphiQL client**: visit [http://localhost:8000/graphql](http://localhost:8000/graphql) to interactively make queries in the browser. ✨
 
 ![](https://github.com/tartiflette/tartiflette-starlette/blob/master/img/graphiql.png?raw=true)
 
-It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
+### Mouting onto an ASGI application
+
+A `TartifletteApp` can be easily mounted onto another ASGI application. This allows you to make it available along with other endpoints.
+
+The following example mounts the GraphQL app from [Creating a GraphQL app](#creating-a-graphql-app) onto a Starlette application:
+
+```python
+# main.py
+from starlette.applications import Starlette
+from graphql import app as graphql_app
+
+app = Starlette()
+app.mount("/", graphql_app)
+```
+
+You can serve it using `uvicorn main:app` and make requests at `http://localhost:8000/graphql` as previously.
 
 ### Accessing request information
 
-The Starlette `Request` object is made available in the GraphQL `context`, which you can access from resolvers:
+The Starlette `Request` object is made available in the Tartiflette `context` which, for example, you can access from resolvers:
 
 ```python
 @Resolver("Query.whoami")
@@ -136,11 +160,20 @@ async def resolve_whoami(parent, args, context, info) -> str:
 - `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
 - `graphiql (bool)`: whether to serve the GraphiQL when accessing the endpoint via a web browser. Defaults to `True`.
+- `path (str)`: the path which clients should make GraphQL queries to. Defaults to `"/"`. A popular alternative is `"/graphql"`.
 - `schema_name (str)`: name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods
 
 - `__call__(scope, receive, send)`: implementation of the ASGI3 callable interface.
+
+#### Error responses
+
+| Status code                | Description                                               |
+| -------------------------- | --------------------------------------------------------- |
+| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` and `POST`.   |
+| 415 Unsupported Media Type | A POST request was made with an unsupported media type.   |
+| 400 Bad Request            | The GraphQL query could not be found in the request data. |
 
 ## Contributing
 

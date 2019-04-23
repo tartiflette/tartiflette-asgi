@@ -20,15 +20,19 @@ with open(os.path.join(CURDIR, "graphiql.html")) as tpl_file:
 
 
 class GraphQLHandler:
-    def __init__(self, engine: Engine, graphiql: bool):
+    def __init__(self, engine: Engine, graphiql: bool, path: str):
         self.engine = engine
         self.graphiql = graphiql
+        self.path = path
 
     async def handle_graphiql(self, request: Request) -> Response:
         text = GRAPHIQL_TEMPLATE.substitute(path=request.url.path)
         return HTMLResponse(text)
 
     async def __call__(self, scope, receive) -> Response:
+        if scope["path"] != self.path:
+            return PlainTextResponse("Not Found", 404)
+
         request = Request(scope, receive)
         background = BackgroundTasks()
 

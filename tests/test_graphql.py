@@ -91,8 +91,21 @@ def test_graphiql_not_found(engine):
     assert response.text == "Not Found"
 
 
-def test_add_graphql_route(starlette, app):
-    starlette.add_route("/graphql", app)
+def test_path(engine):
+    app = TartifletteApp(engine=engine, path="/graphql")
+    client = TestClient(app)
+    assert client.get("/").status_code == 404
+    response = client.get("/graphql?query={ hello }")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": {"hello": "Hello stranger"},
+        "errors": None,
+    }
+
+
+def test_starlette_mount(starlette, engine):
+    app = TartifletteApp(engine=engine, path="/graphql")
+    starlette.mount("/", app)
     client = TestClient(starlette)
     response = client.get("/graphql?query={ hello }")
     assert response.status_code == 200
@@ -105,10 +118,10 @@ def test_add_graphql_route(starlette, app):
 def test_graphql_context(auth_starlette, app):
     # Test the access to `context["request"]`
     # See: `whoami` resolver in `tests/resolvers.py`.
-    auth_starlette.add_route("/graphql", app)
+    auth_starlette.mount("/", app)
     client = TestClient(auth_starlette)
     response = client.post(
-        "/graphql",
+        "/",
         json={"query": "{ whoami }"},
         headers={"Authorization": "Bearer 123"},
     )

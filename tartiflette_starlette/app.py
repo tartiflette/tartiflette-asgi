@@ -13,6 +13,7 @@ class TartifletteApp:
         sdl: str = None,
         graphiql: bool = True,
         schema_name: str = "default",
+        path: str = "/",
     ):
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
@@ -20,7 +21,7 @@ class TartifletteApp:
 
         assert engine, "`engine` expected if `sdl` not given"
 
-        self.handler = GraphQLHandler(engine, graphiql=graphiql)
+        self.handler = GraphQLHandler(engine, graphiql=graphiql, path=path)
 
     async def __call__(
         self, scope: dict, receive: typing.Callable, send: typing.Callable

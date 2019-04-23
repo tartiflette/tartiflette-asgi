@@ -17,7 +17,7 @@ def fixture_engine():
 
 @pytest.fixture(name="app")
 def fixture_app(engine):
-    return TartifletteApp(engine=engine)
+    return TartifletteApp(engine=engine, path="/")
 
 
 @pytest.fixture(name="client")
