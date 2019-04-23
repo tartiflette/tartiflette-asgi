@@ -113,6 +113,18 @@ print(r.json())
 
 It's just Tartiflette from there! Learn more by reading the [Tartiflette documentation][tartiflette].
 
+### Accessing request information
+
+The Starlette `Request` object is made available in the GraphQL `context`, which you can access from resolvers:
+
+```python
+@Resolver("Query.whoami")
+async def resolve_whoami(parent, args, context, info) -> str:
+    request = context["request"]
+    user = getattr(request.state, "user", None)
+    return "a mystery" if user is None else user
+```
+
 ## API Reference
 
 ### `tartiflette_starlette.TartifletteApp`
