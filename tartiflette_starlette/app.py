@@ -6,7 +6,7 @@ from tartiflette import Engine
 from .graphql import handle_graphql
 
 
-class Tartiflette:
+class TartifletteApp:
     def __init__(
         self,
         *,
