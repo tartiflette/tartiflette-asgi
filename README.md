@@ -2,7 +2,7 @@
 
 [![travis](https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg)](https://travis-ci.org/tartiflette/tartiflette-starlette)
 [![black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/ambv/black)
-![python](https://img.shields.io/pypi/pyversions/tartiflette-starlette.svg)]
+![python](https://img.shields.io/pypi/pyversions/tartiflette-starlette.svg)
 [![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)](https://pypi.org/project/tartiflette-starlette/)
 ![license](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -12,7 +12,7 @@
 [starlette]: https://www.starlette.io
 [tartiflette]: https://tartiflette.io
 
-> ⚠️ This package is still under development. Remember to pin your dependencies!
+> ⚠️ This package is still under development. Be sure to pin your dependencies!
 
 ## Installation
 
@@ -26,9 +26,9 @@ pip install tartiflette-starlette
 
 ## Usage
 
-The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own using any ASGI web server, or be mounted onto another ASGI application.
+> Getting started with Tartiflette or GraphQL? See [Resources](#resources).
 
-Once a `TartifletteApp` is setup, it's just Tartiflette from there! You'll probably want to read the [Tartiflette documentation][tartiflette] and learn about engines, resolvers, mutations, etc. If you're just getting started with GraphQL APIs, we recommend you head to the [tutorial](https://tartiflette.io/docs/tutorial/getting-started).
+The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compliant application. As such, it can be served on its own using any ASGI web server, or it can be mounted onto another ASGI application.
 
 **Note**: GraphQL subscriptions are not supported yet.
 
@@ -143,6 +143,18 @@ async def resolve_whoami(parent, args, context, info) -> str:
     user = getattr(request.state, "user", None)
     return "a mystery" if user is None else user
 ```
+
+## Resources
+
+Once a `TartifletteApp` is setup, it's just Tartiflette and GraphQL from there!
+
+Here are a few resources you may find useful when getting started:
+
+- [Introduction to GraphQL](https://graphql.org/learn/): an overview of the GraphQL language.
+- [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/getting-started): a step-by-step guide to building your first Tartiflette app.
+- [Tartiflette API reference](https://tartiflette.io/docs/api/engine): learn about core concepts such as engines, resolvers, mutations, etc.
+
+Happy querying!
 
 ## API Reference
 
