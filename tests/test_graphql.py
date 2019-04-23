@@ -1,5 +1,5 @@
 from starlette.testclient import TestClient
-from tartiflette_starlette import Tartiflette
+from tartiflette_starlette import TartifletteApp
 
 
 def test_graphql_get(client):
@@ -84,16 +84,16 @@ def test_graphiql_get(client):
 
 
 def test_graphiql_not_found(engine):
-    ttftt = Tartiflette(engine=engine, graphiql=False)
-    client = TestClient(ttftt)
+    app = TartifletteApp(engine=engine, graphiql=False)
+    client = TestClient(app)
     response = client.get("/", headers={"accept": "text/html"})
     assert response.status_code == 404
     assert response.text == "Not Found"
 
 
-def test_add_graphql_route(app, ttftt):
-    app.add_route("/graphql", ttftt)
-    client = TestClient(app)
+def test_add_graphql_route(starlette, app):
+    starlette.add_route("/graphql", app)
+    client = TestClient(starlette)
     response = client.get("/graphql?query={ hello }")
     assert response.status_code == 200
     assert response.json() == {
@@ -102,10 +102,11 @@ def test_add_graphql_route(app, ttftt):
     }
 
 
-def test_graphql_context(auth_app, ttftt):
-    """Test the access the `context["request"]`."""
-    auth_app.add_route("/graphql", ttftt)
-    client = TestClient(auth_app)
+def test_graphql_context(auth_starlette, app):
+    # Test the access to `context["request"]`
+    # See: `whoami` resolver in `tests/resolvers.py`.
+    auth_starlette.add_route("/graphql", app)
+    client = TestClient(auth_starlette)
     response = client.post(
         "/graphql",
         json={"query": "{ whoami }"},
