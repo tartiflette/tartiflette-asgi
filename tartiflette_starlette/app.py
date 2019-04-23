@@ -1,9 +1,8 @@
 import typing
 
-from starlette.requests import Request
 from tartiflette import Engine
 
-from .graphql import handle_graphql
+from .graphql import GraphQLHandler
 
 
 class TartifletteApp:
@@ -21,14 +20,10 @@ class TartifletteApp:
 
         assert engine, "`engine` expected if `sdl` not given"
 
-        self.engine = engine
-        self.graphiql = graphiql
+        self.handler = GraphQLHandler(engine, graphiql=graphiql)
 
     async def __call__(
         self, scope: dict, receive: typing.Callable, send: typing.Callable
     ):
-        request = Request(scope, receive=receive)
-        response = await handle_graphql(
-            request, engine=self.engine, enable_graphiql=self.graphiql
-        )
+        response = await self.handler(scope, receive)
         await response(scope, receive, send)
