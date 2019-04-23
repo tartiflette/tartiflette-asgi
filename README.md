@@ -81,7 +81,7 @@ Once the server is running, we're ready to make queries.
 
 As per the [GraphQL spec](https://graphql.org/learn/serving-over-http/#http-methods-headers-and-body), the query can be passed in various ways:
 
-- **Query string** (methods: `GET`, `POST`):
+- **URL query string** (methods: `GET`, `POST`):
 
 ```bash
 curl 'http://localhost:8000/graphql?query=\{hello(name:"Chuck")\}'
@@ -116,7 +116,7 @@ All these requests result in the same response:
 }
 ```
 
-Furthermore, you can use **GraphiQL client**: visit [http://localhost:8000/graphql](http://localhost:8000/graphql) to interactively make queries in the browser. ✨
+Furthermore, you can use the built-in **GraphiQL client**: visit [http://localhost:8000/graphql](http://localhost:8000/graphql) to interactively make queries in the browser. ✨
 
 ![](https://github.com/tartiflette/tartiflette-starlette/blob/master/img/graphiql.png?raw=true)
 
