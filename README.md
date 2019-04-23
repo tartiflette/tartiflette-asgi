@@ -179,6 +179,10 @@ async def resolve_whoami(parent, args, context, info) -> str:
 
 Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/tartiflette/tartiflette-starlette/tree/master/CONTRIBUTING.md).
 
+## Changelog
+
+Changes to this project are recorded in the [changelog](https://github.com/tartiflette/tartiflette-starlette/tree/master/CHANGELOG.md).
+
 ## License
 
 MIT
