@@ -124,7 +124,7 @@ The following example mounts the GraphQL app from [Creating a GraphQL app](#crea
 ```python
 # main.py
 from starlette.applications import Starlette
-from graphql import app as graphql_app
+from .graphql import app as graphql_app
 
 app = Starlette()
 app.mount("/", graphql_app)
