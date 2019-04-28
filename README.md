@@ -117,7 +117,7 @@ Furthermore, you can use the built-in **GraphiQL client**: visit [http://localho
 
 ### Mouting onto an ASGI application
 
-A `TartifletteApp` can be easily mounted onto another ASGI application. This allows you to serve it along with other endpoints.
+Most async web frameworks provide a way to add a route to another ASGI application. This allows you to serve a `TartifletteApp` along with other endpoints.
 
 The following example mounts the GraphQL app from [Creating a GraphQL app](#creating-a-graphql-app) onto a Starlette application:
 
@@ -130,7 +130,7 @@ app = Starlette()
 app.mount("/", graphql_app)
 ```
 
-You can serve it using `uvicorn main:app` and make requests at `http://localhost:8000/graphql` as previously.
+You can serve it using `uvicorn main:app` and make requests at `http://localhost:8000/graphql`.
 
 ### Accessing request information
 
