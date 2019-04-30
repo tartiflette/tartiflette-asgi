@@ -1,4 +1,6 @@
+import pytest
 from starlette.testclient import TestClient
+
 from tartiflette_starlette import TartifletteApp
 
 
@@ -103,11 +105,17 @@ def test_path(engine):
     }
 
 
-def test_starlette_mount(starlette, engine):
-    app = TartifletteApp(engine=engine, path="/graphql")
-    starlette.mount("/", app)
+@pytest.mark.parametrize("path", [None, "/graphql"])
+def test_starlette_mount(starlette, engine, path):
+    kwargs = {"engine": engine}
+    if path is not None:
+        kwargs["path"] = path
+    app = TartifletteApp(**kwargs)
+    starlette.mount("/foo", app)
     client = TestClient(starlette)
-    response = client.get("/graphql?query={ hello }")
+    endpoint = "/" if path is None else path
+    query = "{ hello }"
+    response = client.get(f"/foo{endpoint}?query={query}")
     assert response.status_code == 200
     assert response.json() == {
         "data": {"hello": "Hello stranger"},

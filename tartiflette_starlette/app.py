@@ -18,7 +18,6 @@ class TartifletteApp:
         schema_name: str = "default",
         path: str = "/",
     ):
-
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
             engine = Engine(sdl, schema_name)
