@@ -6,6 +6,9 @@ from .graphql import GraphQLHandler
 
 
 class TartifletteApp:
+
+    handler_class = GraphQLHandler
+
     def __init__(
         self,
         *,
@@ -15,13 +18,14 @@ class TartifletteApp:
         schema_name: str = "default",
         path: str = "/",
     ):
+
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
             engine = Engine(sdl, schema_name)
 
         assert engine, "`engine` expected if `sdl` not given"
 
-        self.handler = GraphQLHandler(engine, graphiql=graphiql, path=path)
+        self.handler = self.handler_class(engine, graphiql=graphiql, path=path)
 
     async def __call__(
         self, scope: dict, receive: typing.Callable, send: typing.Callable
