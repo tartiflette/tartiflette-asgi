@@ -7,7 +7,7 @@ import re
 import os
 from setuptools import find_packages, setup
 
-DEPENDENCIES = ["starlette>=0.12.0.b3, <0.13"]
+DEPENDENCIES = ["starlette>=0.12, <0.13"]
 DEV_DEPENDENCIES = [
     "tartiflette",
     "uvicorn>=0.7, <0.8",
@@ -37,10 +37,12 @@ setup(
     version=get_version(),
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
-    description="Starlette ASGI adapter for Tartiflette",
+    description=(
+        "A Starlette-powered ASGI adapter for the Tartiflette GraphQL engine"
+    ),
     long_description=README,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/tartiflette/tartiflette-starlette",
     packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
     include_package_data=True,
     zip_safe=False,
