@@ -1,5 +1,4 @@
 import os
-import string
 
 from starlette.background import BackgroundTasks
 from starlette.requests import Request
@@ -12,25 +11,33 @@ from starlette.responses import (
 from tartiflette import Engine
 
 from .errors import format_errors
+from .utils import load_string_template
 
 CURDIR = os.path.dirname(__file__)
 
-with open(os.path.join(CURDIR, "graphiql.html")) as tpl_file:
-    GRAPHIQL_TEMPLATE = string.Template(tpl_file.read())
-
 
 class GraphQLHandler:
+    ROOT_URLS = {"", "/"}
+    graphiql_template = load_string_template(
+        os.path.join(CURDIR, "graphiql.html")
+    )
+
     def __init__(self, engine: Engine, graphiql: bool, path: str):
         self.engine = engine
         self.graphiql = graphiql
         self.path = path
 
     async def handle_graphiql(self, request: Request) -> Response:
-        text = GRAPHIQL_TEMPLATE.substitute(path=request.url.path)
+        text = self.graphiql_template.substitute(path=request.url.path)
         return HTMLResponse(text)
 
+    def matches(self, path: str) -> bool:
+        if not self.path:
+            return path in self.ROOT_URLS
+        return path == self.path
+
     async def __call__(self, scope, receive) -> Response:
-        if scope["path"] != self.path:
+        if not self.matches(scope["path"]):
             return PlainTextResponse("Not Found", 404)
 
         request = Request(scope, receive)

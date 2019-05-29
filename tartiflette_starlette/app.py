@@ -16,7 +16,7 @@ class TartifletteApp:
         sdl: str = None,
         graphiql: bool = True,
         schema_name: str = "default",
-        path: str = "/",
+        path: str = "",
     ):
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
