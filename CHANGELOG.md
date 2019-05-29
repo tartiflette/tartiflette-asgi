@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Support for Starlette >=0.12 (previously >=0.12.0b3).
+
 ### [0.1.1]
 
 Released: 2019-04-28.

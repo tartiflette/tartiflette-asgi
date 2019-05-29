@@ -6,7 +6,7 @@
 [![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)](https://pypi.org/project/tartiflette-starlette/)
 ![license](https://img.shields.io/badge/license-MIT-green.svg)
 
-[Starlette]-powered [ASGI] adapter for [Tartiflette], the Python asynchronous GraphQL engine.
+A [Starlette]-powered [ASGI] adapter for the [Tartiflette] GraphQL engine.
 
 [asgi]: https://asgi.readthedocs.io/
 [starlette]: https://www.starlette.io
