@@ -7,14 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- More robust URL matching on `TartifletteApp`.
+- New `root` option. Should be used when mounting `TartifletteApp` onto another ASGI app. Shortcut for `path=""`.
 
 ### Changed
 
-- Default `path` for `TartifletteApp` is now `""` (previously `"/"`).
-- Support for Starlette >=0.12 (previously >=0.12.0b3).
+- **BREAKING** the default `path` is now `"/graphql"` (previously `"/"`).
+- Support for `starlette>=0.12` (previously `>=0.12.0b3`).
+
+### Fixed
+
+- More robust URL matching on `TartifletteApp`.
 
 ### [0.1.1]
 
