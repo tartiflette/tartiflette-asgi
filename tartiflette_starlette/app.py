@@ -15,8 +15,7 @@ class TartifletteApp:
         engine: Engine = None,
         sdl: str = None,
         graphiql: bool = True,
-        path: str = "/graphql",
-        root: bool = False,
+        path: str = "",
         schema_name: str = "default",
     ):
         if engine is None:
@@ -24,9 +23,6 @@ class TartifletteApp:
             engine = Engine(sdl, schema_name)
 
         assert engine, "`engine` expected if `sdl` not given"
-
-        if root:
-            path = ""
 
         self.handler = self.handler_class(engine, graphiql=graphiql, path=path)
 

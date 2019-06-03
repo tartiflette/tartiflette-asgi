@@ -8,13 +8,12 @@ from tartiflette_starlette import TartifletteApp
 from ._utils import omit_none
 
 
-@pytest.mark.parametrize("root", (None, False, True))
-@pytest.mark.parametrize("mount_path", ("/", "/foo"))
+@pytest.mark.parametrize("mount_path", ("/", "/graphql"))
 @pytest.mark.parametrize("path", [None, "", "/", "/graphql", "/graphql/"])
 def test_starlette_mount(
-    starlette: Starlette, engine: Engine, root: bool, mount_path: str, path: str
+    starlette: Starlette, engine: Engine, mount_path: str, path: str
 ):
-    kwargs = omit_none({"engine": engine, "path": path, "root": root})
+    kwargs = omit_none({"engine": engine, "path": path})
 
     app = TartifletteApp(**kwargs)
     starlette.mount(mount_path, app)
@@ -22,9 +21,7 @@ def test_starlette_mount(
     client = TestClient(starlette)
 
     query = "{ hello }"
-    full_path = mount_path.rstrip("/") + (
-        "" if root else ("/graphql" if path is None else path)
-    )
+    full_path = mount_path.rstrip("/") + ("/" if path is None else path)
     assert "//" not in full_path
 
     response = client.get(f"{full_path}?query={query}")

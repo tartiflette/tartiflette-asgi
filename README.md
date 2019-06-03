@@ -37,18 +37,13 @@ The `TartifletteApp` class provided by `tartiflette-starlette` is an ASGI3-compl
 ```python
 # graphql.py
 from tartiflette import Resolver
-
 from tartiflette_starlette import TartifletteApp
 
-# Create a Tartiflette resolver for the `hello` field.
 @Resolver("Query.hello")
 async def resolve_hello(parent, args, context, info):
     name = args["name"]
     return f"Hello, {name}!"
 
-# Define the schema using an SDL string.
-# Note: Tartiflette also supports `.graphql` files.
-# See: https://tartiflette.io/docs/api/engine
 sdl = """
     type Query {
         hello(name: String): String
@@ -58,7 +53,7 @@ sdl = """
 app = TartifletteApp(sdl=sdl)
 ```
 
-> **Note**: the GraphQL endpoint is exposed on the `/graphql` path by default.
+> **Note**: the GraphQL endpoint is exposed on `/` by default.
 
 ### Serve the app
 
@@ -77,7 +72,7 @@ As per the [GraphQL spec](https://graphql.org/learn/serving-over-http/#http-meth
 - **URL query string** (methods: `GET`, `POST`):
 
 ```bash
-curl 'http://localhost:8000/graphql?query=\{hello(name:"Chuck")\}'
+curl 'http://localhost:8000?query=\{hello(name:"Chuck")\}'
 ```
 
 - **JSON-encoded body** (methods: `POST`):
@@ -87,7 +82,7 @@ curl \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{"query": "{ hello(name: \"Chuck\") }"}' \
-  http://localhost:8000/graphql
+  http://localhost:8000
 ```
 
 - **Raw body** (methods: `POST`):
@@ -97,7 +92,7 @@ curl \
   -X POST \
   -H "Content-Type: application/graphql" \
   -d '{ hello(name: "Chuck") }' \
-  http://localhost:8000/graphql
+  http://localhost:8000
 ```
 
 All these requests result in the same response:
@@ -111,7 +106,7 @@ All these requests result in the same response:
 
 ### Interactive GraphiQL client
 
-You can use the built-in GraphiQL client available at [http://localhost:8000/graphql](http://localhost:8000/graphql) to interactively make queries in the browser. ✨
+If you access the GraphQL endpoint from your browser, you'll be able to make interactive queries using the built-in [GraphiQL client](https://github.com/graphql/graphiql).
 
 ![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql.png)
 
@@ -119,14 +114,7 @@ You can use the built-in GraphiQL client available at [http://localhost:8000/gra
 
 Most async web frameworks provide a way to add a route to another ASGI application. This allows you to serve a `TartifletteApp` along with other endpoints.
 
-When doing so, use `root=True`:
-
-```python
-# graphql.py
-app = TartifletteApp(..., root=True)
-```
-
-This allows you to mount the GraphQL app anywhere on the parent ASGI app. For example, with Starlette:
+For example, with Starlette:
 
 ```python
 # main.py
@@ -134,6 +122,12 @@ from starlette.applications import Starlette
 from graphql import app as graphql_app
 
 app = Starlette()
+
+@app.route("/")
+async def home(request):
+  return PlainTextResponse("Hello, world!")
+
+# Mount GraphQL app as a nested ASGI app.
 app.mount("/graphql", graphql_app)
 ```
 
@@ -147,8 +141,7 @@ The Starlette `Request` object is made available in the Tartiflette `context` wh
 @Resolver("Query.whoami")
 async def resolve_whoami(parent, args, context, info) -> str:
     request = context["request"]
-    user = getattr(request.state, "user", None)
-    return "a mystery" if user is None else user
+    return getattr(request.state, "user", "a mystery")
 ```
 
 ## Resources
@@ -174,8 +167,7 @@ Happy querying!
 - `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
 - `graphiql (bool)`: whether to serve the GraphiQL when accessing the endpoint via a web browser. Defaults to `True`.
-- `path (str)`: the path which clients should make GraphQL queries to. Defaults to `"/graphql"`.
-- `root (bool)`: shortcut for `path=""`. Defaults to `False`.
+- `path (str)`: the path which clients should make GraphQL queries to. Defaults to `""`.
 - `schema_name (str)`: name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods

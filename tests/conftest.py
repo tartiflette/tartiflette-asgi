@@ -20,7 +20,7 @@ def fixture_engine() -> Engine:
 
 @pytest.fixture(name="ttftt")
 def fixture_ttftt(engine: Engine) -> TartifletteApp:
-    return TartifletteApp(engine=engine, path="/")
+    return TartifletteApp(engine=engine)
 
 
 @pytest.fixture(name="client")
