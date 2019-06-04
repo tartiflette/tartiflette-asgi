@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for `starlette>=0.12` (previously `>=0.12.0b3`).
+
 ### Changed
 
 - The default `path` is now `""` (previously `"/"`).
-- Support for `starlette>=0.12` (previously `>=0.12.0b3`).
+- The request is now accessible in the GraphQL context via `context["req"]` (previously `context["request"]`).
 
 ### Fixed
 

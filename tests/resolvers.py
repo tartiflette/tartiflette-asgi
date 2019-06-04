@@ -10,6 +10,6 @@ async def hello(parent, args, context, info) -> str:
 
 @Resolver("Query.whoami")
 async def resolve_whoami(parent, args, context, info) -> str:
-    request: Request = context["request"]
+    request: Request = context["req"]
     user = request.state.user
     return "a mystery" if user is None else user
