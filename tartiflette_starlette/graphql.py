@@ -79,7 +79,7 @@ class GraphQLHandler:
                 "No GraphQL query found in the request", 400
             )
 
-        context = {"request": request, "background": background}
+        context = {"req": request, "background": background}
         variables = data.get("variables")
         operation_name = data.get("operationName")
 

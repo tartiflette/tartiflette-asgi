@@ -135,12 +135,12 @@ Run `$ uvicorn main:app` and make requests at `http://localhost:8000/graphql`.
 
 ### Accessing request information
 
-The Starlette `Request` object is made available in the Tartiflette `context` which, for example, you can access from resolvers:
+You can access the Starlette `Request` object from resolvers using `context["req"]`:
 
 ```python
 @Resolver("Query.whoami")
 async def resolve_whoami(parent, args, context, info) -> str:
-    request = context["request"]
+    request = context["req"]
     return getattr(request.state, "user", "a mystery")
 ```
 
