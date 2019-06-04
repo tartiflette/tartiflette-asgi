@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Support for Starlette >=0.12 (previously >=0.12.0b3).
+- The default `path` is now `""` (previously `"/"`).
+- Support for `starlette>=0.12` (previously `>=0.12.0b3`).
+
+### Fixed
+
+- More robust URL matching on `TartifletteApp`.
 
 ### [0.1.1]
 

@@ -1,18 +1,30 @@
+import pytest
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
 
 from tartiflette_starlette import TartifletteApp
 
 
-def test_graphql_context(auth_starlette: Starlette, ttftt: TartifletteApp):
-    # Test the access to `context["request"]`
-    # See: `whoami` resolver in `tests/resolvers.py`.
+@pytest.mark.parametrize(
+    "authorization, expected_user",
+    [(None, "a mystery"), ("Bearer 123", "Jane")],
+)
+def test_access_request_from_graphql_context(
+    auth_starlette: Starlette,
+    ttftt: TartifletteApp,
+    authorization: str,
+    expected_user: str,
+):
+    # See also: `tests/resolvers.py` for the `whoami` resolver.
     auth_starlette.mount("/", ttftt)
     client = TestClient(auth_starlette)
     response = client.post(
         "/",
         json={"query": "{ whoami }"},
-        headers={"Authorization": "Bearer 123"},
+        headers={"Authorization": authorization},
     )
     assert response.status_code == 200
-    assert response.json() == {"data": {"whoami": "Jane"}, "errors": None}
+    assert response.json() == {
+        "data": {"whoami": expected_user},
+        "errors": None,
+    }
