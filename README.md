@@ -1,36 +1,43 @@
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/158689/58954519-b05ad680-8799-11e9-9134-90622e7731f3.png" alt="tartiflette-starlette logo"/>
+</div>
+
+<p align="center">
+  <a href="https://travis-ci.org/tartiflette/tartiflette-starlette">
+    <img src="https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg" alt="Build status">
+  </a>
+  <a href="https://pypi.org/project/tartiflette-starlette">
+    <img src="https://badge.fury.io/py/tartiflette-starlette.svg" alt="Package version">
+  </a>
+  <a href="https://github.com/ambv/black">
+    <img src="https://img.shields.io/badge/code_style-black-000000.svg" alt="Code style">
+    </a>
+</p>
+
 # tartiflette-starlette
 
-[![travis](https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg)](https://travis-ci.org/tartiflette/tartiflette-starlette)
-[![black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/ambv/black)
-![python](https://img.shields.io/pypi/pyversions/tartiflette-starlette.svg)
-[![pypi](https://img.shields.io/pypi/v/tartiflette-starlette.svg)](https://pypi.org/project/tartiflette-starlette/)
-![license](https://img.shields.io/badge/license-MIT-green.svg)
-
-ASGI adapter for the [Tartiflette] GraphQL engine. Powered by [Starlette].
+ASGI adapter for the [Tartiflette] GraphQL engine, powered by [Starlette].
 
 [tartiflette]: https://tartiflette.io
 [starlette]: https://www.starlette.io
 
-> ⚠️ This package is still under development. Make sure to pin your dependencies!
-
-**Table of contents**
-
-- [Features](#features)
-- [Quickstart](#quickstart)
-- [Installation](#installation)
-- [User guide](#user-guide)
-- [API Reference](#api-reference)
-- [FAQ](#faq)
-
-## Features
+The included `TartifletteApp` is an ASGI wrapper with the following features:
 
 - Compatible with any ASGI server and framework.
-- Supports both standalone and sub-app serving.
+- Standalone and sub-app serving.
 - Built-in [GraphiQL] client.
 
 [graphiql]: https://github.com/graphql/graphiql
 
 **Note**: WebSocket subscriptions aren't supported yet.
+
+**Table of contents**
+
+- [Quickstart](#quickstart)
+- [Installation](#installation)
+- [User guide](#user-guide)
+- [API Reference](#api-reference)
+- [FAQ](#faq)
 
 ## Quickstart
 
@@ -86,7 +93,9 @@ First [install Tartiflette](https://tartiflette.io/docs/tutorial/install-tartifl
 pip install tartiflette-starlette
 ```
 
-**Note**: `tartiflette-starlette` uses Starlette 0.12+.
+**Note**: `tartiflette-starlette` uses Starlette 0.12+ and requires Python 3.6+.
+
+> ⚠️ This package is still under development. Make sure to pin your dependencies!
 
 ## User guide
 
@@ -97,9 +106,9 @@ The `TartifletteApp` class is an ASGI3-compliant application. There are two ways
 
 ### Standalone ASGI app
 
-The [Quickstart] example shows how to build a `TartifletteApp` and serve it as a standalone ASGI app.
+The [Quickstart](#quickstart) example shows how to build a `TartifletteApp` and serve it as a standalone ASGI app.
 
-The app is served using Uvicorn, but any other ASGI web server will do. The following ASGI web servers should be supported:
+The app is served using Uvicorn, but any other ASGI web server will do, for example:
 
 - [uvicorn]
 - [hypercorn](https://github.com/pgjones/hypercorn)
