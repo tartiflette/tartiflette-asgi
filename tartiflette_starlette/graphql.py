@@ -90,11 +90,14 @@ class GraphQLHandler:
             operation_name=operation_name,
         )
 
+        content = {"data": result["data"]}
         has_errors = "errors" in result
-        errors = format_errors(result["errors"]) if has_errors else None
+        if has_errors:
+            content["errors"] = format_errors(result["errors"])
+        status = 400 if has_errors else 200
 
         return JSONResponse(
-            content={"data": result["data"], "errors": errors},
-            status_code=400 if has_errors else 200,
+            content=content,
+            status_code=status,
             background=context["background"],
         )

@@ -98,10 +98,7 @@ curl \
 All these requests result in the same response:
 
 ```json
-{
-  "data": { "hello": "Hello, Chuck!" },
-  "errors": null
-}
+{ "data": { "hello": "Hello, Chuck!" } }
 ```
 
 ### Interactive GraphiQL client
