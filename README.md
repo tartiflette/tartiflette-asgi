@@ -20,7 +20,7 @@
 
 Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` and get the following:
 
-- Compatibility any ASGI server and framework.
+- Compatibility with any ASGI server and framework.
 - Standalone and sub-app serving.
 - Built-in [GraphiQL] client.
 
@@ -128,6 +128,7 @@ This is useful to have **a GraphQL endpoint _and_ other (non-GraphQL) endpoints*
 
 ```python
 from starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
 from tartiflette import Resolver
 from tartiflette_starlette import TartifletteApp
 
