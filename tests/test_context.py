@@ -24,7 +24,4 @@ def test_access_request_from_graphql_context(
         headers={"Authorization": authorization},
     )
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"whoami": expected_user},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"whoami": expected_user}}

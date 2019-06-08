@@ -5,10 +5,7 @@ from starlette.testclient import TestClient
 def test_get_querystring(client: TestClient):
     response = client.get("/?query={ hello }")
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}
 
 
 @pytest.mark.parametrize("path", ("/", "/?foo=bar", "/?q={ hello }"))
@@ -21,19 +18,13 @@ def test_get_no_query(client: TestClient, path: str):
 def test_post_querystring(client: TestClient):
     response = client.post("/?query={ hello }")
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}
 
 
 def test_post_json(client: TestClient):
     response = client.post("/", json={"query": "{ hello }"})
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}
 
 
 def test_post_graphql(client: TestClient):
@@ -41,10 +32,7 @@ def test_post_graphql(client: TestClient):
         "/", data="{ hello }", headers={"content-type": "application/graphql"}
     )
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}
 
 
 def test_post_invalid_media_type(client: TestClient):
@@ -61,7 +49,7 @@ def test_put(client: TestClient):
     assert response.text == "Method Not Allowed"
 
 
-def test_graphql_invalid_field(client: TestClient):
+def test_error_handling(client: TestClient):
     response = client.post("/", json={"query": "{ dummy }"})
     assert response.status_code == 400
     assert response.json() == {

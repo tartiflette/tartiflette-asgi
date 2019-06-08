@@ -10,7 +10,4 @@ def test_path(engine: Engine):
     assert client.get("/").status_code == 404
     response = client.get("/graphql?query={ hello }")
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}

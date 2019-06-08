@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The default `path` is now `""` (previously `"/"`).
 - The request is now accessible in the GraphQL context via `context["req"]` (previously `context["request"]`).
+- If no error occurred, the `errors` field is not present in the response anymore (previously was `None`).
 
 ### Fixed
 
