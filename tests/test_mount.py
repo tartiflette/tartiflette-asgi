@@ -26,7 +26,4 @@ def test_starlette_mount(
 
     response = client.get(f"{full_path}?query={query}")
     assert response.status_code == 200
-    assert response.json() == {
-        "data": {"hello": "Hello stranger"},
-        "errors": None,
-    }
+    assert response.json() == {"data": {"hello": "Hello stranger"}}

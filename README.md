@@ -75,7 +75,7 @@ curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http:
 Response:
 
 ```json
-{ "data": { "hello": "Hello, Chuck!" }, "errors": null }
+{ "data": { "hello": "Hello, Chuck!" } }
 ```
 
 Or access `http://localhost:8000` in a browser to make interactive queries using the built-in [GraphiQL] client:
@@ -167,7 +167,7 @@ curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http:
 Response:
 
 ```json
-{ "data": { "hello": "Hello, Chuck!" }, "errors": null }
+{ "data": { "hello": "Hello, Chuck!" } }
 ```
 
 ### Making requests
