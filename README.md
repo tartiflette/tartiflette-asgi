@@ -14,16 +14,13 @@
     </a>
 </p>
 
-# tartiflette-starlette
-
-ASGI adapter for the [Tartiflette] GraphQL engine, powered by [Starlette].
+`tartiflette-starlette` is a wrapper that provides ASGI support for the [Tartiflette] Python GraphQL engine.
 
 [tartiflette]: https://tartiflette.io
-[starlette]: https://www.starlette.io
 
-The included `TartifletteApp` is an ASGI wrapper with the following features:
+Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` and get the following:
 
-- Compatible with any ASGI server and framework.
+- Compatibility any ASGI server and framework.
 - Standalone and sub-app serving.
 - Built-in [GraphiQL] client.
 
@@ -87,15 +84,18 @@ Or access `http://localhost:8000` in a browser to make interactive queries using
 
 ## Installation
 
-First [install Tartiflette](https://tartiflette.io/docs/tutorial/install-tartiflette), then run:
+1. Install Tartiflette's external dependencies as explained in the [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/install-tartiflette).
+2. Install `tartiflette-starlette` from PyPI:
 
 ```bash
 pip install tartiflette-starlette
 ```
 
-**Note**: `tartiflette-starlette` uses Starlette 0.12+ and requires Python 3.6+.
+This will also install [Tartiflette] and [Starlette], so you're good to go!
 
-> ⚠️ This package is still under development. Make sure to pin your dependencies!
+[starlette]: https://www.starlette.io
+
+**Note**: `tartiflette-starlette` requires Python 3.6+.
 
 ## User guide
 
@@ -243,13 +243,13 @@ See also [Requests](https://www.starlette.io/requests/) in the Starlette documen
 
 ### Does this package ship with Tartiflette?
 
-**No**. You need to install Tartiflette yourself, as described in [Installation](#installation).
+**Yes**. Everything is included, which allows you to start building your GraphQL API right away. See also [Installation](#installation).
 
 ### Do I need to learn GraphQL/Tartiflette to use this package?
 
-**Yes**, probably. `tartiflette-starlette` is only an ASGI adapter for Tartiflette, so once you've got the ASGI app up and running, you're in Tartiflette territory.
+**Yes**: once you've got the `TartifletteApp` ASGI app up and running, you're in Tartiflette territory.
 
-Here are some resources you may find useful:
+Here are some resources to get you started:
 
 - [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/getting-started)
 - [Introduction to GraphQL](https://graphql.org/learn/)
@@ -257,9 +257,11 @@ Here are some resources you may find useful:
 
 ### What is the role of Starlette?
 
-`tartiflette-starlette` uses Starlette as an **ASGI toolkit**. More specifically, it uses its request and response classes.
+`tartiflette-starlette` uses Starlette as a lightweight ASGI toolkit: internally, it uses Starlette's request and response classes.
 
-This is **fully transparent** from a user perspective. If you're [submounting your GraphQL app](#submounting-on-another-asgi-app), your web framework you use doesn't need to be built on top of Starlette — it just needs to speak ASGI.
+Luckily, this does not require your applications to use Starlette at all.
+
+For example, if you're [submounting your GraphQL app](#submounting-on-another-asgi-app) on an app built with an async web framework, the framework doesn't need to use Starlette — it just needs to speak ASGI.
 
 ### What is ASGI?
 
