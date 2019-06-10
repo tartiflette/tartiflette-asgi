@@ -7,16 +7,6 @@ import re
 import os
 from setuptools import find_packages, setup
 
-DEPENDENCIES = ["starlette>=0.12, <0.13"]
-DEV_DEPENDENCIES = [
-    "tartiflette",
-    "uvicorn>=0.7, <0.8",
-    "requests",
-    "pytest",
-    "black",
-    "pylint",
-]
-EXCLUDE_FROM_PACKAGES = ["contrib", "docs", "tests*"]
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
 with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
@@ -37,17 +27,23 @@ setup(
     version=get_version(),
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
-    description=(
-        "A Starlette-powered ASGI adapter for the Tartiflette GraphQL engine"
-    ),
+    description="ASGI support for the Tartiflette Python GraphQL engine",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/tartiflette/tartiflette-starlette",
-    packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+    packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=DEPENDENCIES,
-    extras_require={"dev": DEV_DEPENDENCIES},
+    install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.10,<0.11"],
+    extras_require={
+        "dev": [
+            "uvicorn>=0.7, <0.8",
+            "requests",
+            "pytest",
+            "black",
+            "pylint",
+        ]
+    },
     python_requires=">=3.6",
     # license and classifier list:
     # https://pypi.org/pypi?%3Aaction=list_classifiers
