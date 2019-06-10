@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+
+Released: 2019-06-10.
+
 ### Added
 
 - Support for `starlette>=0.12` (previously `>=0.12.0b3`).
@@ -48,6 +52,7 @@ Project-related additions:
 - Contributing guide.
 - README and documentation.
 
-[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.1...HEAD
+[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/tartiflette/tartiflette-starlette/compare/5a1ecf...0.1.0
