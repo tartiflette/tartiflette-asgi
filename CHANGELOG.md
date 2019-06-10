@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for `starlette>=0.12` (previously `>=0.12.0b3`).
+- Tartiflette is now installed too when installing `tartiflette-starlette`.
 
 ### Changed
 
