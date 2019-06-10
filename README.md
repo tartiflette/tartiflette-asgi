@@ -162,7 +162,7 @@ uvicorn app:app
 Make a request:
 
 ```bash
-curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http://localhost:8000/graphql/
+curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http://localhost:8000
 ```
 
 Response:
