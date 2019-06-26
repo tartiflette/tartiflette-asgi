@@ -15,9 +15,9 @@ class TartifletteApp:
         *,
         engine: Engine = None,
         sdl: str = None,
-        context: dict = None,
-        graphiql: typing.Union[bool, GraphiQL] = True,
         path: str = "/",
+        graphiql: typing.Union[bool, GraphiQL] = True,
+        context: dict = None,
         schema_name: str = "default",
     ):
         if engine is None:
@@ -43,9 +43,9 @@ class TartifletteApp:
         self.app = GraphQLMiddleware(
             Router(routes=routes),
             engine=engine,
-            context=context,
-            graphiql=graphiql,
             graphql_path=graphql_route.path,
+            graphiql=graphiql,
+            context=context,
         )
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):

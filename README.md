@@ -201,7 +201,9 @@ curl \
 
 **Note**: you may have your GraphQL API served at a different endpoint.
 
-### Accessing request information
+### Context
+
+#### Accessing request information
 
 You can access the Starlette `Request` object from resolvers using `context["req"]`:
 
@@ -213,6 +215,24 @@ async def resolve_whoami(parent, args, context, info) -> str:
 ```
 
 See also [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
+
+#### Providing additional context to resolvers
+
+If you need to, you can provide your own services, functions or data to resolvers with the `context` option:
+
+```python
+from .db import database  # Imaginary
+
+@Resolver("Query.human")
+async def resolve_human(parent, args, context, info):
+    db = context["db"]
+    # Fetch human…
+
+graphql = TartifletteApp(
+  # ...,
+  context={"db": database},
+)
+```
 
 ## API Reference
 
@@ -226,8 +246,9 @@ See also [Requests](https://www.starlette.io/requests/) in the Starlette documen
 
 - `engine` (`Engine`): a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl` (`str`): a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
-- `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
 - `path` (`str`, optional): the path which clients should make GraphQL queries to. Defaults to `"/"`.
+- `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
+- `context (dict)`: a dictionary which is passed by copy to resolvers when executing a query. Defaults to `{}`. Note: the Starlette `Request` object is always present as `req`.
 - `schema_name` (`str`, optional): name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods
