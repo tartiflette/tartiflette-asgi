@@ -216,29 +216,43 @@ See also [Requests](https://www.starlette.io/requests/) in the Starlette documen
 
 ## API Reference
 
-### `tartiflette_starlette.TartifletteApp`
+> **Note**: unless specified, components documented here can be imported from `tartiflette_starlette` directly, e.g. `from tartiflette_starlette import TartifletteApp`.
+
+### `TartifletteApp`
 
 #### Parameters
 
 **Note**: all parameters are keyword-only.
 
-- `engine (Engine)`: a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
-- `sdl (str)`: a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
-- `graphiql (bool)`: whether to show the GraphiQL client when accessing the endpoint in a web browser. Defaults to `True`.
-- `path (str)`: the path which clients should make GraphQL queries to. Defaults to `""`.
-- `schema_name (str)`: name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
+- `engine` (`Engine`): a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
+- `sdl` (`str`): a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
+- `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
+- `path` (`str`, optional): the path which clients should make GraphQL queries to. Defaults to `"/"`.
+- `schema_name` (`str`, optional): name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods
 
-- `__call__(scope, receive, send)`: implementation of the ASGI3 callable interface.
+- `__call__(scope, receive, send)`: ASGI3 implementation.
+
+### `GraphiQL`
+
+Configuration helper for the GraphiQL client.
+
+#### Parameters
+
+**Note**: all parameters are keyword-only.
+
+- `path` (`str`, optional): the path of the GraphiQL endpoint. Defaults to the `path` given to `TartifletteApp`.
+- `template` (`str`, optional): an HTML template to use instead of the default one. In the template, an HTTP request should be made to the GraphQL endpoint (its path is available as `${path}`).
 
 #### Error responses
 
-| Status code                | Description                                               |
-| -------------------------- | --------------------------------------------------------- |
-| 400 Bad Request            | The GraphQL query could not be found in the request data. |
-| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` or `POST`.    |
-| 415 Unsupported Media Type | A POST request was made with an unsupported media type.   |
+| Status code                | Description                                                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 400 Bad Request            | The GraphQL query could not be found in the request data.                                                                        |
+| 404 Not Found              | The request does not match the GraphQL or GraphiQL endpoint paths.                                                               |
+| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` or `POST`.                                                                           |
+| 415 Unsupported Media Type | The POST request made to the GraphQL endpoint uses a `Content-Type` different from `application/json` and `application/graphql`. |
 
 ## FAQ
 
