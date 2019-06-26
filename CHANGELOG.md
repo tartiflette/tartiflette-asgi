@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `template`.
+
 ## [0.2.0]
 
 Released: 2019-06-10.
