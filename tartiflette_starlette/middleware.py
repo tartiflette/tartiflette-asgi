@@ -10,16 +10,25 @@ from .datastructures import GraphiQL
 
 
 class GraphQLMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app: ASGIApp, engine: Engine, graphiql: GraphiQL):
+    def __init__(
+        self,
+        app: ASGIApp,
+        engine: Engine,
+        graphiql: GraphiQL,
+        graphql_path: str,
+    ):
         super().__init__(app)
-        self.engine = engine
-        self.graphiql = graphiql
+        self.kwargs = {
+            "engine": engine,
+            "graphiql": graphiql,
+            "graphql_path": graphql_path,
+        }
 
     async def dispatch(
         self,
         request: Request,
         call_next: typing.Callable[[Request], typing.Awaitable[Response]],
     ) -> Response:
-        request.state.engine = self.engine
-        request.state.graphiql = self.graphiql
+        for key, value in self.kwargs.items():
+            setattr(request.state, key, value)
         return await call_next(request)

@@ -28,13 +28,19 @@ class TartifletteApp:
         if graphiql is True:
             graphiql = GraphiQL()
 
-        routes = [Route(path=path, endpoint=GraphQLEndpoint)]
+        routes = []
 
         if graphiql and graphiql.path is not None:
             routes.append(Route(path=graphiql.path, endpoint=GraphiQLEndpoint))
 
+        graphql_route = Route(path=path, endpoint=GraphQLEndpoint)
+        routes.append(graphql_route)
+
         self.app = GraphQLMiddleware(
-            Router(routes=routes), engine=engine, graphiql=graphiql
+            Router(routes=routes),
+            engine=engine,
+            graphiql=graphiql,
+            graphql_path=graphql_route.path,
         )
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):

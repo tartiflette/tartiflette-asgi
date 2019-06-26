@@ -14,9 +14,9 @@ from .errors import format_errors
 
 class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
-        config = request.state.graphiql
-        text = config.template.substitute(path=request.url.path)
-        return HTMLResponse(text)
+        graphiql = request.state.graphiql
+        html = graphiql.template.substitute(path=request.state.graphql_path)
+        return HTMLResponse(html)
 
 
 class GraphQLEndpoint(HTTPEndpoint):
