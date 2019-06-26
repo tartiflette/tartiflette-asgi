@@ -15,6 +15,7 @@ class TartifletteApp:
         *,
         engine: Engine = None,
         sdl: str = None,
+        context: dict = None,
         graphiql: typing.Union[bool, GraphiQL] = True,
         path: str = "/",
         schema_name: str = "default",
@@ -24,6 +25,9 @@ class TartifletteApp:
             engine = Engine(sdl, schema_name)
 
         assert engine, "`engine` expected if `sdl` not given"
+
+        if context is None:
+            context = {}
 
         if graphiql is True:
             graphiql = GraphiQL()
@@ -39,6 +43,7 @@ class TartifletteApp:
         self.app = GraphQLMiddleware(
             Router(routes=routes),
             engine=engine,
+            context=context,
             graphiql=graphiql,
             graphql_path=graphql_route.path,
         )

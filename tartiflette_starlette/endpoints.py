@@ -47,7 +47,9 @@ class GraphQLEndpoint(HTTPEndpoint):
             )
 
         background = BackgroundTasks()
-        context = {"req": request, "background": background}
+        context = dict(
+            request.state.context, req=request, background=background
+        )
 
         engine: Engine = request.state.engine
         result: dict = await engine.execute(

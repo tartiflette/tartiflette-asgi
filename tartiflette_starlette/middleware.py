@@ -14,12 +14,14 @@ class GraphQLMiddleware(BaseHTTPMiddleware):
         self,
         app: ASGIApp,
         engine: Engine,
+        context: dict,
         graphiql: GraphiQL,
         graphql_path: str,
     ):
         super().__init__(app)
         self.kwargs = {
             "engine": engine,
+            "context": context,
             "graphiql": graphiql,
             "graphql_path": graphql_path,
         }

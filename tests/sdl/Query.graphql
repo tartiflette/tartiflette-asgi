@@ -1,4 +1,13 @@
 type Query {
   hello(name: String): String
   whoami: String
+  message: String
+}
+
+type Mutation {
+  setMessage(input: MessageInput!): String
+}
+
+input MessageInput {
+  message: String!
 }
