@@ -1,21 +1,22 @@
 import typing
 
 from tartiflette import Engine
+from starlette.routing import Router, Route
+from starlette.types import Scope, Receive, Send
 
-from .graphql import GraphQLHandler
+from .datastructures import GraphiQL
+from .endpoints import GraphiQLEndpoint, GraphQLEndpoint
+from .middleware import GraphQLMiddleware
 
 
 class TartifletteApp:
-
-    handler_class = GraphQLHandler
-
     def __init__(
         self,
         *,
         engine: Engine = None,
         sdl: str = None,
-        graphiql: bool = True,
-        path: str = "",
+        graphiql: typing.Union[bool, GraphiQL] = True,
+        path: str = "/",
         schema_name: str = "default",
     ):
         if engine is None:
@@ -24,10 +25,17 @@ class TartifletteApp:
 
         assert engine, "`engine` expected if `sdl` not given"
 
-        self.handler = self.handler_class(engine, graphiql=graphiql, path=path)
+        if graphiql is True:
+            graphiql = GraphiQL()
 
-    async def __call__(
-        self, scope: dict, receive: typing.Callable, send: typing.Callable
-    ):
-        response = await self.handler(scope, receive)
-        await response(scope, receive, send)
+        routes = [Route(path=path, endpoint=GraphQLEndpoint)]
+
+        if graphiql and graphiql.path is not None:
+            routes.append(Route(path=graphiql.path, endpoint=GraphiQLEndpoint))
+
+        self.app = GraphQLMiddleware(
+            Router(routes=routes), engine=engine, graphiql=graphiql
+        )
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        await self.app(scope, receive, send)

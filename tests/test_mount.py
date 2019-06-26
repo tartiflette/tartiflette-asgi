@@ -9,7 +9,7 @@ from ._utils import omit_none
 
 
 @pytest.mark.parametrize("mount_path", ("/", "/graphql"))
-@pytest.mark.parametrize("path", [None, "", "/", "/graphql", "/graphql/"])
+@pytest.mark.parametrize("path", [None, "/", "/graphql", "/graphql/"])
 def test_starlette_mount(
     starlette: Starlette, engine: Engine, mount_path: str, path: str
 ):
