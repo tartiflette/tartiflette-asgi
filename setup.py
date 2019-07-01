@@ -37,7 +37,7 @@ setup(
     install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.10,<0.11"],
     extras_require={
         "dev": [
-            "uvicorn>=0.7, <0.8",
+            "uvicorn>=0.7, <0.9",
             "requests",
             "pytest",
             "black",
