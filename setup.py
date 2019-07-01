@@ -34,7 +34,7 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.10,<0.11"],
+    install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.10,<0.12"],
     extras_require={
         "dev": [
             "uvicorn>=0.7, <0.9",
