@@ -3,7 +3,7 @@ from starlette.applications import Starlette
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_starlette import TartifletteApp
+from tartiflette_starlette import TartifletteApp, mount
 
 from ._utils import omit_none
 
@@ -16,14 +16,31 @@ def test_starlette_mount(
     kwargs = omit_none({"engine": engine, "path": path})
 
     app = TartifletteApp(**kwargs)
-    starlette.mount(mount_path, app)
-
-    client = TestClient(starlette)
+    mount.starlette(starlette, mount_path, app)
 
     query = "{ hello }"
     full_path = mount_path.rstrip("/") + ("/" if path is None else path)
     assert "//" not in full_path
 
-    response = client.get(f"{full_path}?query={query}")
+    with TestClient(starlette) as client:
+        response = client.get(f"{full_path}?query={query}")
+
     assert response.status_code == 200
     assert response.json() == {"data": {"hello": "Hello stranger"}}
+
+
+def test_must_register_startup_handler(
+    starlette: Starlette, ttftt: TartifletteApp
+):
+    starlette.mount("/graphql", ttftt)
+
+    with TestClient(starlette) as client:
+        with pytest.raises(RuntimeError) as ctx:
+            client.get("/graphql")
+
+    error = str(ctx.value).lower()
+    assert "hint" in error
+    assert "starlette example" in error
+    assert ".add_event_handler" in error
+    assert "'startup'" in error
+    assert ".startup" in error

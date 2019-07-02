@@ -26,7 +26,8 @@ def build_graphiql_client(ttftt) -> TestClient:
 @pytest.fixture(name="client")
 def fixture_client(graphiql, engine: Engine) -> TestClient:
     ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
-    return build_graphiql_client(ttftt)
+    with build_graphiql_client(ttftt) as client:
+        yield client
 
 
 @pytest.fixture(name="path")
@@ -79,10 +80,11 @@ def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
         default_query=query,
         default_headers=headers,
     )
-    client = build_graphiql_client(
-        TartifletteApp(engine=engine, graphiql=graphiql)
-    )
-    response = client.get("/")
+    ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
+
+    with build_graphiql_client(ttftt) as client:
+        response = client.get("/")
+
     assert response.status_code == 200
     assert json.dumps(variables) in response.text
     assert inspect.cleandoc(query) in response.text
