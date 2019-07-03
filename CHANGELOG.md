@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `template`.
+- GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `default_query`, `default_headers`, `default_variables`, `template`.
 
 ## [0.2.0]
 

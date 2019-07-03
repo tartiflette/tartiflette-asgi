@@ -30,7 +30,7 @@ class GraphiQL:
 
     def render_template(self, graphql_endpoint_path: str) -> str:
         return self.template.substitute(
-            path=graphql_endpoint_path,
+            endpoint=graphql_endpoint_path,
             default_query=self.default_query,
             default_variables=json.dumps(self.default_variables),
             default_headers=json.dumps(self.default_headers),

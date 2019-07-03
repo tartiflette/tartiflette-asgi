@@ -280,7 +280,12 @@ Configuration helper for the GraphiQL client.
 - `default_headers` (`dict`, optional): extra HTTP headers to send when calling the GraphQL endpoint.
 - `default_query` (`str`, optional): the default query to display when accessing the GraphiQL interface.
 - `default_variables` (`dict`, optional): default [variables][graphql-variables] to display when accessing the GraphiQL interface.
-- `template` (`str`, optional): an HTML template to use instead of the default one. In the template, an HTTP request should be made to the GraphQL endpoint (its path is available as `${path}`).
+- `template` (`str`, optional): an HTML template to use instead of the default one. In the template, `default_headers`, `default_query` and `default_variables`, as well as the GraphQL `endpoint`, are available as strings (JSON-encoded if needed) using template string substitutions, e.g.:
+
+```js
+const endpoint = `${endpoint}`; // This is where the API call should be made.
+const defaultHeaders = JSON.parse(`${default_headers}`);
+```
 
 [graphql-variables]: https://graphql.org/learn/queries/#variables
 

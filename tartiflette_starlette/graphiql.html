@@ -122,7 +122,7 @@
       }
 
       function graphQLFetcher(graphQLParams) {
-        return fetch("${path}", {
+        return fetch("${endpoint}", {
           method: "post",
           headers: Object.assign(JSON.parse(defaultHeaders), {
             Accept: "application/json",
