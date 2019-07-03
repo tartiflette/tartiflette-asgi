@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2019-07-04
+
 ### Added
 
 - GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `default_query`, `default_headers`, `default_variables`, `template`.
@@ -17,9 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Internal refactoring that leverages more of Starlette's capabilities.
 - Documentation improvements.
 
-## [0.2.0]
-
-Released: 2019-06-10.
+## [0.2.0] - 2019-06-10
 
 ### Added
 
@@ -36,17 +36,13 @@ Released: 2019-06-10.
 
 - More robust URL matching on `TartifletteApp`.
 
-### [0.1.1]
-
-Released: 2019-04-28.
+### [0.1.1] - 2019-04-28
 
 ### Fixed
 
 - Add missing `graphiql.html` package asset.
 
-## [0.1.0]
-
-Released: 2019-04-26.
+## [0.1.0] - 2019-04-26
 
 ### Added
 
@@ -62,7 +58,8 @@ Project-related additions:
 - Contributing guide.
 - README and documentation.
 
-[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.2.0...HEAD
+[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/tartiflette/tartiflette-starlette/compare/5a1ecf...0.1.0
