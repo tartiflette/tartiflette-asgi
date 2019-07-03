@@ -1,3 +1,4 @@
+import inspect
 import json
 import typing
 
@@ -53,12 +54,26 @@ def test_graphiql_not_found(client: TestClient, path):
     assert response.text == "Not Found"
 
 
-def test_default_variables(engine: Engine):
-    variables = {"name": "Alice"}
-    graphiql = GraphiQL(default_variables=variables)
+@pytest.fixture(name="variables")
+def fixture_variables() -> dict:
+    return {"name": "Alice"}
+
+
+@pytest.fixture(name="query")
+def fixture_query() -> str:
+    return """
+        query Hello($name: String) {
+            hello(name: $name)
+        }
+    """
+
+
+def test_defaults(engine: Engine, variables: dict, query: str):
+    graphiql = GraphiQL(default_variables=variables, default_query=query)
     client = build_graphiql_client(
         TartifletteApp(engine=engine, graphiql=graphiql)
     )
     response = client.get("/")
     assert response.status_code == 200
     assert json.dumps(variables) in response.text
+    assert inspect.cleandoc(query) in response.text
