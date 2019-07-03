@@ -133,7 +133,7 @@ This is useful to have **a GraphQL endpoint _and_ other (non-GraphQL) endpoints*
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from tartiflette import Resolver
-from tartiflette_starlette import TartifletteApp
+from tartiflette_starlette import TartifletteApp, mount
 
 app = Starlette()
 
@@ -153,8 +153,15 @@ sdl = """
 """
 
 graphql = TartifletteApp(sdl=sdl)
-app.mount("/graphql", graphql)
+mount.starlette(app, "/graphql", graphql)  # (*)
 ```
+
+> (\*) This is a shorthand for:
+>
+> ```python
+> app.mount("/graphql", graphql)
+> app.add_event_handler("startup", graphql.startup)
+> ```
 
 Save the file as `app.py`, and serve it with [uvicorn]:
 
@@ -173,6 +180,17 @@ Response:
 ```json
 { "data": { "hello": "Hello, Chuck!" } }
 ```
+
+#### General approach
+
+Assuming you have an instance of `TartifletteApp` called `graphql`, you need to:
+
+1. Add the `graphql` app as a sub-application (also known as "mounting"). The parent ASGI application may expose a method such as `.mount()` for this purpose.
+2. Add `graphql.startup` as a startup event handler so that the Tartiflette engine is built upon application startup. Note that:
+
+- Not doing this will result in a `RuntimeError` when requesting the GraphQL endpoint.
+- The parent ASGI application may expose a method such as `.add_event_handler()` for this purpose.
+- This is only required if the parent ASGI application does not call lifespan event handlers for sub-applications, as is the case for Starlette.
 
 ### Making requests
 
@@ -291,6 +309,27 @@ const defaultHeaders = JSON.parse(`${default_headers}`);
 ```
 
 [graphql-variables]: https://graphql.org/learn/queries/#variables
+
+### `mount`
+
+This module contains helpers for mounting a `TartifletteApp` on other ASGI applications. Use these helpers to make sure you comply with the steps described in [General approach](#general-approach).
+
+#### Parameters
+
+All mounting helpers expect the same parameters:
+
+- `parent` (ASGI app): the parent ASGI application which the `TartifletteApp` must be mounted onto.
+- `path` (`str`): the URL path where the `TartifletteApp` should be mounted.
+- `app` (`TartifletteApp`): the `TartifletteApp` to mount.
+- `**kwargs` (any): extra keyword arguments passed to the mount implementation of the `parent` app.
+
+#### Available helpers
+
+| Helper              | Mount implementation | Startup event handler implementation |
+| ------------------- | -------------------- | ------------------------------------ |
+| `mount.starlette()` | `parent.mount()`     | `parent.add_event_handler()`         |
+
+> Missing a helper for your favorite framework? Feel free to [open a pull request](https://github.com/tartiflette/tartiflette-starlette/compare)!
 
 #### Error responses
 
