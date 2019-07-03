@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `default_query`, `default_headers`, `default_variables`, `template`.
+- Support for uvicorn 0.9.x.
+
+### Changed
+
+- Internal refactoring that leverages more of Starlette's capabilities.
+- Documentation improvements.
 
 ## [0.2.0]
 
