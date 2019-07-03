@@ -1,10 +1,10 @@
 import typing
 
+from starlette.routing import Route, Router
+from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
-from starlette.routing import Router, Route
-from starlette.types import Scope, Receive, Send
 
-from .datastructures import GraphiQL
+from .datastructures import GraphiQL, GraphQLRequestState
 from .endpoints import GraphiQLEndpoint, GraphQLEndpoint
 from .middleware import GraphQLMiddleware
 
@@ -38,9 +38,11 @@ class TartifletteApp:
 
         self.app = GraphQLMiddleware(
             Router(routes=routes),
-            engine=engine,
-            graphiql=graphiql,
-            graphql_path=graphql_route.path,
+            state=GraphQLRequestState(
+                engine=engine,
+                graphiql=graphiql,
+                graphql_endpoint_path=graphql_route.path,
+            ),
         )
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):
