@@ -33,6 +33,11 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 - [Quickstart](#quickstart)
 - [Installation](#installation)
 - [User guide](#user-guide)
+  - [Standalone serving](#standalone-serving)
+  - [ASGI submounting](#asgi-submounting)
+  - [Making requests](#making-requests)
+  - [Accessing request information](#accessing-request-information)
+  - [GraphiQL client](#graphiql-client)
 - [API Reference](#api-reference)
 - [FAQ](#faq)
 
@@ -104,7 +109,7 @@ The `TartifletteApp` class is an ASGI3-compliant application. There are two ways
 - Serve it as a standalone ASGI app.
 - Mount it as an endpoint of another ASGI app (e.g. a Starlette application).
 
-### Standalone ASGI app
+### Standalone serving
 
 The [Quickstart](#quickstart) example shows how to build a `TartifletteApp` and serve it as a standalone ASGI app.
 
@@ -114,9 +119,7 @@ The app is served using Uvicorn, but any other ASGI web server will do, for exam
 - [hypercorn](https://github.com/pgjones/hypercorn)
 - [daphne](https://github.com/django/daphne)
 
-### Submounting on another ASGI app
-
-#### How it works
+### ASGI submounting
 
 Most ASGI web frameworks provide a way to **mount** another ASGI app at a given URL prefix. You can use this to serve a `TartifletteApp` at an endpoint such as `/graphql` on the root ASGI application.
 
