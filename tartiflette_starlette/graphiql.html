@@ -46,6 +46,12 @@
        * This is only one example of this kind of feature, GraphiQL exposes
        * various React params to enable interesting integrations.
        */
+
+      // Inject default values from Python.
+      var defaultQuery = `${default_query}`;
+      var defaultVariables = `${default_variables}`;
+      var defaultHeaders = `${default_headers}`;
+
       // Parse the search string to get url parameters.
       var search = window.location.search;
       var parameters = {};
@@ -60,6 +66,11 @@
             ] = decodeURIComponent(entry.slice(eq + 1));
           }
         });
+
+      if (!parameters.variables && defaultVariables !== "") {
+        parameters.variables = defaultVariables;
+      }
+
       // if variables was provided, try to format it.
       if (parameters.variables) {
         try {
@@ -73,6 +84,11 @@
           // than present an error.
         }
       }
+
+      if (!parameters.query && defaultQuery !== "") {
+        parameters.query = defaultQuery;
+      }
+
       // When the query and variables string is edited, update the URL bar so
       // that it can be easily shared
       function onEditQuery(newQuery) {
@@ -106,12 +122,12 @@
       }
 
       function graphQLFetcher(graphQLParams) {
-        return fetch("${path}", {
+        return fetch("${endpoint}", {
           method: "post",
-          headers: {
+          headers: Object.assign(JSON.parse(defaultHeaders), {
             Accept: "application/json",
             "Content-Type": "application/json"
-          },
+          }),
           body: JSON.stringify(graphQLParams),
           credentials: "include"
         })
@@ -126,6 +142,7 @@
             }
           });
       }
+
       // Render <GraphiQL /> into the body.
       // See the README in the top level of this module to learn more about
       // how you can customize GraphiQL by providing different values or

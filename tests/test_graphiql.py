@@ -1,3 +1,5 @@
+import inspect
+import json
 import typing
 
 import pytest
@@ -15,12 +17,16 @@ def fixture_graphiql(request) -> typing.Union[GraphiQL, bool]:
     return request.param
 
 
-@pytest.fixture(name="client")
-def fixture_client(graphiql, engine: Engine) -> TestClient:
-    ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
+def build_graphiql_client(ttftt) -> TestClient:
     client = TestClient(ttftt)
     client.headers.update({"accept": "text/html"})
     return client
+
+
+@pytest.fixture(name="client")
+def fixture_client(graphiql, engine: Engine) -> TestClient:
+    ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
+    return build_graphiql_client(ttftt)
 
 
 @pytest.fixture(name="path")
@@ -46,3 +52,38 @@ def test_graphiql_not_found(client: TestClient, path):
     response = client.get(path + "foo")
     assert response.status_code == 404
     assert response.text == "Not Found"
+
+
+@pytest.fixture(name="variables")
+def fixture_variables() -> dict:
+    return {"name": "Alice"}
+
+
+@pytest.fixture(name="query")
+def fixture_query() -> str:
+    return """
+        query Hello($name: String) {
+            hello(name: $name)
+        }
+    """
+
+
+@pytest.fixture(name="headers")
+def fixture_headers() -> dict:
+    return {"Authorization": "Bearer 123"}
+
+
+def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
+    graphiql = GraphiQL(
+        default_variables=variables,
+        default_query=query,
+        default_headers=headers,
+    )
+    client = build_graphiql_client(
+        TartifletteApp(engine=engine, graphiql=graphiql)
+    )
+    response = client.get("/")
+    assert response.status_code == 200
+    assert json.dumps(variables) in response.text
+    assert inspect.cleandoc(query) in response.text
+    assert json.dumps(headers) in response.text
