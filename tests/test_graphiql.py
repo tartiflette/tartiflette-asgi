@@ -8,7 +8,8 @@ from tartiflette_starlette import GraphiQL, TartifletteApp
 
 
 @pytest.fixture(
-    name="graphiql", params=[False, True, GraphiQL(), GraphiQL(path="/graphql")]
+    name="graphiql",
+    params=[False, True, GraphiQL(), GraphiQL(path="/graphql")],
 )
 def fixture_graphiql(request) -> typing.Union[GraphiQL, bool]:
     return request.param

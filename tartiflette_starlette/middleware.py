@@ -4,31 +4,20 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.types import ASGIApp
-from tartiflette import Engine
 
-from .datastructures import GraphiQL
+from .datastructures import GraphQLRequestState
+from .helpers import StateHelper
 
 
 class GraphQLMiddleware(BaseHTTPMiddleware):
-    def __init__(
-        self,
-        app: ASGIApp,
-        engine: Engine,
-        graphiql: GraphiQL,
-        graphql_path: str,
-    ):
+    def __init__(self, app: ASGIApp, state: GraphQLRequestState):
         super().__init__(app)
-        self.kwargs = {
-            "engine": engine,
-            "graphiql": graphiql,
-            "graphql_path": graphql_path,
-        }
+        self.state = state
 
     async def dispatch(
         self,
         request: Request,
         call_next: typing.Callable[[Request], typing.Awaitable[Response]],
     ) -> Response:
-        for key, value in self.kwargs.items():
-            setattr(request.state, key, value)
+        StateHelper.set(request, self.state)
         return await call_next(request)

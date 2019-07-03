@@ -10,12 +10,15 @@ from starlette.responses import (
 from tartiflette import Engine
 
 from .errors import format_errors
+from .helpers import StateHelper
 
 
 class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
-        graphiql = request.state.graphiql
-        html = graphiql.template.substitute(path=request.state.graphql_path)
+        state = StateHelper.get(request)
+        html = state.graphiql.render_template(
+            graphql_endpoint_path=state.graphql_endpoint_path
+        )
         return HTMLResponse(html)
 
 
@@ -49,7 +52,8 @@ class GraphQLEndpoint(HTTPEndpoint):
         background = BackgroundTasks()
         context = {"req": request, "background": background}
 
-        engine: Engine = request.state.engine
+        state = StateHelper.get(request)
+        engine: Engine = state.engine
         result: dict = await engine.execute(
             query,
             context=context,
@@ -71,8 +75,9 @@ class GraphQLEndpoint(HTTPEndpoint):
 
     async def dispatch(self):
         request = Request(self.scope, self.receive)
+        state = StateHelper.get(request)
         if "text/html" in request.headers.get("Accept", ""):
-            if request.state.graphiql and request.state.graphiql.path is None:
+            if state.graphiql and state.graphiql.path is None:
                 app = GraphiQLEndpoint
             else:
                 app = PlainTextResponse("Not Found", 404)
