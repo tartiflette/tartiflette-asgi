@@ -68,8 +68,17 @@ def fixture_query() -> str:
     """
 
 
-def test_defaults(engine: Engine, variables: dict, query: str):
-    graphiql = GraphiQL(default_variables=variables, default_query=query)
+@pytest.fixture(name="headers")
+def fixture_headers() -> dict:
+    return {"Authorization": "Bearer 123"}
+
+
+def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
+    graphiql = GraphiQL(
+        default_variables=variables,
+        default_query=query,
+        default_headers=headers,
+    )
     client = build_graphiql_client(
         TartifletteApp(engine=engine, graphiql=graphiql)
     )
@@ -77,3 +86,4 @@ def test_defaults(engine: Engine, variables: dict, query: str):
     assert response.status_code == 200
     assert json.dumps(variables) in response.text
     assert inspect.cleandoc(query) in response.text
+    assert json.dumps(headers) in response.text

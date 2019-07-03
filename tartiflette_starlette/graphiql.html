@@ -51,6 +51,11 @@
       var defaultQuery = `${default_query}`;
       var defaultVariables = `${default_variables}`;
 
+      var headers = Object.assign(JSON.parse(`${default_headers}`), {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      });
+
       // Parse the search string to get url parameters.
       var search = window.location.search;
       var parameters = {};
@@ -123,10 +128,7 @@
       function graphQLFetcher(graphQLParams) {
         return fetch("${path}", {
           method: "post",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
+          headers,
           body: JSON.stringify(graphQLParams),
           credentials: "include"
         })

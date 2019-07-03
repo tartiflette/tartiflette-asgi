@@ -17,6 +17,7 @@ class GraphiQL:
         template: str = None,
         default_query: str = "",
         default_variables: dict = None,
+        default_headers: dict = None,
     ):
         if template is None:
             with open(_GRAPHIQL_TEMPLATE, encoding="utf-8") as f:
@@ -25,12 +26,14 @@ class GraphiQL:
         self.template = string.Template(template)
         self.default_query = inspect.cleandoc(default_query)
         self.default_variables = default_variables or {}
+        self.default_headers = default_headers or {}
 
     def render_template(self, graphql_endpoint_path: str) -> str:
         return self.template.substitute(
             path=graphql_endpoint_path,
             default_query=self.default_query,
             default_variables=json.dumps(self.default_variables),
+            default_headers=json.dumps(self.default_headers),
         )
 
 
