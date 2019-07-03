@@ -50,11 +50,7 @@
       // Inject default values from Python.
       var defaultQuery = `${default_query}`;
       var defaultVariables = `${default_variables}`;
-
-      var headers = Object.assign(JSON.parse(`${default_headers}`), {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      });
+      var defaultHeaders = `${default_headers}`;
 
       // Parse the search string to get url parameters.
       var search = window.location.search;
@@ -128,7 +124,10 @@
       function graphQLFetcher(graphQLParams) {
         return fetch("${path}", {
           method: "post",
-          headers,
+          headers: Object.assign(JSON.parse(defaultHeaders), {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }),
           body: JSON.stringify(graphQLParams),
           credentials: "include"
         })

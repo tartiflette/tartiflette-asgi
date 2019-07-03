@@ -214,6 +214,40 @@ async def resolve_whoami(parent, args, context, info) -> str:
 
 See also [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
 
+### GraphiQL client
+
+By default, the GraphQL endpoint provided by `TartifletteApp` serves a [GraphiQL] client when it is accessed from a web browser. It can be customized using the `GraphiQL` helper.
+
+Here's an example:
+
+```python
+from tartiflette_starlette import TartifletteApp, GraphiQL
+
+app = TartifletteApp(
+    sdl="""
+    type Query {
+        hello(name: String): String
+    }
+    """,
+    graphiql=GraphiQL(
+        path="/graphiql",
+        default_headers={"Authorization": "Bearer 123"},
+        default_variables={"name": "world"},
+        default_query="""
+        query Hello($name: String) {
+            hello(name: $name)
+        }
+        """,
+    ),
+)
+```
+
+Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the customized GraphiQL client when accessin http://127.0.0.1/graphiql:
+
+![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-custom.png)
+
+See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
+
 ## API Reference
 
 > **Note**: unless specified, components documented here can be imported from `tartiflette_starlette` directly, e.g. `from tartiflette_starlette import TartifletteApp`.
@@ -242,8 +276,13 @@ Configuration helper for the GraphiQL client.
 
 **Note**: all parameters are keyword-only.
 
-- `path` (`str`, optional): the path of the GraphiQL endpoint. Defaults to the `path` given to `TartifletteApp`.
+- `path` (`str`, optional): the path of the GraphiQL endpoint, **relative to the root path which `TartifletteApp` is served at**. If not given, defaults to the `path` given to `TartifletteApp`.
+- `default_headers` (`dict`, optional): extra HTTP headers to send when calling the GraphQL endpoint.
+- `default_query` (`str`, optional): the default query to display when accessing the GraphiQL interface.
+- `default_variables` (`dict`, optional): default [variables][graphql-variables] to display when accessing the GraphiQL interface.
 - `template` (`str`, optional): an HTML template to use instead of the default one. In the template, an HTTP request should be made to the GraphQL endpoint (its path is available as `${path}`).
+
+[graphql-variables]: https://graphql.org/learn/queries/#variables
 
 #### Error responses
 
