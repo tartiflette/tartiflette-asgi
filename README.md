@@ -245,7 +245,7 @@ app = TartifletteApp(
 )
 ```
 
-Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the customized GraphiQL client when accessin http://127.0.0.1/graphiql:
+Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the customized GraphiQL client when accessing http://127.0.0.1/graphiql:
 
 ![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-custom.png)
 
