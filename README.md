@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://travis-ci.org/tartiflette/tartiflette-starlette">
-    <img src="https://img.shields.io/travis/tartiflette/tartiflette-starlette.svg" alt="Build status">
+    <img src="https://travis-ci.org/tartiflette/tartiflette-starlette.svg?branch=master" alt="Build status">
   </a>
   <a href="https://pypi.org/project/tartiflette-starlette">
     <img src="https://badge.fury.io/py/tartiflette-starlette.svg" alt="Package version">
