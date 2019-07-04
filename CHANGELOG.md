@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for Tartiflette 0.12.x.
+- Add a `mount` module with submounting helpers.
+- Add `mount.starlette()`.
+
+### Changed
+
+- Due to the new [engine cooking API](https://tartiflette.io/docs/api/engine#cook-your-tartiflette) in Tartiflette 0.12, `TartifletteApp` now includes a startup event handler responsible for building the GraphQL engine. If submounting, it **must** be registered on the parent ASGI app. Helpers in the `mount` module take care of this for you.
+
+### Removed
+
+- Drop support for Tartiflette 0.11.x and below.
+
 ## [0.3.0] - 2019-07-04
 
 ### Added
