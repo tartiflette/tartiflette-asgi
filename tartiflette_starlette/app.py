@@ -1,5 +1,4 @@
 import typing
-import traceback
 
 from starlette.routing import Lifespan, Route, Router
 from starlette.types import Receive, Scope, Send
