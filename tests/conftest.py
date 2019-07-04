@@ -25,7 +25,8 @@ def fixture_ttftt(engine: Engine) -> TartifletteApp:
 
 @pytest.fixture(name="client")
 def fixture_client(ttftt: TartifletteApp) -> TestClient:
-    return TestClient(ttftt)
+    with TestClient(ttftt) as client:
+        yield client
 
 
 @pytest.fixture(name="starlette")

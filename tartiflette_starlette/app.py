@@ -1,6 +1,6 @@
 import typing
 
-from starlette.routing import Route, Router
+from starlette.routing import Lifespan, Route, Router
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
@@ -21,9 +21,11 @@ class TartifletteApp:
     ):
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
-            engine = Engine(sdl, schema_name)
+            engine = Engine(sdl=sdl, schema_name=schema_name)
 
         assert engine, "`engine` expected if `sdl` not given"
+
+        self.engine = engine
 
         if graphiql is True:
             graphiql = GraphiQL()
@@ -39,11 +41,29 @@ class TartifletteApp:
         self.app = GraphQLMiddleware(
             Router(routes=routes),
             state=GraphQLRequestState(
-                engine=engine,
+                engine=self.engine,
                 graphiql=graphiql,
                 graphql_endpoint_path=graphql_route.path,
             ),
         )
+        self.lifespan = Lifespan(on_startup=self.startup)
+        self._started_up = False
+
+    async def startup(self):
+        await self.engine.cook()
+        self._started_up = True
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):
-        await self.app(scope, receive, send)
+        if scope["type"] == "lifespan":
+            await self.lifespan(scope, receive, send)
+        else:
+            if not self._started_up:
+                raise RuntimeError(
+                    "GraphQL engine is not ready.\n\n"
+                    "HINT: you must register the startup event handler on the "
+                    "parent ASGI application.\n"
+                    "Starlette example:\n\n"
+                    "   app.mount('/graphql', graphql)\n"
+                    "   app.add_event_handler('startup', graphql.startup)"
+                )
+            await self.app(scope, receive, send)
