@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2019-07-04
+
 ### Added
 
 - Support for Tartiflette 0.12.x.
@@ -21,12 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Drop support for Tartiflette 0.11.x and below.
 
-## [0.3.0] - 2019-07-04
+## [0.3.0] - 2019-07-03
 
 ### Added
 
 - GraphiQL configuration via the `GraphiQL` helper. Options: `path`, `default_query`, `default_headers`, `default_variables`, `template`.
-- Support for uvicorn 0.9.x.
 
 ### Changed
 
@@ -50,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - More robust URL matching on `TartifletteApp`.
 
-### [0.1.1] - 2019-04-28
+## [0.1.1] - 2019-04-28
 
 ### Fixed
 
@@ -72,7 +73,8 @@ Project-related additions:
 - Contributing guide.
 - README and documentation.
 
-[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.3.0...HEAD
+[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.0...0.1.1
