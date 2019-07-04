@@ -104,7 +104,7 @@ This will also install [Tartiflette] and [Starlette], so you're good to go!
 
 ## User guide
 
-The `TartifletteApp` class is an ASGI3-compliant application. There are two ways to use it:
+The [`TartifletteApp`](#tartifletteapp) class is an ASGI3-compliant application. There are two ways to use it:
 
 - Serve it as a standalone ASGI app.
 - Mount it as an endpoint of another ASGI app (e.g. a Starlette application).
@@ -191,6 +191,8 @@ Assuming you have an instance of `TartifletteApp` called `graphql`, you need to:
 - Not doing this will result in a `RuntimeError` when requesting the GraphQL endpoint.
 - The parent ASGI application may expose a method such as `.add_event_handler()` for this purpose.
 - This is only required if the parent ASGI application does not call lifespan event handlers for sub-applications, as is the case for Starlette.
+
+**Tip**: the [`mount`](#mount) module provides mounting helpers for various ASGI frameworks.
 
 ### Making requests
 
@@ -289,6 +291,15 @@ See [`GraphiQL`](#graphiql) in the API reference for a complete description of t
 
 - `__call__(scope, receive, send)`: ASGI3 implementation.
 
+#### Error responses
+
+| Status code                | Description                                                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 400 Bad Request            | The GraphQL query could not be found in the request data.                                                                        |
+| 404 Not Found              | The request does not match the GraphQL or GraphiQL endpoint paths.                                                               |
+| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` or `POST`.                                                                           |
+| 415 Unsupported Media Type | The POST request made to the GraphQL endpoint uses a `Content-Type` different from `application/json` and `application/graphql`. |
+
 ### `GraphiQL`
 
 Configuration helper for the GraphiQL client.
@@ -330,15 +341,6 @@ All mounting helpers expect the same parameters:
 | `mount.starlette()` | `parent.mount()`     | `parent.add_event_handler()`         |
 
 > Missing a helper for your favorite framework? Feel free to [open a pull request](https://github.com/tartiflette/tartiflette-starlette/compare)!
-
-#### Error responses
-
-| Status code                | Description                                                                                                                      |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 400 Bad Request            | The GraphQL query could not be found in the request data.                                                                        |
-| 404 Not Found              | The request does not match the GraphQL or GraphiQL endpoint paths.                                                               |
-| 405 Method Not Allowed     | The HTTP method is not one of `GET`, `HEAD` or `POST`.                                                                           |
-| 415 Unsupported Media Type | The POST request made to the GraphQL endpoint uses a `Content-Type` different from `application/json` and `application/graphql`. |
 
 ## FAQ
 
