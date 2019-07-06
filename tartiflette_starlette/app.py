@@ -1,11 +1,11 @@
 import typing
 
-from starlette.routing import Lifespan, Route, Router
+from starlette.routing import Lifespan, Route, Router, WebSocketRoute
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
 from .datastructures import GraphiQL, GraphQLConfig
-from .endpoints import GraphiQLEndpoint, GraphQLEndpoint
+from .endpoints import GraphiQLEndpoint, GraphQLEndpoint, SubscriptionEndpoint
 from .middleware import GraphQLMiddleware
 
 
@@ -17,6 +17,7 @@ class TartifletteApp:
         sdl: str = None,
         graphiql: typing.Union[bool, GraphiQL] = True,
         path: str = "/",
+        subscription_path: str = None,
         context: dict = None,
         schema_name: str = "default",
     ):
@@ -41,6 +42,12 @@ class TartifletteApp:
 
         graphql_route = Route(path=path, endpoint=GraphQLEndpoint)
         routes.append(graphql_route)
+
+        if subscription_path is not None:
+            subscription_route = WebSocketRoute(
+                path=subscription_path, endpoint=SubscriptionEndpoint
+            )
+            routes.append(subscription_route)
 
         config = GraphQLConfig(
             engine=self.engine,

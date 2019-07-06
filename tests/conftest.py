@@ -10,6 +10,7 @@ from tartiflette import Engine
 
 from tartiflette_starlette import TartifletteApp
 
+from ._utils import PubSub, pubsub
 
 # NOTE: must be session-scoped to prevent redefining GraphQL types.
 @pytest.fixture(name="engine", scope="session")
@@ -18,9 +19,18 @@ def fixture_engine() -> Engine:
     return Engine(sdl, modules=["tests.resolvers"])
 
 
+@pytest.fixture(name="pubsub", scope="session")
+def fixture_pubsub() -> PubSub:
+    return pubsub
+
+
 @pytest.fixture(name="ttftt")
-def fixture_ttftt(engine: Engine) -> TartifletteApp:
-    return TartifletteApp(engine=engine)
+def fixture_ttftt(engine: Engine, pubsub: PubSub) -> TartifletteApp:
+    return TartifletteApp(
+        engine=engine,
+        subscription_path="/subscriptions",
+        context={"pubsub": pubsub},
+    )
 
 
 @pytest.fixture(name="client")
