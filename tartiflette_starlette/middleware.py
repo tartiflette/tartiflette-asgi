@@ -1,23 +1,18 @@
-import typing
+from starlette.requests import HTTPConnection
+from starlette.types import ASGIApp, Scope, Receive, Send
 
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.requests import Request
-from starlette.responses import Response
-from starlette.types import ASGIApp
-
-from .datastructures import GraphQLRequestState
-from .helpers import StateHelper
+from .datastructures import GraphQLConfig
 
 
-class GraphQLMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app: ASGIApp, state: GraphQLRequestState):
-        super().__init__(app)
-        self.state = state
+class GraphQLMiddleware:
+    def __init__(self, app: ASGIApp, config: GraphQLConfig):
+        self.app = app
+        self.config = config
 
-    async def dispatch(
-        self,
-        request: Request,
-        call_next: typing.Callable[[Request], typing.Awaitable[Response]],
-    ) -> Response:
-        StateHelper.set(request, self.state)
-        return await call_next(request)
+    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        scope["graphql"] = self.config
+        await self.app(scope, receive, send)
+
+
+def get_graphql_config(conn: HTTPConnection) -> GraphQLConfig:
+    return conn["graphql"]

@@ -4,7 +4,7 @@ from starlette.routing import Lifespan, Route, Router
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
-from .datastructures import GraphiQL, GraphQLRequestState
+from .datastructures import GraphiQL, GraphQLConfig
 from .endpoints import GraphiQLEndpoint, GraphQLEndpoint
 from .middleware import GraphQLMiddleware
 
@@ -38,15 +38,16 @@ class TartifletteApp:
         graphql_route = Route(path=path, endpoint=GraphQLEndpoint)
         routes.append(graphql_route)
 
-        self.app = GraphQLMiddleware(
-            Router(routes=routes),
-            state=GraphQLRequestState(
-                engine=self.engine,
-                graphiql=graphiql,
-                graphql_endpoint_path=graphql_route.path,
-            ),
+        config = GraphQLConfig(
+            engine=self.engine,
+            graphiql=graphiql,
+            graphql_endpoint_path=graphql_route.path,
         )
+
+        router = Router(routes=routes)
+        self.app = GraphQLMiddleware(router, config=config)
         self.lifespan = Lifespan(on_startup=self.startup)
+
         self._started_up = False
 
     async def startup(self):

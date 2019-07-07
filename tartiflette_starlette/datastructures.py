@@ -37,7 +37,7 @@ class GraphiQL:
         )
 
 
-class GraphQLRequestState(typing.NamedTuple):
+class GraphQLConfig(typing.NamedTuple):
     engine: Engine
     graphiql: GraphiQL
     graphql_endpoint_path: str
