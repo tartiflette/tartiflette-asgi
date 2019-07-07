@@ -271,7 +271,7 @@ Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the cust
 
 See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
 
-#### Providing additional context to resolvers
+### Providing additional context to resolvers
 
 You can inject your own services, functions or data into the GraphQL `context` using the `context` option.
 
