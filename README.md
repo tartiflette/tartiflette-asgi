@@ -271,6 +271,27 @@ Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the cust
 
 See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
 
+#### Providing additional context to resolvers
+
+You can inject your own services, functions or data into the GraphQL `context` using the `context` option.
+
+For example, assuming you use a publish/subscribe library named `pubsub`, you could write:
+
+```python
+from pubsub import PubSub  # Fake
+
+@Resolver("Query.human")
+async def resolve_human(parent, args, context, info):
+    pubsub = context["pubsub"]
+    # ...
+    await pubsub.publish("human_fetched", args)
+
+graphql = TartifletteApp(
+  # ...,
+  context={"pubsub": PubSub()},
+)
+```
+
 ## API Reference
 
 > **Note**: unless specified, components documented here can be imported from `tartiflette_starlette` directly, e.g. `from tartiflette_starlette import TartifletteApp`.
@@ -285,6 +306,7 @@ See [`GraphiQL`](#graphiql) in the API reference for a complete description of t
 - `sdl` (`str`): a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
 - `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
 - `path` (`str`, optional): the path which clients should make GraphQL queries to. Defaults to `"/"`.
+- `context (dict)`: a copy of this dictionary is passed to resolvers when executing a query. Defaults to `{}`. Note: the Starlette `Request` object is always present as `req`.
 - `schema_name` (`str`, optional): name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods

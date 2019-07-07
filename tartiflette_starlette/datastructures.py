@@ -39,5 +39,6 @@ class GraphiQL:
 
 class GraphQLConfig(typing.NamedTuple):
     engine: Engine
+    context: dict
     graphiql: GraphiQL
     graphql_endpoint_path: str
