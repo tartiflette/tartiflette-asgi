@@ -13,3 +13,9 @@ async def resolve_whoami(parent, args, context, info) -> str:
     request: Request = context["req"]
     user = request.state.user
     return "a mystery" if user is None else user
+
+
+@Resolver("Query.foo")
+async def resolve_foo(parent, args, context, info) -> str:
+    get_foo = context.get("get_foo", lambda: "default")
+    return get_foo()

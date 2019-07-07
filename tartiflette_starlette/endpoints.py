@@ -49,10 +49,11 @@ class GraphQLEndpoint(HTTPEndpoint):
                 "No GraphQL query found in the request", 400
             )
 
+        config = get_graphql_config(request)
         background = BackgroundTasks()
-        context = {"req": request, "background": background}
+        context = {"req": request, "background": background, **config.context}
 
-        engine: Engine = get_graphql_config(request).engine
+        engine: Engine = config.engine
         result: dict = await engine.execute(
             query,
             context=context,
