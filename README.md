@@ -337,10 +337,10 @@ app = TartifletteApp(
     graphiql=GraphiQL(
         default_query="""
         subscription {
-            timer(seconds: 5) {
+          timer(seconds: 5) {
             remainingTime
             status
-            }
+          }
         }
         """
     ),
@@ -354,6 +354,8 @@ Save this file as `graphql.py`, then run `$ uvicorn graphql:app`. Open the Graph
 ![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-subscriptions.png)
 
 See [`Subscriptions`](#subscriptions) in the API reference for a complete description of the available options.
+
+For more information on using subscriptions in Tartiflette, see the [Tartiflette documentation](https://tartiflette.io/docs/api/subscription).
 
 ## API Reference
 
@@ -369,8 +371,8 @@ See [`Subscriptions`](#subscriptions) in the API reference for a complete descri
 - `sdl` (`str`): a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
 - `path` (`str`, optional): the path which clients should make GraphQL queries to. Defaults to `"/"`.
 - `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
-- `subscriptions` (`subscriptions` or `bool`, optional): subscriptions configuration. Defaults to `True`, which is equivalent to `Subscriptions(path="/subscriptions")`. Leave empty or pass `None` to not register the subscription WebSocket endpoint.
-- `context (dict)`: a copy of this dictionary is passed to resolvers when executing a query. Defaults to `{}`. Note: the Starlette `Request` object is always present as `req`.
+- `subscriptions` (`Subscriptions` or `bool`, optional): subscriptions configuration. Defaults to `True`, which is equivalent to `Subscriptions(path="/subscriptions")`. Leave empty or pass `None` to not register the subscription WebSocket endpoint.
+- `context` (`dict`, optional): a copy of this dictionary is passed to resolvers when executing a query. Defaults to `{}`. Note: the Starlette `Request` object is always present as `req`.
 - `schema_name` (`str`, optional): name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
 #### Methods
