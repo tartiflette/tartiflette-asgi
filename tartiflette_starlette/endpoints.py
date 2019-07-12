@@ -103,7 +103,7 @@ class SubscriptionEndpoint(WebSocketEndpoint):
         self.protocol = None
 
     async def on_connect(self, websocket: WebSocket):
-        await super().on_connect(websocket)
+        await websocket.accept(subprotocol=GraphQLWSProtocol.name)
         config = get_graphql_config(websocket)
         self.protocol = GraphQLWSProtocol(
             websocket=websocket,

@@ -9,6 +9,8 @@ from .constants import GQL
 
 
 class GraphQLWSProtocol:
+    name = "graphql-ws"
+
     def __init__(self):
         self._operations = {}
 
@@ -62,6 +64,7 @@ class GraphQLWSProtocol:
             raise exc
 
         await self._send_message(opid, "complete")
+        await self._unsubscribe(opid)
 
     async def _unsubscribe(self, opid: str):
         operation: typing.AsyncGenerator = self._operations.pop(opid, None)
