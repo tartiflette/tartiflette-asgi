@@ -331,7 +331,20 @@ async def on_timer(parent, args, context, info):
         await asyncio.sleep(1)
     yield {"remainingTime": 0, "status": "DONE"}
 
-app = TartifletteApp(sdl=sdl, subscriptions=True)
+app = TartifletteApp(
+    sdl=sdl,
+    subscriptions=True,
+    graphiql=GraphiQL(
+        default_query="""
+        subscription {
+            timer(seconds: 5) {
+            remainingTime
+            status
+            }
+        }
+        """
+    ),
+)
 ```
 
 > **Note**: the subscriptions endpoint is exposed on `/subscriptions` by default.
