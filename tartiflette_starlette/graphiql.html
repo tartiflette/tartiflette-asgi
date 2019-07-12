@@ -34,23 +34,17 @@
     <script src="//cdn.jsdelivr.net/npm/react@16.2.0/umd/react.production.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/react-dom@16.2.0/umd/react-dom.production.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/graphiql@0.12.0/graphiql.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/subscriptions-transport-ws@0.7.0/browser/client.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/graphiql-subscriptions-fetcher@0.0.2/browser/client.js"></script>
   </head>
   <body>
     <div id="graphiql">Loading...</div>
     <script>
-      /**
-       * This GraphiQL example illustrates how to use some of GraphiQL's props
-       * in order to enable reading and updating the URL parameters, making
-       * link sharing of queries a little bit easier.
-       *
-       * This is only one example of this kind of feature, GraphiQL exposes
-       * various React params to enable interesting integrations.
-       */
-
       // Inject default values from Python.
       var defaultQuery = `${default_query}`;
       var defaultVariables = `${default_variables}`;
       var defaultHeaders = `${default_headers}`;
+      var subscriptionsEndpoint = `${subscriptions_endpoint}`;
 
       // Parse the search string to get url parameters.
       var search = window.location.search;
@@ -143,13 +137,30 @@
           });
       }
 
-      // Render <GraphiQL /> into the body.
-      // See the README in the top level of this module to learn more about
-      // how you can customize GraphiQL by providing different values or
-      // additional child elements.
+      if (!subscriptionsEndpoint) {
+        parameters.fetcher = graphQLFetcher;
+      } else {
+        var subscriptionsURL = [
+          "ws://",
+          window.location.hostname,
+          window.location.port ? ":" + window.location.port : "",
+          subscriptionsEndpoint
+        ].join("");
+
+        var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient(
+          subscriptionsURL,
+          { reconnect: true }
+        );
+
+        parameters.fetcher = window.GraphiQLSubscriptionsFetcher.graphQLFetcher(
+          subscriptionsClient,
+          graphQLFetcher
+        );
+      }
+
       ReactDOM.render(
         React.createElement(GraphiQL, {
-          fetcher: graphQLFetcher,
+          fetcher: parameters.fetcher,
           query: parameters.query,
           variables: parameters.variables,
           operationName: parameters.operationName,

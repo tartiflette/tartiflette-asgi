@@ -21,7 +21,12 @@ class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
         config = get_graphql_config(request)
         html = config.graphiql.render_template(
-            graphql_endpoint_path=config.graphql_endpoint_path
+            graphql_endpoint=config.path,
+            subscriptions_endpoint=(
+                None
+                if config.subscriptions is None
+                else config.subscriptions.path
+            ),
         )
         return HTMLResponse(html)
 

@@ -9,6 +9,10 @@ from tartiflette import Engine
 _GRAPHIQL_TEMPLATE = os.path.join(os.path.dirname(__file__), "graphiql.html")
 
 
+class Subscriptions(typing.NamedTuple):
+    path: str
+
+
 class GraphiQL:
     def __init__(
         self,
@@ -28,9 +32,14 @@ class GraphiQL:
         self.default_variables = default_variables or {}
         self.default_headers = default_headers or {}
 
-    def render_template(self, graphql_endpoint_path: str) -> str:
+    def render_template(
+        self,
+        graphql_endpoint: str,
+        subscriptions_endpoint: typing.Optional[str],
+    ) -> str:
         return self.template.substitute(
-            endpoint=graphql_endpoint_path,
+            endpoint=graphql_endpoint,
+            subscriptions_endpoint=subscriptions_endpoint,
             default_query=self.default_query,
             default_variables=json.dumps(self.default_variables),
             default_headers=json.dumps(self.default_headers),
@@ -41,4 +50,5 @@ class GraphQLConfig(typing.NamedTuple):
     engine: Engine
     context: dict
     graphiql: GraphiQL
-    graphql_endpoint_path: str
+    path: str
+    subscriptions: typing.Optional[Subscriptions]
