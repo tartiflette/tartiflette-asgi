@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- WebSocket subscriptions (`subscriptions-transport-ws` protocol).
 - Pass extra context to resolvers using the new `context` option on `TartifletteApp`.
 
 ## [0.4.0] - 2019-07-04
