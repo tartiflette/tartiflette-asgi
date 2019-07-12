@@ -292,6 +292,55 @@ graphql = TartifletteApp(
 )
 ```
 
+### WebSocket subscriptions (Advanced)
+
+This package provides support for [GraphQL subscriptions](https://graphql.org/blog/subscriptions-in-graphql-and-relay/) over WebSocket. This is done by implementing the [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol. As a result, subscription queries can be issued from the built-in GraphiQL client, as well as [Apollo GraphQL](https://www.apollographql.com/docs/react/advanced/subscriptions/) and any other client that uses this protocol.
+
+To enable subscriptions, configure `subscriptions` on `TartifletteApp`:
+
+```python
+import asyncio
+from tartiflette import Subscription
+from tartiflette_starlette import TartifletteApp
+
+sdl = """
+type Subscription {
+  timer(seconds: Int!): Timer
+}
+
+enum Status {
+  RUNNING
+  DONE
+}
+
+type Timer {
+  remainingTime: Int!
+  status: Status!
+}
+"""
+
+@Subscription("Subscription.timer")
+async def on_timer(parent, args, context, info):
+    seconds = args["seconds"]
+    for i in range(seconds):
+        yield {"remainingTime": seconds - i, "status": "RUNNING"}
+        await asyncio.sleep(1)
+    yield {"remainingTime": 0, "status": "DONE"}
+
+graphql = TartifletteApp(sdl=sdl, subscription_path="/subscriptions")
+```
+
+Save this file as `app.py`, then run `$ uvicorn app:graphql`. Open the GraphiQL client at http://localhost:8000, and enter the following query:
+
+```graphql
+subscription {
+  timer(seconds: 10) {
+    remainingTime,
+    status
+  }
+}
+```
+
 ## API Reference
 
 > **Note**: unless specified, components documented here can be imported from `tartiflette_starlette` directly, e.g. `from tartiflette_starlette import TartifletteApp`.
