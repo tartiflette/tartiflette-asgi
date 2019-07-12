@@ -9,8 +9,9 @@ from tartiflette import Engine
 _GRAPHIQL_TEMPLATE = os.path.join(os.path.dirname(__file__), "graphiql.html")
 
 
-class Subscriptions(typing.NamedTuple):
-    path: str
+class Subscriptions:
+    def __init__(self, *, path: str):
+        self.path = path
 
 
 class GraphiQL:

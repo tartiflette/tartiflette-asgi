@@ -23,10 +23,9 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 - Compatibility with any ASGI server and framework.
 - Standalone and sub-app serving.
 - Built-in [GraphiQL] client.
+- Support for [GraphQL subscriptions over WebSocket](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md).
 
 [graphiql]: https://github.com/graphql/graphiql
-
-**Note**: WebSocket subscriptions aren't supported yet.
 
 **Table of contents**
 
@@ -38,6 +37,7 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
   - [Making requests](#making-requests)
   - [Accessing request information](#accessing-request-information)
   - [GraphiQL client](#graphiql-client)
+  - [WebSocket subscriptions (Advanced)](#websocket-subscriptions-advanced)
 - [API Reference](#api-reference)
 - [FAQ](#faq)
 
@@ -294,9 +294,9 @@ graphql = TartifletteApp(
 
 ### WebSocket subscriptions (Advanced)
 
-This package provides support for [GraphQL subscriptions](https://graphql.org/blog/subscriptions-in-graphql-and-relay/) over WebSocket. This is done by implementing the [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol. As a result, subscription queries can be issued from the built-in GraphiQL client, as well as [Apollo GraphQL](https://www.apollographql.com/docs/react/advanced/subscriptions/) and any other client that uses this protocol.
+This package provides support for [GraphQL subscriptions](https://graphql.org/blog/subscriptions-in-graphql-and-relay/) over WebSocket. Subscription queries can be issued via the built-in GraphiQL client, as well as [Apollo GraphQL](https://www.apollographql.com/docs/react/advanced/subscriptions/) and any other client that uses the [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol.
 
-To enable subscriptions, configure `subscriptions` on `TartifletteApp`:
+Example:
 
 ```python
 import asyncio
@@ -304,6 +304,10 @@ from tartiflette import Subscription
 from tartiflette_starlette import TartifletteApp
 
 sdl = """
+type Query {
+  _: Boolean
+}
+
 type Subscription {
   timer(seconds: Int!): Timer
 }
@@ -327,19 +331,16 @@ async def on_timer(parent, args, context, info):
         await asyncio.sleep(1)
     yield {"remainingTime": 0, "status": "DONE"}
 
-graphql = TartifletteApp(sdl=sdl, subscription_path="/subscriptions")
+app = TartifletteApp(sdl=sdl, subscriptions=True)
 ```
 
-Save this file as `app.py`, then run `$ uvicorn app:graphql`. Open the GraphiQL client at http://localhost:8000, and enter the following query:
+> **Note**: the subscriptions endpoint is exposed on `/subscriptions` by default.
 
-```graphql
-subscription {
-  timer(seconds: 10) {
-    remainingTime,
-    status
-  }
-}
-```
+Save this file as `graphql.py`, then run `$ uvicorn graphql:app`. Open the GraphiQL client at http://localhost:8000, and hit "Play"! The timer should update on real-time.
+
+![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-subscriptions.png)
+
+See [`Subscriptions`](#subscriptions) in the API reference for a complete description of the available options.
 
 ## API Reference
 
@@ -353,8 +354,9 @@ subscription {
 
 - `engine` (`Engine`): a Tartiflette [engine](https://tartiflette.io/docs/api/engine). Required if `sdl` is not given.
 - `sdl` (`str`): a GraphQL schema defined using the [GraphQL Schema Definition Language](https://graphql.org/learn/schema/). Required if `engine` is not given.
-- `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
 - `path` (`str`, optional): the path which clients should make GraphQL queries to. Defaults to `"/"`.
+- `graphiql` (`GraphiQL` or `bool`, optional): configuration for the GraphiQL client. Defaults to `True`, which is equivalent to `GraphiQL()`. Use `False` to not register the GraphiQL client.
+- `subscriptions` (`subscriptions` or `bool`, optional): subscriptions configuration. Defaults to `True`, which is equivalent to `Subscriptions(path="/subscriptions")`. Leave empty or pass `None` to not register the subscription WebSocket endpoint.
 - `context (dict)`: a copy of this dictionary is passed to resolvers when executing a query. Defaults to `{}`. Note: the Starlette `Request` object is always present as `req`.
 - `schema_name` (`str`, optional): name of the GraphQL schema from the [Schema Registry](https://tartiflette.io/docs/api/schema-registry/) which should be used — mostly for advanced usage. Defaults to `"default"`.
 
@@ -391,6 +393,16 @@ const defaultHeaders = JSON.parse(`${default_headers}`);
 ```
 
 [graphql-variables]: https://graphql.org/learn/queries/#variables
+
+### `Subscriptions`
+
+Configuration helper for WebSocket subscriptions.
+
+#### Parameters
+
+**Note**: all parameters are keyword-only.
+
+- `path` (`str`): the path of the subscriptions WebSocket endpoint, **relative to the root path which `TartifletteApp` is served at**. If not given, defaults to `/subscriptions`.
 
 ### `mount`
 
