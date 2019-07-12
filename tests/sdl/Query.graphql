@@ -2,4 +2,15 @@ type Query {
   hello(name: String): String
   whoami: String
   foo: String
+  dog(id: Int!): Dog
+}
+
+type Dog {
+  id: Int!
+  name: String!
+  nickname: String
+}
+
+type Subscription {
+  dogAdded: Dog
 }

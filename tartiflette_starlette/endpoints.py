@@ -1,5 +1,7 @@
+import typing
+
 from starlette.background import BackgroundTasks
-from starlette.endpoints import HTTPEndpoint
+from starlette.endpoints import HTTPEndpoint, WebSocketEndpoint
 from starlette.requests import Request
 from starlette.responses import (
     HTMLResponse,
@@ -7,17 +9,24 @@ from starlette.responses import (
     PlainTextResponse,
     Response,
 )
+from starlette.websockets import WebSocket
 from tartiflette import Engine
 
 from .errors import format_errors
 from .middleware import get_graphql_config
+from .subscriptions import GraphQLWSProtocol
 
 
 class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
         config = get_graphql_config(request)
         html = config.graphiql.render_template(
-            graphql_endpoint_path=config.graphql_endpoint_path
+            graphql_endpoint=config.path,
+            subscriptions_endpoint=(
+                None
+                if config.subscriptions is None
+                else config.subscriptions.path
+            ),
         )
         return HTMLResponse(html)
 
@@ -84,3 +93,26 @@ class GraphQLEndpoint(HTTPEndpoint):
             await app(self.scope, self.receive, self.send)
         else:
             await super().dispatch()
+
+
+class SubscriptionEndpoint(WebSocketEndpoint):
+    encoding = "json"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.protocol = None
+
+    async def on_connect(self, websocket: WebSocket):
+        await websocket.accept(subprotocol=GraphQLWSProtocol.name)
+        config = get_graphql_config(websocket)
+        self.protocol = GraphQLWSProtocol(
+            websocket=websocket,
+            engine=config.engine,
+            context=dict(config.context),
+        )
+
+    async def on_receive(self, websocket: WebSocket, data: typing.Any):
+        await self.protocol.on_receive(message=data)
+
+    async def on_disconnect(self, websocket: WebSocket, close_code: int):
+        await self.protocol.on_disconnect(close_code)

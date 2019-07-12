@@ -10,7 +10,6 @@ from tartiflette import Engine
 
 from tartiflette_starlette import TartifletteApp
 
-
 # NOTE: must be session-scoped to prevent redefining GraphQL types.
 @pytest.fixture(name="engine", scope="session")
 def fixture_engine() -> Engine:

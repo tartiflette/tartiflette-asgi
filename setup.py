@@ -36,7 +36,14 @@ setup(
     zip_safe=False,
     install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.12,<0.13"],
     extras_require={
-        "dev": ["uvicorn>=0.7, <0.9", "requests", "pytest", "black", "pylint"]
+        "dev": [
+            "uvicorn>=0.7, <0.9",
+            "requests",
+            "pytest",
+            "black",
+            "pylint",
+            "pyee>=6, <7",
+        ]
     },
     python_requires=">=3.6",
     # license and classifier list:
