@@ -34,7 +34,11 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.12,<0.13"],
+    install_requires=[
+        "starlette>=0.12,<0.13",
+        "tartiflette>=0.12,<0.13",
+        "subscriptions-transport-ws-python @ git+https://github.com/florimondmanca/subscriptions-transport-ws-python.git@0.1.0",
+    ],
     extras_require={
         "dev": [
             "uvicorn>=0.7, <0.9",

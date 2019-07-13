@@ -1,3 +1,4 @@
+import asyncio
 import typing
 
 from starlette.background import BackgroundTasks
@@ -10,11 +11,11 @@ from starlette.responses import (
     Response,
 )
 from starlette.websockets import WebSocket
+from subscriptions_transport_ws import GraphQLWSProtocol
 from tartiflette import Engine
 
 from .errors import format_errors
 from .middleware import get_graphql_config
-from .subscriptions import GraphQLWSProtocol
 
 
 class GraphiQLEndpoint(HTTPEndpoint):
@@ -100,19 +101,40 @@ class SubscriptionEndpoint(WebSocketEndpoint):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.protocol = None
+        self.proto: GraphQLWSProtocol = None
+        self.tasks = set()
 
     async def on_connect(self, websocket: WebSocket):
-        await websocket.accept(subprotocol=GraphQLWSProtocol.name)
-        config = get_graphql_config(websocket)
-        self.protocol = GraphQLWSProtocol(
-            websocket=websocket,
-            engine=config.engine,
-            context=dict(config.context),
+        async def send(message: dict):
+            await websocket.send_json(message)
+
+        def subscribe(query: str, variables: dict, operation_name: str):
+            config = get_graphql_config(websocket)
+            return config.engine.subscribe(
+                query=query,
+                variables=variables,
+                operation_name=operation_name,
+                context=dict(config.context),
+            )
+
+        async def close(code: int):
+            await websocket.close(code)
+
+        self.proto = GraphQLWSProtocol(
+            send=send,
+            subscribe=subscribe,
+            close=close,
+            raised_when_closed=(asyncio.CancelledError,),
         )
 
+        await websocket.accept(subprotocol=self.proto.name)
+
     async def on_receive(self, websocket: WebSocket, data: typing.Any):
-        await self.protocol.on_receive(message=data)
+        loop = asyncio.get_event_loop()
+        self.tasks.add(loop.create_task(self.proto(data)))
 
     async def on_disconnect(self, websocket: WebSocket, close_code: int):
-        await self.protocol.on_disconnect(close_code)
+        if self.proto is not None:
+            await self.proto.stop()
+        for task in self.tasks:
+            task.cancel()
