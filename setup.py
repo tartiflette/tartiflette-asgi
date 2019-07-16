@@ -10,7 +10,7 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 setup(
     name="tartiflette-starlette",
-    version="0.5.0",
+    version="0.5.1",
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
     description="ASGI support for the Tartiflette Python GraphQL engine",
