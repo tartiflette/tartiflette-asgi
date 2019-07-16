@@ -20,3 +20,11 @@ pytest
 ```
 
 6. Once the feature or bug fix is ready enough to be reviewed, [open a pull request!](https://github.com/tartiflette/tartiflette-starlette/compare) :rocket:
+
+## Notes to maintainers
+
+To bump the package version (automatically updates version strings and the changelog), run:
+
+```bash
+bash scripts/bumpversion.sh [major|minor|patch]
+```

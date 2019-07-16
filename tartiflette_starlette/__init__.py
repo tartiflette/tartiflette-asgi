@@ -1,4 +1,5 @@
 from .app import TartifletteApp
 from .datastructures import GraphiQL
 from .datastructures import Subscriptions
-from .version import __version__
+
+__version__ = "0.5.0"
