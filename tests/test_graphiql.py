@@ -45,6 +45,7 @@ def test_graphiql(client: TestClient, graphiql, path):
     if response.status_code == 200:
         assert "<!DOCTYPE html>" in response.text
         assert 'fetch("/",' in response.text
+        assert "None" not in response.text
     else:
         assert response.text == "Not Found"
 

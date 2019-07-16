@@ -9,6 +9,10 @@ from tartiflette import Engine
 _GRAPHIQL_TEMPLATE = os.path.join(os.path.dirname(__file__), "graphiql.html")
 
 
+def _optional(value: typing.Optional[str]) -> str:
+    return value if value is not None else ""
+
+
 class Subscriptions:
     def __init__(self, *, path: str):
         self.path = path
@@ -40,7 +44,7 @@ class GraphiQL:
     ) -> str:
         return self.template.substitute(
             endpoint=graphql_endpoint,
-            subscriptions_endpoint=subscriptions_endpoint,
+            subscriptions_endpoint=_optional(subscriptions_endpoint),
             default_query=self.default_query,
             default_variables=json.dumps(self.default_variables),
             default_headers=json.dumps(self.default_headers),
