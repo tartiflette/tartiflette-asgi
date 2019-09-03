@@ -172,8 +172,10 @@ uvicorn app:app
 Make a request:
 
 ```bash
-curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http://localhost:8000
+curl -H "Content-Type: application/graphql/"  -d '{ hello(name: "Chuck") }' http://localhost:8000
 ```
+
+> **Note**: if you receive a `307 Temporary Redirect` response, make sure to include the trailing slash: `/graphql/`.
 
 Response:
 
