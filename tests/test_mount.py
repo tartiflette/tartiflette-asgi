@@ -22,11 +22,16 @@ def test_starlette_mount(
     full_path = mount_path.rstrip("/") + ("/" if path is None else path)
     assert "//" not in full_path
 
+    url = f"{full_path}?query={query}"
     with TestClient(starlette) as client:
-        response = client.get(f"{full_path}?query={query}")
+        response = client.get(url)
+        graphiql_response = client.get(url, headers={"accept": "text/html"})
 
     assert response.status_code == 200
     assert response.json() == {"data": {"hello": "Hello stranger"}}
+
+    assert graphiql_response.status_code == 200
+    assert full_path in graphiql_response.text
 
 
 def test_must_register_startup_handler(

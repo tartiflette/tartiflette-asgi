@@ -20,8 +20,9 @@ from .subscriptions import GraphQLWSProtocol
 class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
         config = get_graphql_config(request)
+        graphql_endpoint = request["root_path"] + config.path
         html = config.graphiql.render_template(
-            graphql_endpoint=config.path,
+            graphql_endpoint=graphql_endpoint,
             subscriptions_endpoint=(
                 None
                 if config.subscriptions is None
