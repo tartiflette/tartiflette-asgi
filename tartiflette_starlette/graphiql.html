@@ -45,6 +45,7 @@
       var defaultVariables = `${default_variables}`;
       var defaultHeaders = `${default_headers}`;
       var subscriptionsEndpoint = `${subscriptions_endpoint}`;
+      var graphQLEndpoint = `${endpoint}`;
 
       // Parse the search string to get url parameters.
       var search = window.location.search;
@@ -116,7 +117,7 @@
       }
 
       function graphQLFetcher(graphQLParams) {
-        return fetch("${endpoint}", {
+        return fetch(graphQLEndpoint, {
           method: "post",
           headers: Object.assign(JSON.parse(defaultHeaders), {
             Accept: "application/json",
