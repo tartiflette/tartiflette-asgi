@@ -52,15 +52,10 @@ def test_put(client: TestClient):
 def test_error_handling(client: TestClient):
     response = client.post("/", json={"query": "{ dummy }"})
     assert response.status_code == 400
-    assert response.json() == {
-        "data": None,
-        "errors": [
-            {
-                "locations": [{"column": 3, "line": 1}],
-                "message": (
-                    "field `Query.dummy` was not found in GraphQL schema."
-                ),
-                "path": ["dummy"],
-            }
-        ],
-    }
+    json = response.json()
+    assert json["data"] is None
+    assert len(json["errors"]) == 1
+    error = json["errors"][0]
+    assert error["locations"] == [{"column": 3, "line": 1}]
+    assert "dummy" in error["message"]
+    assert error["path"] == ["dummy"]
