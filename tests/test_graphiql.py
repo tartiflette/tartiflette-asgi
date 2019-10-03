@@ -1,5 +1,6 @@
 import inspect
 import json
+import re
 import typing
 
 import pytest
@@ -44,7 +45,10 @@ def test_graphiql(client: TestClient, graphiql, path):
 
     if response.status_code == 200:
         assert "<!DOCTYPE html>" in response.text
-        assert 'fetch("/",' in response.text
+        m = re.search(r"var (\w+) = `/`;", response.text)
+        assert m is not None, response.text
+        endpoint_variable_name = m.group(1)
+        assert f"fetch({endpoint_variable_name}," in response.text
         assert "None" not in response.text
     else:
         assert response.text == "Not Found"
