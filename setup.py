@@ -1,23 +1,41 @@
-import io
-import os
-from setuptools import find_packages, setup
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-CURDIR = os.path.abspath(os.path.dirname(__file__))
+import re
+from pathlib import Path
 
-with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
-    README = f.read()
+from setuptools import setup
+
+
+def get_version(package: str) -> str:
+    """Return package version as listed in `__version__` in `__init__.py`."""
+    version = Path(package, "__init__.py").read_text()
+    match = re.search("__version__ = ['\"]([^'\"]+)['\"]", version)
+    assert match is not None
+    return match.group(1)
+
+
+def get_long_description() -> str:
+    with open("README.md", encoding="utf8") as readme:
+        with open("CHANGELOG.md", encoding="utf8") as changelog:
+            return readme.read() + "\n\n" + changelog.read()
+
+
+def get_packages(package: str) -> list:
+    """Return root package and all sub-packages."""
+    return [str(path.parent) for path in Path(package).glob("**/__init__.py")]
 
 
 setup(
     name="tartiflette-starlette",
-    version="0.5.1",
+    version=get_version("tartiflette_starlette"),
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
     description="ASGI support for the Tartiflette Python GraphQL engine",
-    long_description=README,
+    long_description=get_long_description(),
     long_description_content_type="text/markdown",
     url="https://github.com/tartiflette/tartiflette-starlette",
-    packages=find_packages(exclude=["tests*"]),
+    packages=get_packages("tartiflette_starlette"),
     include_package_data=True,
     zip_safe=False,
     install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.12,<0.13"],
@@ -28,7 +46,6 @@ setup(
             "pytest",
             "black",
             "pylint",
-            "bumpversion",
             "pyee>=6, <7",
         ]
     },
