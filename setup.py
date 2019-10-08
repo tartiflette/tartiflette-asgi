@@ -36,6 +36,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/tartiflette/tartiflette-starlette",
     packages=get_packages("tartiflette_starlette"),
+    package_data={"tartiflette_starlette": ["py.typed"]},
     include_package_data=True,
     zip_safe=False,
     install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.12,<0.13"],
