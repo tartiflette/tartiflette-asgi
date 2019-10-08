@@ -1,6 +1,7 @@
 -e .
 
 black
+mypy
 pyee>=6,<7
 pytest
 requests  # Required by the Starlette test client.
