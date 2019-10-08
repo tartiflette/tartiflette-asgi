@@ -16,8 +16,6 @@ jobs:
       name: "flake8"
       python: 3.7
       script: flake8 tartiflette_starlette tests setup.py
-  allow_failures:
-    - name: "mypy"
 
 before_install:
   - sudo apt-get install cmake flex bison
