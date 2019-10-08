@@ -9,13 +9,11 @@ python:
 jobs:
   include:
     - stage: "Check"
-      name: "mypy"
+      name: "Lint"
       python: 3.7
-      script: mypy tartiflette_starlette
-    - stage: "Check"
-      name: "flake8"
-      python: 3.7
-      script: flake8 tartiflette_starlette tests setup.py
+      script:
+        - mypy tartiflette_starlette
+        - flake8 tartiflette_starlette tests setup.py
 
 before_install:
   - sudo apt-get install cmake flex bison
