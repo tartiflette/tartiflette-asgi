@@ -8,6 +8,6 @@ from tartiflette_starlette import TartifletteApp
 MountHelper = typing.Callable[[ASGIApp, str, TartifletteApp], None]
 
 
-def starlette(parent: Starlette, path: str, app: TartifletteApp, **kwargs):
-    parent.mount(path, app, **kwargs)
+def starlette(parent: Starlette, path: str, app: TartifletteApp) -> None:
+    parent.mount(path, app)
     parent.add_event_handler("startup", app.startup)

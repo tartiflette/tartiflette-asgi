@@ -9,10 +9,14 @@ class GraphQLMiddleware:
         self.app = app
         self.config = config
 
-    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+    async def __call__(
+        self, scope: Scope, receive: Receive, send: Send
+    ) -> None:
         scope["graphql"] = self.config
         await self.app(scope, receive, send)
 
 
 def get_graphql_config(conn: HTTPConnection) -> GraphQLConfig:
-    return conn["graphql"]
+    config = conn["graphql"]
+    assert isinstance(config, GraphQLConfig)
+    return config
