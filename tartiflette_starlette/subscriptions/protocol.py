@@ -78,9 +78,7 @@ class GraphQLWSProtocol:
         try:
             await self._send_message(optype=GQL.CONNECTION_ACK)
         except Exception as exc:  # pylint: disable=broad-except
-            await self._send_error(
-                str(exc), opid=opid, error_type=GQL.CONNECTION_ERROR
-            )
+            await self._send_error(str(exc), opid=opid, error_type=GQL.CONNECTION_ERROR)
             await self.close(1011)
 
     async def _on_start(self, opid: str, payload: dict) -> None:
@@ -120,9 +118,7 @@ class GraphQLWSProtocol:
         elif optype == "connection_terminate":
             handler = self._on_connection_terminate
         else:
-            await self._send_error(
-                f"Unsupported message type: {optype}", opid=opid
-            )
+            await self._send_error(f"Unsupported message type: {optype}", opid=opid)
             return
 
         await handler(opid=opid, payload=payload)

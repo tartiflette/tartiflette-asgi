@@ -14,9 +14,7 @@ MISSING = object()
 
 
 @pytest.mark.parametrize("subscriptions", [MISSING, None])
-def test_if_subscriptions_disabled_then_cannot_connect(
-    engine: Engine, subscriptions
-):
+def test_if_subscriptions_disabled_then_cannot_connect(engine: Engine, subscriptions):
     kwargs = {}
     if subscriptions is not MISSING:
         kwargs["subscriptions"] = subscriptions
@@ -35,17 +33,13 @@ def fixture_pubsub() -> PubSub:
     return pubsub
 
 
-@pytest.fixture(
-    name="subscriptions", params=[True, Subscriptions(path="/subs")]
-)
+@pytest.fixture(name="subscriptions", params=[True, Subscriptions(path="/subs")])
 def fixture_subscriptions(request) -> typing.Union[Subscriptions, bool]:
     return request.param
 
 
 @pytest.fixture(name="client")
-def fixture_client(
-    engine: Engine, subscriptions, pubsub: PubSub
-) -> TestClient:
+def fixture_client(engine: Engine, subscriptions, pubsub: PubSub) -> TestClient:
     ttftt = TartifletteApp(
         engine=engine, subscriptions=subscriptions, context={"pubsub": pubsub}
     )
@@ -114,13 +108,7 @@ def test_subscribe(client: TestClient, pubsub: PubSub, path: str):
             "id": "myquery",
             "type": "data",
             "payload": {
-                "data": {
-                    "dogAdded": {
-                        "id": 1,
-                        "name": "Gaspar",
-                        "nickname": "Rapsag",
-                    }
-                }
+                "data": {"dogAdded": {"id": 1, "name": "Gaspar", "nickname": "Rapsag"}}
             },
         }
 
@@ -130,11 +118,7 @@ def test_subscribe(client: TestClient, pubsub: PubSub, path: str):
             "type": "data",
             "payload": {
                 "data": {
-                    "dogAdded": {
-                        "id": 2,
-                        "name": "Merrygold",
-                        "nickname": "Woofy",
-                    }
+                    "dogAdded": {"id": 2, "name": "Merrygold", "nickname": "Woofy"}
                 }
             },
         }

@@ -44,9 +44,7 @@ class TartifletteApp:
         elif not subscriptions:
             subscriptions = None
 
-        assert subscriptions is None or isinstance(
-            subscriptions, Subscriptions
-        )
+        assert subscriptions is None or isinstance(subscriptions, Subscriptions)
 
         router = Router()
 
@@ -77,9 +75,7 @@ class TartifletteApp:
         await self.engine.cook()
         self._started_up = True
 
-    async def __call__(
-        self, scope: Scope, receive: Receive, send: Send
-    ) -> None:
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] == "lifespan":
             await self.lifespan(scope, receive, send)
         else:
