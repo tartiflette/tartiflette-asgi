@@ -2,30 +2,23 @@ language: python
 dist: xenial
 
 python:
-  - "3.6"
-  - "3.7"
-  - "3.8-dev"
+  - 3.6
+  - 3.7
+  - 3.8-dev
 
 jobs:
   include:
     - stage: "Check"
-      name: "Lint"
-      python: 3.7
-      script:
-        - mypy tartiflette_starlette
-        - flake8 tartiflette_starlette tests setup.py
-    - stage: "Check"
-      name: "Build"
       python: 3.7
       install:
         - pip install -r requirements.txt
         - pip install --upgrade wheel
       script:
-        - python setup.py build sdist bdist_wheel
+        - scripts/check
+        - scripts/build
+        # Ensure type annotations are included, and package is installable from source.
         - export SDIST=$(find dist -iname "tartiflette-starlette-*.tar.gz")
-        # Ensure type annotations are shipped.
         - tar -tzf $SDIST | grep py.typed
-        # Ensure package is installable from source.
         - python -m venv venv-test
         - venv-test/bin/python -m pip install $SDIST
 
@@ -34,7 +27,7 @@ before_install:
   - pip install -U pip
 
 script:
-  - pytest
+  - scripts/test
 
 deploy:
   provider: pypi
@@ -43,5 +36,5 @@ deploy:
   password: $PYPI_PASSWORD
   on:
     tags: true
-    # deploy only once
+    # Deploy only once.
     python: "3.7"
