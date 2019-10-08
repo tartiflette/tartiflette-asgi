@@ -46,4 +46,4 @@ async def on_dog_added(parent, args, ctx, info) -> typing.AsyncIterator[dict]:
             queue.task_done()
             if dog is None:
                 break
-            yield dog._asdict()
+            yield {"dogAdded": dog._asdict()}
