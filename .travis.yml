@@ -28,13 +28,3 @@ before_install:
 
 script:
   - scripts/test
-
-deploy:
-  provider: pypi
-  distributions: "sdist bdist_wheel"
-  username: $PYPI_USERNAME
-  password: $PYPI_PASSWORD
-  on:
-    tags: true
-    # Deploy only once.
-    python: "3.7"
