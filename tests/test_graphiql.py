@@ -11,8 +11,7 @@ from tartiflette_starlette import GraphiQL, TartifletteApp
 
 
 @pytest.fixture(
-    name="graphiql",
-    params=[False, True, GraphiQL(), GraphiQL(path="/graphql")],
+    name="graphiql", params=[False, True, GraphiQL(), GraphiQL(path="/graphql")]
 )
 def fixture_graphiql(request) -> typing.Union[GraphiQL, bool]:
     return request.param
@@ -81,9 +80,7 @@ def fixture_headers() -> dict:
 
 def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
     graphiql = GraphiQL(
-        default_variables=variables,
-        default_query=query,
-        default_headers=headers,
+        default_variables=variables, default_query=query, default_headers=headers
     )
     ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
 

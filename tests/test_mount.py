@@ -34,9 +34,7 @@ def test_starlette_mount(
     assert full_path in graphiql_response.text
 
 
-def test_must_register_startup_handler(
-    starlette: Starlette, ttftt: TartifletteApp
-):
+def test_must_register_startup_handler(starlette: Starlette, ttftt: TartifletteApp):
     starlette.mount("/graphql", ttftt)
 
     with TestClient(starlette) as client:
