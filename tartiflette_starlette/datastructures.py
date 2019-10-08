@@ -14,7 +14,7 @@ def _optional(value: typing.Optional[str]) -> str:
 
 
 class Subscriptions:
-    def __init__(self, *, path: str):
+    def __init__(self, *, path: str) -> None:
         self.path = path
 
 
@@ -54,6 +54,6 @@ class GraphiQL:
 class GraphQLConfig(typing.NamedTuple):
     engine: Engine
     context: dict
-    graphiql: GraphiQL
+    graphiql: typing.Optional[GraphiQL]
     path: str
     subscriptions: typing.Optional[Subscriptions]

@@ -1,6 +1,6 @@
 import typing
 
-from starlette.routing import Lifespan, Route, Router, WebSocketRoute
+from starlette.routing import Lifespan, Router
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
@@ -15,12 +15,12 @@ class TartifletteApp:
         *,
         engine: Engine = None,
         sdl: str = None,
-        graphiql: typing.Union[bool, GraphiQL] = True,
+        graphiql: typing.Union[None, bool, GraphiQL] = True,
         path: str = "/",
         subscriptions: typing.Union[bool, Subscriptions] = None,
         context: dict = None,
         schema_name: str = "default",
-    ):
+    ) -> None:
         if engine is None:
             assert sdl, "`sdl` expected if `engine` not given"
             engine = Engine(sdl=sdl, schema_name=schema_name)
@@ -34,43 +34,52 @@ class TartifletteApp:
 
         if graphiql is True:
             graphiql = GraphiQL()
+        elif not graphiql:
+            graphiql = None
+
+        assert graphiql is None or isinstance(graphiql, GraphiQL)
 
         if subscriptions is True:
             subscriptions = Subscriptions(path="/subscriptions")
+        elif not subscriptions:
+            subscriptions = None
 
-        routes = []
+        assert subscriptions is None or isinstance(
+            subscriptions, Subscriptions
+        )
+
+        router = Router()
 
         if graphiql and graphiql.path is not None:
-            routes.append(Route(path=graphiql.path, endpoint=GraphiQLEndpoint))
+            router.add_route(path=graphiql.path, endpoint=GraphiQLEndpoint)
 
-        graphql_route = Route(path=path, endpoint=GraphQLEndpoint)
-        routes.append(graphql_route)
+        router.add_route(path=path, endpoint=GraphQLEndpoint)
 
         if subscriptions is not None:
-            subscription_route = WebSocketRoute(
+            router.add_websocket_route(
                 path=subscriptions.path, endpoint=SubscriptionEndpoint
             )
-            routes.append(subscription_route)
 
         config = GraphQLConfig(
             engine=self.engine,
             context=context,
             graphiql=graphiql,
-            path=graphql_route.path,
+            path=path,
             subscriptions=subscriptions,
         )
 
-        router = Router(routes=routes)
         self.app = GraphQLMiddleware(router, config=config)
         self.lifespan = Lifespan(on_startup=self.startup)
 
         self._started_up = False
 
-    async def startup(self):
+    async def startup(self) -> None:
         await self.engine.cook()
         self._started_up = True
 
-    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+    async def __call__(
+        self, scope: Scope, receive: Receive, send: Send
+    ) -> None:
         if scope["type"] == "lifespan":
             await self.lifespan(scope, receive, send)
         else:
