@@ -23,8 +23,11 @@ pytest
 
 ## Notes to maintainers
 
-To bump the package version (automatically updates version strings and the changelog), run:
+To make a new release:
 
-```bash
-bash scripts/bumpversion.sh [major|minor|patch]
-```
+- Bump the version in `__init__.py`.
+- Edit the changelog with the set of changes since the last release.
+- Create a release commit: `$ git commit -m "Release x.y.z"`.
+- Tag it: `$ git tag x.y.z`.
+- Push to remote: `$ git push --tags`.
+- CI will publish the tagged commit to PyPI.
