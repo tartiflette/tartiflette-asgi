@@ -10,21 +10,7 @@ jobs:
   include:
     - stage: "Check"
       python: 3.7
-      install:
-        - pip install -r requirements.txt
-        - pip install --upgrade wheel
-      script:
-        - scripts/check
-        - scripts/build
-        # Ensure type annotations are included, and package is installable from source.
-        - export SDIST=$(find dist -iname "tartiflette-starlette-*.tar.gz")
-        - tar -tzf $SDIST | grep py.typed
-        - python -m venv venv-test
-        - venv-test/bin/python -m pip install $SDIST
-
-before_install:
-  - sudo apt-get install cmake flex bison
-  - pip install -U pip
+      script: scripts/check
 
 script:
   - scripts/test

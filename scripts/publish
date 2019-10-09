@@ -15,16 +15,10 @@ if ! command -v "${PREFIX}twine" &>/dev/null ; then
     exit 1
 fi
 
-if ! ${PREFIX}pip show wheel &>/dev/null ; then
-    echo "Unable to find the 'wheel' command."
-    echo "Install from PyPI, using '${PREFIX}pip install wheel'."
-    exit 1
-fi
-
 find ${PACKAGE} -type f -name "*.py[co]" -delete
 find ${PACKAGE} -type d -name __pycache__ -delete
 
-${PREFIX}python setup.py sdist bdist_wheel
+scripts/build
 ${PREFIX}twine upload dist/*
 
 echo "You probably want to also tag the version now:"
