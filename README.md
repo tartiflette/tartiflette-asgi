@@ -303,7 +303,7 @@ Example:
 ```python
 import asyncio
 from tartiflette import Subscription
-from tartiflette_starlette import TartifletteApp
+from tartiflette_starlette import TartifletteApp, GraphiQL
 
 sdl = """
 type Query {
@@ -329,9 +329,9 @@ type Timer {
 async def on_timer(parent, args, context, info):
     seconds = args["seconds"]
     for i in range(seconds):
-        yield {"remainingTime": seconds - i, "status": "RUNNING"}
+        yield {"timer": {"remainingTime": seconds - i, "status": "RUNNING"}}
         await asyncio.sleep(1)
-    yield {"remainingTime": 0, "status": "DONE"}
+    yield {"timer": {"remainingTime": 0, "status": "DONE"}}
 
 app = TartifletteApp(
     sdl=sdl,
