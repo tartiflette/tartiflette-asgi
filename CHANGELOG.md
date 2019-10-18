@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.6.0 - 2019-10-18
+
+### Added
+
+- Add support for Tartiflette 1.x. (Pull #58)
+- Officialize support for Python 3.8. (Pull #80)
+
+### Removed
+
+- Drop support for Tartiflette 0.x. (Pull #58)
+
 ## 0.5.2 - 2019-10-09
 
 ### Added
