@@ -1,6 +1,10 @@
 language: python
 dist: xenial
 
+branches:
+  only:
+    - master
+
 python:
   - 3.6
   - 3.7
