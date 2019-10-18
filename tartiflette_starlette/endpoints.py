@@ -1,14 +1,11 @@
 import typing
 
 from starlette.background import BackgroundTasks
+from starlette.datastructures import QueryParams
 from starlette.endpoints import HTTPEndpoint, WebSocketEndpoint
 from starlette.requests import Request
-from starlette.responses import (
-    HTMLResponse,
-    JSONResponse,
-    PlainTextResponse,
-    Response,
-)
+from starlette.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
+from starlette.types import ASGIApp, Receive, Scope, Send
 from starlette.websockets import WebSocket
 from tartiflette import Engine
 
@@ -21,12 +18,12 @@ class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
         config = get_graphql_config(request)
         graphql_endpoint = request["root_path"] + config.path
-        html = config.graphiql.render_template(
+        graphiql = config.graphiql
+        assert graphiql is not None
+        html = graphiql.render_template(
             graphql_endpoint=graphql_endpoint,
             subscriptions_endpoint=(
-                None
-                if config.subscriptions is None
-                else config.subscriptions.path
+                None if config.subscriptions is None else config.subscriptions.path
             ),
         )
         return HTMLResponse(html)
@@ -51,13 +48,11 @@ class GraphQLEndpoint(HTTPEndpoint):
 
         return await self._get_response(request, data=data)
 
-    async def _get_response(self, request: Request, data: dict) -> Response:
+    async def _get_response(self, request: Request, data: QueryParams) -> Response:
         try:
             query = data["query"]
         except KeyError:
-            return PlainTextResponse(
-                "No GraphQL query found in the request", 400
-            )
+            return PlainTextResponse("No GraphQL query found in the request", 400)
 
         config = get_graphql_config(request)
         background = BackgroundTasks()
@@ -77,16 +72,13 @@ class GraphQLEndpoint(HTTPEndpoint):
             content["errors"] = format_errors(result["errors"])
         status = 400 if has_errors else 200
 
-        return JSONResponse(
-            content=content,
-            status_code=status,
-            background=context["background"],
-        )
+        return JSONResponse(content=content, status_code=status, background=background)
 
-    async def dispatch(self):
+    async def dispatch(self) -> None:
         request = Request(self.scope, self.receive)
         graphiql = get_graphql_config(request).graphiql
         if "text/html" in request.headers.get("Accept", ""):
+            app: ASGIApp
             if graphiql and graphiql.path is None:
                 app = GraphiQLEndpoint
             else:
@@ -97,23 +89,23 @@ class GraphQLEndpoint(HTTPEndpoint):
 
 
 class SubscriptionEndpoint(WebSocketEndpoint):
-    encoding = "json"
+    encoding = "json"  # type: ignore
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.protocol = None
+    def __init__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        super().__init__(scope, receive, send)
+        self.protocol: typing.Optional[GraphQLWSProtocol] = None
 
-    async def on_connect(self, websocket: WebSocket):
+    async def on_connect(self, websocket: WebSocket) -> None:
         await websocket.accept(subprotocol=GraphQLWSProtocol.name)
         config = get_graphql_config(websocket)
         self.protocol = GraphQLWSProtocol(
-            websocket=websocket,
-            engine=config.engine,
-            context=dict(config.context),
+            websocket=websocket, engine=config.engine, context=dict(config.context)
         )
 
-    async def on_receive(self, websocket: WebSocket, data: typing.Any):
+    async def on_receive(self, websocket: WebSocket, data: typing.Any) -> None:
+        assert self.protocol is not None
         await self.protocol.on_receive(message=data)
 
-    async def on_disconnect(self, websocket: WebSocket, close_code: int):
+    async def on_disconnect(self, websocket: WebSocket, close_code: int) -> None:
+        assert self.protocol is not None
         await self.protocol.on_disconnect(close_code)

@@ -7,38 +7,34 @@ from tartiflette import Engine
 from . import protocol
 
 
-class _AsyncIOMixin:
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+class GraphQLWSProtocol(protocol.GraphQLWSProtocol):
+    def __init__(self, websocket: WebSocket, engine: Engine, context: dict):
+        super().__init__()
+        self.websocket = websocket
+        self.engine = engine
+        self.context = context
         self.tasks: typing.Set[asyncio.Task] = set()
 
-    def schedule(self, coro: typing.Coroutine):
+    # Concurrency implementation.
+
+    def schedule(self, coro: typing.Coroutine) -> None:
         loop = asyncio.get_event_loop()
         self.tasks.add(loop.create_task(coro))
 
-    async def on_disconnect(self, close_code: int):
+    async def on_disconnect(self, close_code: int) -> None:
         await super().on_disconnect(close_code)
         for task in self.tasks:
             task.cancel()
 
+    # WebSocket implementation.
 
-class _StarletteWebSocketMixin:
-    def __init__(self, *, websocket: WebSocket, **kwargs):
-        super().__init__(**kwargs)
-        self.websocket = websocket
-
-    async def send_json(self, message: typing.Any):
+    async def send_json(self, message: typing.Any) -> None:
         await self.websocket.send_json(message)
 
-    async def close(self, close_code: int):
+    async def close(self, close_code: int) -> None:
         await self.websocket.close(close_code)
 
-
-class _TartifletteEngineMixin:
-    def __init__(self, *, engine: Engine, context: dict, **kwargs):
-        super().__init__(**kwargs)
-        self.engine = engine
-        self.context = context
+    # GraphQL engine implementation.
 
     def get_stream(self, opid: str, payload: dict) -> typing.AsyncGenerator:
         context = {**payload.get("context", {}), **self.context}
@@ -48,13 +44,3 @@ class _TartifletteEngineMixin:
             operation_name=payload.get("operationName"),
             context=context,
         )
-
-
-class GraphQLWSProtocol(
-    _AsyncIOMixin,
-    _StarletteWebSocketMixin,
-    _TartifletteEngineMixin,
-    protocol.GraphQLWSProtocol,
-):
-    def __init__(self, websocket: WebSocket, engine: Engine, context: dict):
-        super().__init__(websocket=websocket, engine=engine, context=context)

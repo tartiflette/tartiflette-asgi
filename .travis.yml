@@ -2,23 +2,15 @@ language: python
 dist: xenial
 
 python:
-  - "3.6"
-  - "3.7"
-  - "3.8-dev"
+  - 3.6
+  - 3.7
+  - 3.8-dev
 
-before_install:
-  - sudo apt-get install cmake flex bison
-  - pip install -U pip
+jobs:
+  include:
+    - stage: "Check"
+      python: 3.7
+      script: scripts/check
 
 script:
-  - pytest
-
-deploy:
-  provider: pypi
-  distributions: "sdist bdist_wheel"
-  username: $PYPI_USERNAME
-  password: $PYPI_PASSWORD
-  on:
-    tags: true
-    # deploy only once
-    python: "3.7"
+  - scripts/test

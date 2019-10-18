@@ -3,14 +3,13 @@ import typing
 import pytest
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
-
 from tartiflette import Engine
+
 from tartiflette_starlette import TartifletteApp, mount
 
 
 @pytest.mark.parametrize(
-    "authorization, expected_user",
-    [(None, "a mystery"), ("Bearer 123", "Jane")],
+    "authorization, expected_user", [(None, "a mystery"), ("Bearer 123", "Jane")]
 )
 def test_access_request_from_graphql_context(
     auth_starlette: Starlette,
@@ -22,9 +21,7 @@ def test_access_request_from_graphql_context(
     mount.starlette(auth_starlette, "/", ttftt)
     with TestClient(auth_starlette) as client:
         response = client.post(
-            "/",
-            json={"query": "{ whoami }"},
-            headers={"Authorization": authorization},
+            "/", json={"query": "{ whoami }"}, headers={"Authorization": authorization}
         )
     assert response.status_code == 200
     assert response.json() == {"data": {"whoami": expected_user}}

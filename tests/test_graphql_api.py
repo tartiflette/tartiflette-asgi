@@ -36,9 +36,7 @@ def test_post_graphql(client: TestClient):
 
 
 def test_post_invalid_media_type(client: TestClient):
-    response = client.post(
-        "/", data="{ hello }", headers={"content-type": "dummy"}
-    )
+    response = client.post("/", data="{ hello }", headers={"content-type": "dummy"})
     assert response.status_code == 415
     assert response.text == "Unsupported Media Type"
 

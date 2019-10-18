@@ -14,7 +14,7 @@ def _optional(value: typing.Optional[str]) -> str:
 
 
 class Subscriptions:
-    def __init__(self, *, path: str):
+    def __init__(self, *, path: str) -> None:
         self.path = path
 
 
@@ -38,9 +38,7 @@ class GraphiQL:
         self.default_headers = default_headers or {}
 
     def render_template(
-        self,
-        graphql_endpoint: str,
-        subscriptions_endpoint: typing.Optional[str],
+        self, graphql_endpoint: str, subscriptions_endpoint: typing.Optional[str]
     ) -> str:
         return self.template.substitute(
             endpoint=graphql_endpoint,
@@ -54,6 +52,6 @@ class GraphiQL:
 class GraphQLConfig(typing.NamedTuple):
     engine: Engine
     context: dict
-    graphiql: GraphiQL
+    graphiql: typing.Optional[GraphiQL]
     path: str
     subscriptions: typing.Optional[Subscriptions]

@@ -10,6 +10,7 @@ from tartiflette import Engine
 
 from tartiflette_starlette import TartifletteApp
 
+
 # NOTE: must be session-scoped to prevent redefining GraphQL types.
 @pytest.fixture(name="engine", scope="session")
 def fixture_engine() -> Engine:
@@ -41,9 +42,7 @@ def auth_starlette(starlette: Starlette) -> Starlette:
         call_next: typing.Callable[[Request], typing.Awaitable[Response]],
     ) -> Response:
         request.state.user = (
-            "Jane"
-            if request.headers.get("Authorization") == "Bearer 123"
-            else None
+            "Jane" if request.headers.get("Authorization") == "Bearer 123" else None
         )
         return await call_next(request)
 

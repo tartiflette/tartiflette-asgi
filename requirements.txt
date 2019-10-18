@@ -1,6 +1,14 @@
 -e .
 
+autoflake
 black
+flake8
+flake8-bugbear
+flake8-comprehensions
+flake8-pie
+isort
+mypy
 pyee>=6,<7
 pytest
 requests  # Required by the Starlette test client.
+seed-isort-config

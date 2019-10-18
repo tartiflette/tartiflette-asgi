@@ -5,22 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
 
-## [0.5.1] - 2019-07-16
+## 0.5.2 - 2019-10-09
+
+### Added
+
+- Add support for Python 3.8. (Pull #55)
+
+### Fixed
+
+- Type annotations are now correctly detected by `mypy`. (Pull #66)
+- Fix a bug that prevented the GraphiQL web interface from making queries when the application was mounted on a parent ASGI app. (Pull #51)
+
+## 0.5.1 - 2019-07-16
 
 ### Fixed
 
 - Fixed a bug that prevented accessing the GraphiQL interface when subscriptions were not enabled.
 
-## [0.5.0] - 2019-07-12
+## 0.5.0 - 2019-07-12
 
 ### Added
 
 - WebSocket subscriptions, configurable with the new `subscriptions` option on `TartifletteApp`.
 - Pass extra context to resolvers using the new `context` option on `TartifletteApp`.
 
-## [0.4.0] - 2019-07-04
+## 0.4.0 - 2019-07-04
 
 ### Added
 
@@ -36,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Drop support for Tartiflette 0.11.x and below.
 
-## [0.3.0] - 2019-07-03
+## 0.3.0 - 2019-07-03
 
 ### Added
 
@@ -47,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Internal refactoring that leverages more of Starlette's capabilities.
 - Documentation improvements.
 
-## [0.2.0] - 2019-06-10
+## 0.2.0 - 2019-06-10
 
 ### Added
 
@@ -64,13 +75,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - More robust URL matching on `TartifletteApp`.
 
-## [0.1.1] - 2019-04-28
+## 0.1.1 - 2019-04-28
 
 ### Fixed
 
 - Add missing `graphiql.html` package asset.
 
-## [0.1.0] - 2019-04-26
+## 0.1.0 - 2019-04-26
 
 ### Added
 
@@ -85,12 +96,3 @@ Project-related additions:
 - Changelog.
 - Contributing guide.
 - README and documentation.
-
-[unreleased]: https://github.com/tartiflette/tartiflette-starlette/compare/0.5.1...HEAD
-[0.5.1]: https://github.com/tartiflette/tartiflette-starlette/compare/0.5.0...0.5.1
-[0.5.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.4.0...0.5.0
-[0.4.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.3.0...0.4.0
-[0.3.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.2.0...0.3.0
-[0.2.0]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.1...0.2.0
-[0.1.1]: https://github.com/tartiflette/tartiflette-starlette/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/tartiflette/tartiflette-starlette/compare/5a1ecf...0.1.0
