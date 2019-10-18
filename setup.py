@@ -39,7 +39,7 @@ setup(
     package_data={"tartiflette_starlette": ["py.typed"]},
     include_package_data=True,
     zip_safe=False,
-    install_requires=["starlette>=0.12,<0.13", "tartiflette>=0.12,<0.13"],
+    install_requires=["starlette>=0.12,<0.13", "tartiflette>=1.0,<1.2"],
     python_requires=">=3.6",
     # https://pypi.org/pypi?%3Aaction=list_classifiers
     license="MIT",

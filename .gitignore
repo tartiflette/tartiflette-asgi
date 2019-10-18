@@ -19,3 +19,4 @@ var/
 .pytest_cache/
 debug/
 .DS_Store
+*.idea/
