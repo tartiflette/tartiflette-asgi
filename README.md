@@ -27,6 +27,12 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 [graphiql]: https://github.com/graphql/graphiql
 
+---
+
+**Note**: `tartiflette-starlette >= 0.6` is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-starlette == 0.5.2`.
+
+---
+
 **Table of contents**
 
 - [Quickstart](#quickstart)
@@ -93,7 +99,7 @@ Or access `http://localhost:8000` in a browser to make interactive queries using
 2. Install `tartiflette-starlette` from PyPI:
 
 ```bash
-pip install tartiflette-starlette
+pip install "tartiflette-starlette==0.*"
 ```
 
 This will also install [Tartiflette] and [Starlette], so you're good to go!
