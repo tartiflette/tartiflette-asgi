@@ -29,7 +29,9 @@ def test_post_json(client: TestClient):
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_post_invalid_json(client: TestClient):
-    response = client.post("/", data="\{test}", headers={"content-type": "application/json"})
+    response = client.post(
+        "/", data="\{test}", headers={"content-type": "application/json"}
+    )
     assert response.status_code == 400
     assert response.json() == {"error": "Invalid JSON."}
 
