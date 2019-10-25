@@ -31,7 +31,7 @@ def test_post_json(client: TestClient):
 def test_post_invalid_json(client: TestClient):
     response = client.post("/", data="\{test}", headers={"content-type": "application/json"})
     assert response.status_code == 400
-    assert response.text == "Invalid JSON."
+    assert response.json() == {"error": "Invalid JSON."}
 
 
 def test_post_graphql(client: TestClient):

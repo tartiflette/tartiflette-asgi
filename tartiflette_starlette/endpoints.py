@@ -41,7 +41,7 @@ class GraphQLEndpoint(HTTPEndpoint):
             try:
                 data = await request.json()
             except json.JSONDecodeError:
-                return PlainTextResponse("Invalid JSON.", 400)
+                return JSONResponse({"error": "Invalid JSON."}, 400)
         elif "application/graphql" in content_type:
             body = await request.body()
             data = {"query": body.decode()}
