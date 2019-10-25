@@ -27,6 +27,13 @@ def test_post_json(client: TestClient):
     assert response.json() == {"data": {"hello": "Hello stranger"}}
 
 
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
+def test_post_invalid_json(client: TestClient):
+    response = client.post("/", data="\{test}", headers={"content-type": "application/json"})
+    assert response.status_code == 400
+    assert response.text == "Invalid JSON."
+
+
 def test_post_graphql(client: TestClient):
     response = client.post(
         "/", data="{ hello }", headers={"content-type": "application/graphql"}
