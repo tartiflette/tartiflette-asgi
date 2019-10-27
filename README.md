@@ -1,20 +1,20 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/158689/58954519-b05ad680-8799-11e9-9134-90622e7731f3.png" alt="tartiflette-starlette logo"/>
+  <img src="https://user-images.githubusercontent.com/158689/58954519-b05ad680-8799-11e9-9134-90622e7731f3.png" alt="tartiflette-asgi logo"/>
 </div>
 
 <p align="center">
-  <a href="https://travis-ci.org/tartiflette/tartiflette-starlette">
-    <img src="https://travis-ci.org/tartiflette/tartiflette-starlette.svg?branch=master" alt="Build status">
+  <a href="https://travis-ci.org/tartiflette/tartiflette-asgi">
+    <img src="https://travis-ci.org/tartiflette/tartiflette-asgi.svg?branch=master" alt="Build status">
   </a>
-  <a href="https://pypi.org/project/tartiflette-starlette">
-    <img src="https://badge.fury.io/py/tartiflette-starlette.svg" alt="Package version">
+  <a href="https://pypi.org/project/tartiflette-asgi">
+    <img src="https://badge.fury.io/py/tartiflette-asgi.svg" alt="Package version">
   </a>
   <a href="https://github.com/ambv/black">
     <img src="https://img.shields.io/badge/code_style-black-000000.svg" alt="Code style">
     </a>
 </p>
 
-`tartiflette-starlette` is a wrapper that provides ASGI support for the [Tartiflette] Python GraphQL engine.
+`tartiflette-asgi` (previously `tartiflette-starlette`) is a wrapper that provides ASGI support for the [Tartiflette] Python GraphQL engine.
 
 [tartiflette]: https://tartiflette.io
 
@@ -29,7 +29,7 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 ---
 
-**Note**: `tartiflette-starlette >= 0.6` is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-starlette == 0.5.2`.
+**Note**: `tartiflette-asgi >= 0.6` is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-asgi == 0.5.2`.
 
 ---
 
@@ -51,7 +51,7 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 ```python
 from tartiflette import Resolver
-from tartiflette_starlette import TartifletteApp
+from tartiflette_asgi import TartifletteApp
 
 @Resolver("Query.hello")
 async def hello(parent, args, context, info):
@@ -91,22 +91,22 @@ Response:
 
 Or access `http://localhost:8000` in a browser to make interactive queries using the built-in [GraphiQL] client:
 
-![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql.png)
+![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql.png)
 
 ## Installation
 
 1. Install Tartiflette's external dependencies as explained in the [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/install-tartiflette).
-2. Install `tartiflette-starlette` from PyPI:
+2. Install `tartiflette-asgi` from PyPI:
 
 ```bash
-pip install "tartiflette-starlette==0.*"
+pip install "tartiflette-asgi==0.*"
 ```
 
 This will also install [Tartiflette] and [Starlette], so you're good to go!
 
 [starlette]: https://www.starlette.io
 
-**Note**: `tartiflette-starlette` requires Python 3.6+.
+**Note**: `tartiflette-asgi` requires Python 3.6+.
 
 ## User guide
 
@@ -139,7 +139,7 @@ This is useful to have **a GraphQL endpoint _and_ other (non-GraphQL) endpoints*
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from tartiflette import Resolver
-from tartiflette_starlette import TartifletteApp, mount
+from tartiflette_asgi import TartifletteApp, mount
 
 app = Starlette()
 
@@ -204,7 +204,7 @@ Assuming you have an instance of `TartifletteApp` called `graphql`, you need to:
 
 ### Making requests
 
-`tartiflette-starlette` complies with the [GraphQL spec](https://graphql.org/learn/serving-over-http/#http-methods-headers-and-body), which allows you to pass the query in several ways:
+`tartiflette-asgi` complies with the [GraphQL spec](https://graphql.org/learn/serving-over-http/#http-methods-headers-and-body), which allows you to pass the query in several ways:
 
 - **URL query string** (methods: `GET`, `POST`):
 
@@ -252,7 +252,7 @@ By default, the GraphQL endpoint provided by `TartifletteApp` serves a [GraphiQL
 Here's an example:
 
 ```python
-from tartiflette_starlette import TartifletteApp, GraphiQL
+from tartiflette_asgi import TartifletteApp, GraphiQL
 
 app = TartifletteApp(
     sdl="""
@@ -275,7 +275,7 @@ app = TartifletteApp(
 
 Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the customized GraphiQL client when accessing http://127.0.0.1/graphiql:
 
-![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-custom.png)
+![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql-custom.png)
 
 See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
 
@@ -309,7 +309,7 @@ Example:
 ```python
 import asyncio
 from tartiflette import Subscription
-from tartiflette_starlette import TartifletteApp, GraphiQL
+from tartiflette_asgi import TartifletteApp, GraphiQL
 
 sdl = """
 type Query {
@@ -359,7 +359,7 @@ app = TartifletteApp(
 
 Save this file as `graphql.py`, then run `$ uvicorn graphql:app`. Open the GraphiQL client at http://localhost:8000, and hit "Play"! The timer should update on real-time.
 
-![](https://github.com/tartiflette/tartiflette-starlette/raw/master/img/graphiql-subscriptions.png)
+![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql-subscriptions.png)
 
 See [`Subscriptions`](#subscriptions) in the API reference for a complete description of the available options.
 
@@ -367,7 +367,7 @@ For more information on using subscriptions in Tartiflette, see the [Tartiflette
 
 ## API Reference
 
-> **Note**: unless specified, components documented here can be imported from `tartiflette_starlette` directly, e.g. `from tartiflette_starlette import TartifletteApp`.
+> **Note**: unless specified, components documented here can be imported from `tartiflette_asgi` directly, e.g. `from tartiflette_asgi import TartifletteApp`.
 
 ### `TartifletteApp`
 
@@ -446,7 +446,7 @@ All mounting helpers expect the same parameters:
 | ------------------- | -------------------- | ------------------------------------ |
 | `mount.starlette()` | `parent.mount()`     | `parent.add_event_handler()`         |
 
-> Missing a helper for your favorite framework? Feel free to [open a pull request](https://github.com/tartiflette/tartiflette-starlette/compare)!
+> Missing a helper for your favorite framework? Feel free to [open a pull request](https://github.com/tartiflette/tartiflette-asgi/compare)!
 
 ## FAQ
 
@@ -466,7 +466,7 @@ Here are some resources to get you started:
 
 ### What is the role of Starlette?
 
-`tartiflette-starlette` uses Starlette as a lightweight ASGI toolkit: internally, it uses Starlette's request and response classes, and some other components.
+`tartiflette-asgi` uses Starlette as a lightweight ASGI toolkit: internally, it uses Starlette's request and response classes, and some other components.
 
 Luckily, this does not require your applications to use Starlette at all.
 
@@ -480,11 +480,11 @@ See also the [ASGI documentation](https://asgi.readthedocs.io/en/latest/).
 
 ## Contributing
 
-Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/tartiflette/tartiflette-starlette/tree/master/CONTRIBUTING.md).
+Want to contribute? Awesome! Be sure to read our [Contributing guidelines](https://github.com/tartiflette/tartiflette-asgi/tree/master/CONTRIBUTING.md).
 
 ## Changelog
 
-Changes to this project are recorded in the [changelog](https://github.com/tartiflette/tartiflette-starlette/tree/master/CHANGELOG.md).
+Changes to this project are recorded in the [changelog](https://github.com/tartiflette/tartiflette-asgi/tree/master/CHANGELOG.md).
 
 ## License
 

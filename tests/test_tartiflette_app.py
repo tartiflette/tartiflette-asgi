@@ -1,7 +1,7 @@
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_starlette import TartifletteApp
+from tartiflette_asgi import TartifletteApp
 
 
 def test_path(engine: Engine):
