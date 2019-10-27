@@ -29,7 +29,7 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 ---
 
-**Note**: `tartiflette-asgi >= 0.6` is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-asgi == 0.5.2`.
+**Note**: `tartiflette-asgi >= 0.7` (and `tartiflette-starlette == 0.6.*`) is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-starlette == 0.5.*`.
 
 ---
 
