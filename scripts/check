@@ -7,6 +7,6 @@ fi
 
 set -x
 
-${PREFIX}black --check --diff --target-version=py36 tartiflette_starlette tests setup.py
-${PREFIX}mypy tartiflette_starlette
-${PREFIX}flake8 tartiflette_starlette tests setup.py
+${PREFIX}black --check --diff --target-version=py36 tartiflette_asgi tests setup.py
+${PREFIX}mypy tartiflette_asgi
+${PREFIX}flake8 tartiflette_asgi tests setup.py

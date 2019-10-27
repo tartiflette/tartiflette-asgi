@@ -16,6 +16,6 @@ if [ -d 'htmlcov' ] ; then
     rm -r htmlcov
 fi
 
-if [ -d 'tartiflette_starlette.egg-info' ] ; then
-    rm -r tartiflette_starlette.egg-info
+if [ -d 'tartiflette_asgi.egg-info' ] ; then
+    rm -r tartiflette_asgi.egg-info
 fi

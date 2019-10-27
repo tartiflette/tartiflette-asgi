@@ -3,7 +3,7 @@ from starlette.applications import Starlette
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_starlette import TartifletteApp, mount
+from tartiflette_asgi import TartifletteApp, mount
 
 from ._utils import omit_none
 
