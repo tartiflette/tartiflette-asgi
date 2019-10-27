@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-export SOURCE_FILES="tartiflette_starlette tests setup.py"
+export SOURCE_FILES="tartiflette_asgi tests setup.py"
 export PREFIX=""
 if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
@@ -9,8 +9,8 @@ fi
 set -x
 
 ${PREFIX}autoflake --in-place --recursive $SOURCE_FILES
-${PREFIX}seed-isort-config --application-directories=tartiflette_starlette
-${PREFIX}isort --project=tartiflette_starlette --recursive --apply $SOURCE_FILES
+${PREFIX}seed-isort-config --application-directories=tartiflette_asgi
+${PREFIX}isort --project=tartiflette_asgi --recursive --apply $SOURCE_FILES
 ${PREFIX}black --target-version=py36 $SOURCE_FILES
 
 scripts/check

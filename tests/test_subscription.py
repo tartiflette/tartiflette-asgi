@@ -6,7 +6,7 @@ from starlette.testclient import TestClient
 from starlette.websockets import WebSocket, WebSocketDisconnect
 from tartiflette import Engine
 
-from tartiflette_starlette import Subscriptions, TartifletteApp
+from tartiflette_asgi import Subscriptions, TartifletteApp
 
 from ._utils import Dog, PubSub
 

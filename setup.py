@@ -27,16 +27,16 @@ def get_packages(package: str) -> list:
 
 
 setup(
-    name="tartiflette-starlette",
-    version=get_version("tartiflette_starlette"),
+    name="tartiflette-asgi",
+    version=get_version("tartiflette_asgi"),
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
     description="ASGI support for the Tartiflette Python GraphQL engine",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    url="https://github.com/tartiflette/tartiflette-starlette",
-    packages=get_packages("tartiflette_starlette"),
-    package_data={"tartiflette_starlette": ["py.typed"]},
+    url="https://github.com/tartiflette/tartiflette-asgi",
+    packages=get_packages("tartiflette_asgi"),
+    package_data={"tartiflette_asgi": ["py.typed"]},
     include_package_data=True,
     zip_safe=False,
     install_requires=["starlette>=0.12,<0.13", "tartiflette>=1.0,<1.2"],

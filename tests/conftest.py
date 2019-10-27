@@ -8,7 +8,7 @@ from starlette.responses import Response
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_starlette import TartifletteApp
+from tartiflette_asgi import TartifletteApp
 
 
 # NOTE: must be session-scoped to prevent redefining GraphQL types.

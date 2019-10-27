@@ -7,7 +7,7 @@ import pytest
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_starlette import GraphiQL, TartifletteApp
+from tartiflette_asgi import GraphiQL, TartifletteApp
 
 
 @pytest.fixture(
