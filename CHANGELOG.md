@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.7.1 - 2019-10-28
+
+### Fixed
+
+- Requests containing malformed JSON now return a 400 Bad Request error response instead of 500 Internal Server Error. (Pull #81)
+
 ## 0.7.0 - 2019-10-27
 
 ### Changed
