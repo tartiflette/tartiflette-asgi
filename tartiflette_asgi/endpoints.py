@@ -1,4 +1,6 @@
 import typing
+import json
+
 
 from starlette.background import BackgroundTasks
 from starlette.datastructures import QueryParams
@@ -37,7 +39,10 @@ class GraphQLEndpoint(HTTPEndpoint):
         content_type = request.headers.get("Content-Type", "")
 
         if "application/json" in content_type:
-            data = await request.json()
+            try:
+                data = await request.json()
+            except json.JSONDecodeError:
+                return JSONResponse({"error": "Invalid JSON."}, 400)
         elif "application/graphql" in content_type:
             body = await request.body()
             data = {"query": body.decode()}
