@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/158689/58954519-b05ad680-8799-11e9-9134-90622e7731f3.png" alt="tartiflette-asgi logo"/>
+  <img src="img/tartiflette-asgi.png" alt="tartiflette-asgi logo"/>
 </div>
 
 <p align="center">
