@@ -203,27 +203,6 @@ Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the cust
 
 See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
 
-### Providing additional context to resolvers
-
-You can inject your own services, functions or data into the GraphQL `context` using the `context` option.
-
-For example, assuming you use a publish/subscribe library named `pubsub`, you could write:
-
-```python
-from pubsub import PubSub  # Fake
-
-@Resolver("Query.human")
-async def resolve_human(parent, args, context, info):
-    pubsub = context["pubsub"]
-    # ...
-    await pubsub.publish("human_fetched", args)
-
-graphql = TartifletteApp(
-  # ...,
-  context={"pubsub": PubSub()},
-)
-```
-
 ### WebSocket subscriptions (Advanced)
 
 This package provides support for [GraphQL subscriptions](https://graphql.org/blog/subscriptions-in-graphql-and-relay/) over WebSocket. Subscription queries can be issued via the built-in GraphiQL client, as well as [Apollo GraphQL](https://www.apollographql.com/docs/react/advanced/subscriptions/) and any other client that uses the [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol.
