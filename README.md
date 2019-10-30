@@ -14,18 +14,16 @@
     </a>
 </p>
 
-`tartiflette-asgi` (previously `tartiflette-starlette`) is a wrapper that provides ASGI support for the [Tartiflette] Python GraphQL engine.
+`tartiflette-asgi` (previously `tartiflette-starlette`) is a wrapper that provides ASGI support for the [Tartiflette] Python GraphQL engine. It is ideal for serving a GraphQL API over HTTP, or adding a GraphQL API endpoint to an existing ASGI application.
 
 [tartiflette]: https://tartiflette.io
 
-Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` and get the following:
+Build a GraphQL API using Tartiflette, then use `tartiflette-asgi` to achieve the following:
 
-- Compatibility with any ASGI server and framework.
-- Standalone and sub-app serving.
-- Built-in [GraphiQL] client.
-- Support for [GraphQL subscriptions over WebSocket](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md).
-
-[graphiql]: https://github.com/graphql/graphiql
+- Serve your GraphQL API as a standalone ASGI application using an ASGI server (e.g. Uvicorn, Daphne or Hypercorn).
+- Mount your GraphQL API endpoint onto an existing ASGI application (built using e.g. Starlette, FastAPI, Responder, Quart or Sanic).
+- Make interactive queries using the built-in GraphiQL client.
+- Implement GraphQL subscriptions thanks to built-in support for the [GraphQL subscriptions over WebSocket protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md).
 
 **Table of contents**
 
@@ -33,13 +31,12 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 - [Quickstart](#quickstart)
   - [Installation](#installation)
   - [Example](#example)
-- [User guide](#user-guide)
-  - [Standalone serving](#standalone-serving)
-  - [ASGI submounting](#asgi-submounting)
+- [Usage](#usage)
   - [Making requests](#making-requests)
   - [Accessing request information](#accessing-request-information)
   - [GraphiQL client](#graphiql-client)
   - [WebSocket subscriptions (Advanced)](#websocket-subscriptions-advanced)
+- [ASGI sub-mounting](#asgi-sub-mounting)
 - [API Reference](#api-reference)
 - [FAQ](#faq)
 
@@ -103,99 +100,7 @@ You should get the following JSON response:
 {"data": {"hello": "Hello, Chuck!"}}
 ```
 
-## User guide
-
-The [`TartifletteApp`](#tartifletteapp) class is an ASGI3-compliant application. There are two ways to use it:
-
-- Serve it as a standalone ASGI app.
-- Mount it as an endpoint of another ASGI app (e.g. a Starlette application).
-
-### Standalone serving
-
-The [Quickstart](#quickstart) example shows how to build a `TartifletteApp` and serve it as a standalone ASGI app.
-
-The app is served using Uvicorn, but any other ASGI web server will do, for example:
-
-- [uvicorn]
-- [hypercorn](https://github.com/pgjones/hypercorn)
-- [daphne](https://github.com/django/daphne)
-
-### ASGI submounting
-
-Most ASGI web frameworks provide a way to **mount** another ASGI app at a given URL prefix. You can use this to serve a `TartifletteApp` at an endpoint such as `/graphql` on the root ASGI application.
-
-This is useful to have **a GraphQL endpoint _and_ other (non-GraphQL) endpoints** within a single application. For example, to have a REST endpoint at `/api/users` and a GraphQL endpoint at `/graphql`.
-
-> **Important**: this should work with _**any**_ web framework that supports ASGI submounting — it doesn't have to be Starlette. See also: [What is the role of Starlette?](#what-is-the-role-of-starlette)
-
-#### Starlette example
-
-```python
-from starlette.applications import Starlette
-from starlette.responses import PlainTextResponse
-from tartiflette import Resolver
-from tartiflette_asgi import TartifletteApp, mount
-
-app = Starlette()
-
-@app.route("/")
-async def home(request):
-  return PlainTextResponse("Hello, world!")
-
-@Resolver("Query.hello")
-async def hello(parent, args, context, info):
-    name = args["name"]
-    return f"Hello, {name}!"
-
-sdl = """
-  type Query {
-    hello(name: String): String
-  }
-"""
-
-graphql = TartifletteApp(sdl=sdl)
-mount.starlette(app, "/graphql", graphql)  # (*)
-```
-
-> (\*) This is a shorthand for:
->
-> ```python
-> app.mount("/graphql", graphql)
-> app.add_event_handler("startup", graphql.startup)
-> ```
-
-Save the file as `app.py`, and serve it with [uvicorn]:
-
-```bash
-uvicorn app:app
-```
-
-Make a request:
-
-```bash
-curl -H "Content-Type: application/graphql/"  -d '{ hello(name: "Chuck") }' http://localhost:8000
-```
-
-> **Note**: if you receive a `307 Temporary Redirect` response, make sure to include the trailing slash: `/graphql/`.
-
-Response:
-
-```json
-{ "data": { "hello": "Hello, Chuck!" } }
-```
-
-#### General approach
-
-Assuming you have an instance of `TartifletteApp` called `graphql`, you need to:
-
-1. Add the `graphql` app as a sub-application (also known as "mounting"). The parent ASGI application may expose a method such as `.mount()` for this purpose.
-2. Add `graphql.startup` as a startup event handler so that the Tartiflette engine is built upon application startup. Note that:
-
-- Not doing this will result in a `RuntimeError` when requesting the GraphQL endpoint.
-- The parent ASGI application may expose a method such as `.add_event_handler()` for this purpose.
-- This is only required if the parent ASGI application does not call lifespan event handlers for sub-applications, as is the case for Starlette.
-
-**Tip**: the [`mount`](#mount) module provides mounting helpers for various ASGI frameworks.
+## Usage
 
 ### Making requests
 
@@ -359,6 +264,76 @@ Save this file as `graphql.py`, then run `$ uvicorn graphql:app`. Open the Graph
 See [`Subscriptions`](#subscriptions) in the API reference for a complete description of the available options.
 
 For more information on using subscriptions in Tartiflette, see the [Tartiflette documentation](https://tartiflette.io/docs/api/subscription).
+
+## ASGI sub-mounting
+
+You can mount a `TartifletteApp` instance as a sub-route of another ASGI application.
+
+This is useful to have a GraphQL endpoint _and_ other (non-GraphQL) endpoints within a single application. For example, you may wnat to have a REST endpoint at `/api/users`, or serve an HTML page at `/index.html`, as well as expose a GraphQL endpoint at `/graphql`.
+
+How to achieve this depends on the specific ASGI web framework you are using, so this page documents how to achieve it in various situations.
+
+### General approach
+
+In general, you'll need to do the following:
+
+1. Create a `TartifletteApp` application instance.
+1. Mount it under the main ASGI application's router. (Most ASGI frameworks expose a method such as `.mount()` for this purpose.)
+1. Register the startup lifespan event handler on the main ASGI application. (Frameworks typically expose a method such as `.add_event_handler()` for this purpose.)
+
+> **Important**
+>
+> The startup event handler is responsible for preparing the GraphQL engine (a.k.a. [cooking the engine](https://tartiflette.io/docs/api/engine#cook-your-tartiflette)), e.g. loading modules, SDL files, etc.
+>
+> If your ASGI framework does not implement the lifespan protocol and/or does not allow to register custom lifespan event handlers, or if you're working at the raw ASGI level, you can still use `tartiflette-asgi` but you'll need to add lifespan support yourself, e.g. using [asgi-lifespan](https://github.com/florimondmanca/asgi-lifespan).
+
+### Examples
+
+This section documents how to mount a `TartifletteApp` instance under an ASGI application for various ASGI web frameworks.
+
+To run an example:
+
+- Save the application script as `graphql.py`.
+- Run the server using `$ uvicorn graphql:app`.
+- Make a request using:
+
+```bash
+curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Type: application/graphql"
+```
+
+#### Starlette
+
+```python
+from starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
+from tartiflette import Resolver
+from tartiflette_asgi import TartifletteApp
+
+# Create a Starlette application.
+
+app = Starlette()
+
+# Maybe add some non-GraphQL routes...
+
+@app.route("/")
+async def home(request):
+  return PlainTextResponse("Hello, world!")
+
+# Create a 'TartifletteApp' instance.
+
+@Resolver("Query.hello")
+async def hello(parent, args, context, info):
+    name = args["name"]
+    return f"Hello, {name}!"
+
+sdl = "type Query { hello(name: String): String }"
+graphql = TartifletteApp(sdl=sdl)
+
+# Mount it under the Starlette application.
+
+app.mount("/graphql", graphql)
+app.add_event_handler("startup", graphql.startup)
+```
 
 ## API Reference
 
