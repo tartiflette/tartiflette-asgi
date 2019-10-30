@@ -147,7 +147,7 @@ async def resolve_whoami(parent, args, context, info) -> str:
 
 For detailed usage notes about the `Request` object, see [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
 
-## Shared GraphQL context
+### Shared GraphQL context
 
 If you need to make services, functions or data available to GraphQL resolvers, you can use `TartifletteApp(context=...)`. Contents of the `context` argument will be merged into the GraphQL `context` passed to resolvers.
 
