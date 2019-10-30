@@ -134,16 +134,17 @@ curl \
 
 ### Accessing request information
 
-You can access the Starlette `Request` object from resolvers using `context["req"]`:
+All the information about the current HTTP request (URL, headers, query parameters, etc) is available on `context["req"]`, which returns a Starlette `Request` object representing the current HTTP request.
 
 ```python
 @Resolver("Query.whoami")
 async def resolve_whoami(parent, args, context, info) -> str:
     request = context["req"]
-    return getattr(request.state, "user", "a mystery")
+    who = request.query_params.get("username", "unknown")
+    return who
 ```
 
-See also [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
+For detailed usage notes about the `Request` object, see [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
 
 ### GraphiQL client
 
