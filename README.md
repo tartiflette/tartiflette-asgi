@@ -34,6 +34,7 @@ Build a GraphQL API using Tartiflette, then use `tartiflette-asgi` to achieve th
 - [Usage](#usage)
   - [Making requests](#making-requests)
   - [Accessing request information](#accessing-request-information)
+  - [Shared GraphQL context](#shared-graphql-context)
   - [GraphiQL client](#graphiql-client)
   - [WebSocket subscriptions (Advanced)](#websocket-subscriptions-advanced)
 - [ASGI sub-mounting](#asgi-sub-mounting)
@@ -145,6 +146,28 @@ async def resolve_whoami(parent, args, context, info) -> str:
 ```
 
 For detailed usage notes about the `Request` object, see [Requests](https://www.starlette.io/requests/) in the Starlette documentation.
+
+## Shared GraphQL context
+
+If you need to make services, functions or data available to GraphQL resolvers, you can use `TartifletteApp(context=...)`. Contents of the `context` argument will be merged into the GraphQL `context` passed to resolvers.
+
+For example:
+
+```python
+import os
+from tartiflette import Resolver
+from tartiflette_asgi import TartifletteApp
+
+@Resolver("Query.human")
+async def resolve_human(parent, args, context, info):
+    planet = context["planet"]
+    return f"Human living on {planet}"
+
+app = TartifletteApp(
+  sdl="type Query { human(): String }",
+  context={"planet": os.getenv("PLANET", "Earth")},
+)
+```
 
 ### GraphiQL client
 
