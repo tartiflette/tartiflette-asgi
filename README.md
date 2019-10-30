@@ -27,14 +27,9 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 [graphiql]: https://github.com/graphql/graphiql
 
----
-
-**Note**: `tartiflette-asgi >= 0.7` (and `tartiflette-starlette == 0.6.*`) is only compatible with Tartiflette 1.x. For compatibility with Tartiflette 0.x, please install `tartiflette-starlette == 0.5.*`.
-
----
-
 **Table of contents**
 
+- [Requirements](#requirements)
 - [Quickstart](#quickstart)
 - [Installation](#installation)
 - [User guide](#user-guide)
@@ -46,6 +41,13 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
   - [WebSocket subscriptions (Advanced)](#websocket-subscriptions-advanced)
 - [API Reference](#api-reference)
 - [FAQ](#faq)
+
+## Requirements
+
+`tartiflette-asgi` is compatible with:
+
+- Python 3.6, 3.7 or 3.8.
+- Tartiflette 1.x.
 
 ## Quickstart
 
