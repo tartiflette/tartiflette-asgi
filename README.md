@@ -171,37 +171,50 @@ app = TartifletteApp(
 
 ### GraphiQL client
 
-By default, the GraphQL endpoint provided by `TartifletteApp` serves a [GraphiQL] client when it is accessed from a web browser. It can be customized using the `GraphiQL` helper.
+#### Default behavior
 
-Here's an example:
+When you access the GraphQL endpoint in a web browser, `TartifletteApp` serves a [GraphiQL](https://github.com/graphql/graphiql) client, which allows you to make interactive GraphQL queries in the browser.
+
+![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql.png)
+
+#### Customization
+
+You can customize the GraphiQL interface using `TartifletteApp(graphiql=GraphiQL(...))`.
+
+For example, this snippet will:
+
+- Serve the GraphiQL web interface at `/graphiql`.
+- Send an `Authorization` header when making requests to the API endpoint.
+- Setup the default variables and query to show when accessing the web interface for the first time.
 
 ```python
 from tartiflette_asgi import TartifletteApp, GraphiQL
 
-app = TartifletteApp(
-    sdl="""
-    type Query {
-        hello(name: String): String
+sdl = "type Query { hello(name: String): String }"
+
+graphiql = GraphiQL(
+    path="/graphiql",
+    default_headers={"Authorization": "Bearer 123"},
+    default_variables={"name": "world"},
+    default_query="""
+    query Hello($name: String) {
+        hello(name: $name)
     }
     """,
-    graphiql=GraphiQL(
-        path="/graphiql",
-        default_headers={"Authorization": "Bearer 123"},
-        default_variables={"name": "world"},
-        default_query="""
-        query Hello($name: String) {
-            hello(name: $name)
-        }
-        """,
-    ),
 )
+
+app = TartifletteApp(sdl=sdl, graphiql=graphiql)
 ```
 
-Save this as `graphql.py` and run `uvicorn graphql:app`. You should see the customized GraphiQL client when accessing http://127.0.0.1/graphiql:
+If you run this application, you should see the customized GraphiQL client when accessing http://localhost:8000/graphiql:
 
-![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql-custom.png)
+![](https://raw.githubusercontent.com/tartiflette/tartiflette-asgi/master/img/graphiql-custom.png)
 
-See [`GraphiQL`](#graphiql) in the API reference for a complete description of the available options.
+For the full list of options, see [`GraphiQL`](#graphiql).
+
+#### Disabling the GraphiQL client
+
+To disable the GraphiQL client altogether, use `TartifletteApp(graphiql=False)`.
 
 ### WebSocket subscriptions (Advanced)
 
