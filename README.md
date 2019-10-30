@@ -31,7 +31,8 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 - [Requirements](#requirements)
 - [Quickstart](#quickstart)
-- [Installation](#installation)
+  - [Installation](#installation)
+  - [Example](#example)
 - [User guide](#user-guide)
   - [Standalone serving](#standalone-serving)
   - [ASGI submounting](#asgi-submounting)
@@ -51,6 +52,26 @@ Build your GraphQL API with Tartiflette, then use the included `TartifletteApp` 
 
 ## Quickstart
 
+### Installation
+
+First, install Tartiflette's external dependencies, as explained in the [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/install-tartiflette).
+
+Then, you can install Tartiflette and `tartiflette-asgi` using `pip`:
+
+```bash
+pip install tartiflette "tartiflette-asgi==0.*"
+```
+
+You'll also need an [ASGI web server](https://github.com/florimondmanca/awesome-asgi#servers). For example, let's install [Uvicorn](http://www.uvicorn.org/):
+
+```bash
+pip install uvicorn
+```
+
+### Example
+
+Create an application that exposes a `TartifletteApp` instance:
+
 ```python
 from tartiflette import Resolver
 from tartiflette_asgi import TartifletteApp
@@ -60,55 +81,27 @@ async def hello(parent, args, context, info):
     name = args["name"]
     return f"Hello, {name}!"
 
-sdl = """
-  type Query {
-    hello(name: String): String
-  }
-"""
-
-app = TartifletteApp(sdl=sdl)
+sdl = "type Query { hello(name: String): String }"
+app = TartifletteApp(sdl=sdl, path="/graphql")
 ```
 
-Save the file as `graphql.py` and start a [uvicorn] server:
-
-[uvicorn]: https://www.uvicorn.org
+Save this file as `graphql.py`, then start the server:
 
 ```bash
 uvicorn graphql:app
 ```
 
-> **Note**: the GraphQL endpoint is exposed on `/` by default.
-
-Make a request:
+Make an HTTP request containing a GraphQL query:
 
 ```bash
-curl -H "Content-Type: application/graphql"  -d '{ hello(name: "Chuck") }' http://localhost:8000
+curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Type: application/graphql"
 ```
 
-Response:
+You should get the following JSON response:
 
 ```json
-{ "data": { "hello": "Hello, Chuck!" } }
+{"data": {"hello": "Hello, Chuck!"}}
 ```
-
-Or access `http://localhost:8000` in a browser to make interactive queries using the built-in [GraphiQL] client:
-
-![](https://github.com/tartiflette/tartiflette-asgi/raw/master/img/graphiql.png)
-
-## Installation
-
-1. Install Tartiflette's external dependencies as explained in the [Tartiflette tutorial](https://tartiflette.io/docs/tutorial/install-tartiflette).
-2. Install `tartiflette-asgi` from PyPI:
-
-```bash
-pip install "tartiflette-asgi==0.*"
-```
-
-This will also install [Tartiflette] and [Starlette], so you're good to go!
-
-[starlette]: https://www.starlette.io
-
-**Note**: `tartiflette-asgi` requires Python 3.6+.
 
 ## User guide
 
