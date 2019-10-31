@@ -20,3 +20,4 @@ var/
 debug/
 .DS_Store
 *.idea/
+site/
