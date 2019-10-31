@@ -7,6 +7,8 @@ flake8-bugbear
 flake8-comprehensions
 flake8-pie
 isort
+mkdocs
+mkdocs-material
 mypy
 pyee>=6,<7
 pytest
