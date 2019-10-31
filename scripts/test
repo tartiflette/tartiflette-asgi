@@ -7,5 +7,8 @@ fi
 
 set -x
 
-scripts/check
+if [[ -z $CI ]]; then
+    scripts/check
+fi
+
 ${PREFIX}pytest ${@}
