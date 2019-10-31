@@ -7,4 +7,5 @@ fi
 
 set -x
 
+scripts/check
 ${PREFIX}pytest ${@}
