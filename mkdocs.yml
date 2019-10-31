@@ -3,6 +3,9 @@ site_description: ASGI support for the Tartiflette Python GraphQL engine
 
 theme:
   name: material
+  palette:
+    primary: "black"
+    accent: "orange"
 
 repo_name: tartiflette/tartiflette-asgi
 repo_url: https://github.com/tartiflette/tartiflette-asgi
@@ -10,7 +13,14 @@ edit_uri: ""
 
 nav:
   - Introduction: "index.md"
+  - User Guide: "usage.md"
+  - API Reference: "api.md"
+  - FAQ: "faq.md"
+  - Contributing: "https://github.com/tartiflette/tartiflette-asgi/tree/master/CONTRIBUTING.md"
+  - Changelog: "https://github.com/tartiflette/tartiflette-asgi/tree/master/CHANGELOG.md"
 
 markdown_extensions:
+  - admonition
   - codehilite:
       guess_lang: false
+  - pymdownx.superfences
