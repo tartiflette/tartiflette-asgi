@@ -15,6 +15,9 @@ jobs:
     - stage: "Check"
       python: 3.7
       script: scripts/check
+    - stage: "Docs"
+      python: 3.7
+      scripts: scripts/docs
 
 script:
   - scripts/test
