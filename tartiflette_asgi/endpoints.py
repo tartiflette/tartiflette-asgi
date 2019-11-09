@@ -1,6 +1,5 @@
-import typing
 import json
-
+import typing
 
 from starlette.background import BackgroundTasks
 from starlette.datastructures import QueryParams
@@ -20,13 +19,14 @@ class GraphiQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
         config = get_graphql_config(request)
         graphql_endpoint = request["root_path"] + config.path
+        subscriptions_endpoint = None
+        if config.subscriptions:
+            subscriptions_endpoint = request["root_path"] + config.subscriptions.path
         graphiql = config.graphiql
         assert graphiql is not None
         html = graphiql.render_template(
             graphql_endpoint=graphql_endpoint,
-            subscriptions_endpoint=(
-                None if config.subscriptions is None else config.subscriptions.path
-            ),
+            subscriptions_endpoint=subscriptions_endpoint,
         )
         return HTMLResponse(html)
 
