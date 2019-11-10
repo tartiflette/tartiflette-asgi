@@ -4,10 +4,11 @@ import re
 import typing
 
 import pytest
+from starlette.applications import Starlette
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_asgi import GraphiQL, TartifletteApp
+from tartiflette_asgi import GraphiQL, TartifletteApp, mount
 
 
 @pytest.fixture(
@@ -91,3 +92,22 @@ def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
     assert json.dumps(variables) in response.text
     assert inspect.cleandoc(query) in response.text
     assert json.dumps(headers) in response.text
+
+
+@pytest.mark.parametrize("mount_path", ("", "/graphql"))
+def test_endpoint_paths_when_mounted(
+    starlette: Starlette, engine: Engine, mount_path: str
+):
+    ttftt = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
+    mount.starlette(starlette, mount_path, ttftt)
+
+    with TestClient(starlette) as client:
+        response = client.get(mount_path, headers={"accept": "text/html"})
+
+    assert response.status_code == 200
+
+    graphql_endpoint = mount_path + "/"
+    assert fr"var graphQLEndpoint = `{graphql_endpoint}`;" in response.text
+
+    subscriptions_endpoint = mount_path + "/subscriptions"
+    assert fr"var subscriptionsEndpoint = `{subscriptions_endpoint}`;" in response.text
