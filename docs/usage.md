@@ -114,7 +114,7 @@ To disable the GraphiQL client altogether, use `TartifletteApp(graphiql=False)`.
 
 You can mount a `TartifletteApp` instance as a sub-route of another ASGI application.
 
-This is useful to have a GraphQL endpoint _and_ other (non-GraphQL) endpoints within a single application. For example, you may wnat to have a REST endpoint at `/api/users`, or serve an HTML page at `/index.html`, as well as expose a GraphQL endpoint at `/graphql`.
+This is useful to have a GraphQL endpoint _and_ other (non-GraphQL) endpoints within a single application. For example, you may want to have a REST endpoint at `/api/users`, or serve an HTML page at `/index.html`, as well as expose a GraphQL endpoint at `/graphql`.
 
 How to achieve this depends on the specific ASGI web framework you are using, so this section documents how to achieve it in various situations.
 
