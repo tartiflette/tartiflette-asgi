@@ -127,7 +127,7 @@ In general, you'll need to do the following:
 1. Register the startup lifespan event handler on the main ASGI application. (Frameworks typically expose a method such as `.add_event_handler()` for this purpose.)
 
 !!! important
-    The startup event handler is responsible for preparing the GraphQL engine (a.k.a. [cooking the engine](https://tartiflette.io/docs/api/engine#cook-your-tartiflette)), e.g. loading modules, SDL files, etc.
+The startup event handler is responsible for preparing the GraphQL engine (a.k.a. [cooking the engine](https://tartiflette.io/docs/api/engine#cook-your-tartiflette)), e.g. loading modules, SDL files, etc.
 
     If your ASGI framework does not implement the lifespan protocol and/or does not allow to register custom lifespan event handlers, or if you're working at the raw ASGI level, you can still use `tartiflette-asgi` but you'll need to add lifespan support yourself, e.g. using [asgi-lifespan](https://github.com/florimondmanca/asgi-lifespan).
 
@@ -168,14 +168,10 @@ curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Typ
 ```python
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
-from starlette.routing import Route
+from starlette.routing import Mount, Route
 from tartiflette import Resolver
 from tartiflette_asgi import TartifletteApp
 
-# Maybe add some non-GraphQL routes...
-
-async def home(request):
-  return PlainTextResponse("Hello, world!")
 
 # Create a 'TartifletteApp' instance.
 
@@ -187,16 +183,18 @@ async def hello(parent, args, context, info):
 sdl = "type Query { hello(name: String): String }"
 graphql = TartifletteApp(sdl=sdl)
 
-# Create a Starlette application.
+# Declare regular routes as seems fit...
+
+async def home(request):
+  return PlainTextResponse("Hello, world!")
+
+# Create a Starlette application, mounting the 'TartifletteApp' instance.
 
 routes = [
-    Route("/", endpoint=home)
+    Route("/", endpoint=home),
+    Mount("/graphql", graphql),
 ]
 app = Starlette(routes=routes)
-
-# Mount it under the Starlette application.
-
-app.mount("/graphql", graphql)
 app.add_event_handler("startup", graphql.startup)
 ```
 
