@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Upgrade Starlette to `starlette==0.13.*`. (Pull #106)
+
 ## 0.7.1 - 2019-10-28
 
 ### Fixed

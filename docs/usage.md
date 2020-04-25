@@ -168,18 +168,10 @@ curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Typ
 ```python
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
+from starlette.routing import Mount, Route
 from tartiflette import Resolver
 from tartiflette_asgi import TartifletteApp
 
-# Create a Starlette application.
-
-app = Starlette()
-
-# Maybe add some non-GraphQL routes...
-
-@app.route("/")
-async def home(request):
-  return PlainTextResponse("Hello, world!")
 
 # Create a 'TartifletteApp' instance.
 
@@ -191,10 +183,18 @@ async def hello(parent, args, context, info):
 sdl = "type Query { hello(name: String): String }"
 graphql = TartifletteApp(sdl=sdl)
 
-# Mount it under the Starlette application.
+# Declare regular routes as seems fit...
 
-app.mount("/graphql", graphql)
-app.add_event_handler("startup", graphql.startup)
+async def home(request):
+  return PlainTextResponse("Hello, world!")
+
+# Create a Starlette application, mounting the 'TartifletteApp' instance.
+
+routes = [
+    Route("/", endpoint=home),
+    Mount("/graphql", graphql),
+]
+app = Starlette(routes=routes, on_startup=[graphql.startup])
 ```
 
 ## Advanced usage
