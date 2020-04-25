@@ -168,16 +168,12 @@ curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Typ
 ```python
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
+from starlette.routing import Route
 from tartiflette import Resolver
 from tartiflette_asgi import TartifletteApp
 
-# Create a Starlette application.
-
-app = Starlette()
-
 # Maybe add some non-GraphQL routes...
 
-@app.route("/")
 async def home(request):
   return PlainTextResponse("Hello, world!")
 
@@ -190,6 +186,13 @@ async def hello(parent, args, context, info):
 
 sdl = "type Query { hello(name: String): String }"
 graphql = TartifletteApp(sdl=sdl)
+
+# Create a Starlette application.
+
+routes = [
+    Route("/", endpoint=home)
+]
+app = Starlette(routes=routes)
 
 # Mount it under the Starlette application.
 
