@@ -194,7 +194,7 @@ routes = [
     Route("/", endpoint=home),
     Mount("/graphql", graphql),
 ]
-app = Starlette(routes=routes, on_startup=graphql.startup)
+app = Starlette(routes=routes, on_startup=[graphql.startup])
 ```
 
 ## Advanced usage
