@@ -4,7 +4,7 @@ from tartiflette import Engine
 from tartiflette_asgi import TartifletteApp
 
 
-def test_path(engine: Engine):
+def test_path(engine: Engine) -> None:
     ttftt = TartifletteApp(engine=engine, path="/graphql")
 
     with TestClient(ttftt) as client:

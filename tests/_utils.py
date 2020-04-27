@@ -14,4 +14,4 @@ pubsub = PubSub()  # pylint: disable=invalid-name
 class Dog(typing.NamedTuple):
     id: int
     name: str
-    nickname: str = None
+    nickname: typing.Optional[str] = None

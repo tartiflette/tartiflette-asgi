@@ -24,8 +24,8 @@ def fixture_ttftt(engine: Engine) -> TartifletteApp:
 
 
 @pytest.fixture(name="client")
-def fixture_client(ttftt: TartifletteApp) -> TestClient:
-    with TestClient(ttftt) as client:
+def fixture_client(ttftt: TartifletteApp) -> typing.Iterator[TestClient]:
+    with TestClient(ttftt) as client:  # type: TestClient  # type: ignore
         yield client
 
 
