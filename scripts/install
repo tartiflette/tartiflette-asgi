@@ -1,13 +1,14 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 
-if [ -z $CI ]; then
+if [ -z $GITHUB_ACTIONS ]; then
   python -m venv venv
   export PREFIX="venv/bin/"
 else
   export PREFIX=""
+  # Tartiflette requires these binaries to be installed, but
+  # they don't come installed on Actions' Ubuntu.
+  sudo apt-get install cmake flex bison
 fi
-
-set -x
 
 ${PREFIX}pip install -U pip
 ${PREFIX}pip install -r requirements.txt
