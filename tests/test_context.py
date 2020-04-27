@@ -16,7 +16,7 @@ def test_access_request_from_graphql_context(
     ttftt: TartifletteApp,
     authorization: str,
     expected_user: str,
-):
+) -> None:
     # See also: `tests/resolvers.py` for the `whoami` resolver.
     mount.starlette(auth_starlette, "/", ttftt)
     with TestClient(auth_starlette) as client:
@@ -28,7 +28,7 @@ def test_access_request_from_graphql_context(
 
 
 @pytest.mark.parametrize("context", (None, {"get_foo": lambda: "bar"}))
-def test_extra_context(engine: Engine, context: typing.Optional[dict]):
+def test_extra_context(engine: Engine, context: typing.Optional[dict]) -> None:
     ttftt = TartifletteApp(engine=engine, context=context)
 
     with TestClient(ttftt) as client:

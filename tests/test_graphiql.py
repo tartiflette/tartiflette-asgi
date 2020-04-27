@@ -14,31 +14,31 @@ from tartiflette_asgi import GraphiQL, TartifletteApp, mount
 @pytest.fixture(
     name="graphiql", params=[False, True, GraphiQL(), GraphiQL(path="/graphql")]
 )
-def fixture_graphiql(request) -> typing.Union[GraphiQL, bool]:
+def fixture_graphiql(request: typing.Any) -> typing.Union[GraphiQL, bool]:
     return request.param
 
 
-def build_graphiql_client(ttftt) -> TestClient:
+def build_graphiql_client(ttftt: TartifletteApp) -> TestClient:
     client = TestClient(ttftt)
     client.headers.update({"accept": "text/html"})
     return client
 
 
 @pytest.fixture(name="client")
-def fixture_client(graphiql, engine: Engine) -> TestClient:
+def fixture_client(graphiql: typing.Any, engine: Engine) -> typing.Iterator[TestClient]:
     ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
-    with build_graphiql_client(ttftt) as client:
+    with build_graphiql_client(ttftt) as client:  # type: TestClient  # type: ignore
         yield client
 
 
 @pytest.fixture(name="path")
-def fixture_path(graphiql) -> str:
+def fixture_path(graphiql: typing.Any) -> str:
     if not graphiql or graphiql is True or graphiql.path is None:
         return ""
     return graphiql.path
 
 
-def test_graphiql(client: TestClient, graphiql, path):
+def test_graphiql(client: TestClient, graphiql: typing.Any, path: str) -> None:
     response = client.get(path)
 
     assert response.status_code == 200 if graphiql else 404
@@ -54,7 +54,7 @@ def test_graphiql(client: TestClient, graphiql, path):
         assert response.text == "Not Found"
 
 
-def test_graphiql_not_found(client: TestClient, path):
+def test_graphiql_not_found(client: TestClient, path: str) -> None:
     response = client.get(path + "foo")
     assert response.status_code == 404
     assert response.text == "Not Found"
@@ -79,7 +79,7 @@ def fixture_headers() -> dict:
     return {"Authorization": "Bearer 123"}
 
 
-def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
+def test_defaults(engine: Engine, variables: dict, query: str, headers: dict) -> None:
     graphiql = GraphiQL(
         default_variables=variables, default_query=query, default_headers=headers
     )
@@ -97,7 +97,7 @@ def test_defaults(engine: Engine, variables: dict, query: str, headers: dict):
 @pytest.mark.parametrize("mount_path", ("", "/graphql"))
 def test_endpoint_paths_when_mounted(
     starlette: Starlette, engine: Engine, mount_path: str
-):
+) -> None:
     ttftt = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
     mount.starlette(starlette, mount_path, ttftt)
 

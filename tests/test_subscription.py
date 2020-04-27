@@ -14,14 +14,16 @@ MISSING = object()
 
 
 @pytest.mark.parametrize("subscriptions", [MISSING, None])
-def test_if_subscriptions_disabled_then_cannot_connect(engine: Engine, subscriptions):
+def test_if_subscriptions_disabled_then_cannot_connect(
+    engine: Engine, subscriptions: typing.Any
+) -> None:
     kwargs = {}
     if subscriptions is not MISSING:
         kwargs["subscriptions"] = subscriptions
 
     ttftt = TartifletteApp(engine=engine, **kwargs)
 
-    with TestClient(ttftt) as client:
+    with TestClient(ttftt) as client:  # type: TestClient  # type: ignore
         with pytest.raises(WebSocketDisconnect):
             client.websocket_connect("/subscriptions")
 
@@ -34,36 +36,38 @@ def fixture_pubsub() -> PubSub:
 
 
 @pytest.fixture(name="subscriptions", params=[True, Subscriptions(path="/subs")])
-def fixture_subscriptions(request) -> typing.Union[Subscriptions, bool]:
+def fixture_subscriptions(request: typing.Any) -> typing.Union[Subscriptions, bool]:
     return request.param
 
 
 @pytest.fixture(name="client")
-def fixture_client(engine: Engine, subscriptions, pubsub: PubSub) -> TestClient:
+def fixture_client(
+    engine: Engine, subscriptions: typing.Any, pubsub: PubSub
+) -> typing.Iterator[TestClient]:
     ttftt = TartifletteApp(
         engine=engine, subscriptions=subscriptions, context={"pubsub": pubsub}
     )
-    with TestClient(ttftt) as client:
+    with TestClient(ttftt) as client:  # type: TestClient  # type: ignore
         yield client
 
 
 @pytest.fixture(name="path")
-def fixture_path(subscriptions) -> str:
+def fixture_path(subscriptions: typing.Any) -> str:
     if subscriptions is True:
         return "/subscriptions"
     return subscriptions.path
 
 
-def _init(ws: WebSocket):
+def _init(ws: WebSocket) -> None:
     ws.send_json({"type": "connection_init"})
     assert ws.receive_json() == {"type": "connection_ack"}
 
 
-def _terminate(ws: WebSocket):
+def _terminate(ws: WebSocket) -> None:
     ws.send_json({"type": "connection_terminate"})
 
 
-def test_protocol_connect_disconnect(client: TestClient, path: str):
+def test_protocol_connect_disconnect(client: TestClient, path: str) -> None:
     with client.websocket_connect(path) as ws:
         _init(ws)
         _terminate(ws)
@@ -74,8 +78,8 @@ def test_protocol_connect_disconnect(client: TestClient, path: str):
     assert exc.code == 1011
 
 
-def test_subscribe(client: TestClient, pubsub: PubSub, path: str):
-    def _emit(dog: Dog):
+def test_subscribe(client: TestClient, pubsub: PubSub, path: str) -> None:
+    def _emit(dog: Dog = None) -> None:
         time.sleep(0.1)
         pubsub.emit("dog_added", dog)
 

@@ -12,7 +12,7 @@ from ._utils import omit_none
 @pytest.mark.parametrize("path", [None, "/", "/graphql", "/graphql/"])
 def test_starlette_mount(
     starlette: Starlette, engine: Engine, mount_path: str, path: str
-):
+) -> None:
     kwargs = omit_none({"engine": engine, "path": path})
 
     app = TartifletteApp(**kwargs)
@@ -34,7 +34,9 @@ def test_starlette_mount(
     assert full_path in graphiql_response.text
 
 
-def test_must_register_startup_handler(starlette: Starlette, ttftt: TartifletteApp):
+def test_must_register_startup_handler(
+    starlette: Starlette, ttftt: TartifletteApp
+) -> None:
     starlette.mount("/graphql", ttftt)
 
     with TestClient(starlette) as client:
