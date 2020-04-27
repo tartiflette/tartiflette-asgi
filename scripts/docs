@@ -5,12 +5,6 @@ if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
 
-if ! command -v "${PREFIX}mkdocs" &>/dev/null ; then
-    echo "Unable to find the 'mkdocs' command."
-    echo "Install from PyPI, using '${PREFIX}pip install mkdocs'."
-    exit 1
-fi
-
 set -x
 
 ${PREFIX}mkdocs build

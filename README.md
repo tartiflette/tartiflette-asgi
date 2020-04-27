@@ -3,8 +3,8 @@
 </div>
 
 <p align="center">
-  <a href="https://travis-ci.org/tartiflette/tartiflette-asgi">
-    <img src="https://travis-ci.org/tartiflette/tartiflette-asgi.svg?branch=master" alt="Build status">
+  <a href="https://github.com/tartiflette/tartiflette-asgi/actions">
+    <img src="https://github.com/tartiflette/tartiflette-asgi/workflows/Build/badge.svg?branch=master" alt="Build status">
   </a>
   <a href="https://pypi.org/project/tartiflette-asgi">
     <img src="https://badge.fury.io/py/tartiflette-asgi.svg" alt="Package version">
