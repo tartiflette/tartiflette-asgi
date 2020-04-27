@@ -6,15 +6,11 @@ Thank you for your interest in contributing to this project! Here are some tips 
 
 - Consider [opening an issue](https://github.com/tartiflette/tartiflette-asgi/issues/new) if the change you are proposing is not trivial. :+1:
 - Fork this repo on GitHub, then clone it to your machine.
-- Create a virtual environment and install development dependencies:
+- Install dependencies:
 
 ```bash
-python -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
+scripts/install
 ```
-
-(Feel free to adapt this step to your development environment.)
 
 - When you're ready to have your work reviewed, [open a pull request!](https://github.com/tartiflette/tartiflette-asgi/compare) :rocket:
 

@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ -z $CI ]; then
+  python -m venv venv
+  export PREFIX="venv/bin/"
+else
+  export PREFIX=""
+fi
+
+set -x
+
+${PREFIX}pip install -U pip
+${PREFIX}pip install -r requirements.txt
