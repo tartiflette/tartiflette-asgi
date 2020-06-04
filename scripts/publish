@@ -1,35 +1,15 @@
 #!/bin/sh -e
 
-export PACKAGE="tartiflette_asgi"
-export VERSION=`cat ${PACKAGE}/__init__.py | grep __version__ | sed "s/__version__ = //" | sed "s/'//g"`
 export PREFIX=""
 if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
 
-scripts/clean
-
-if ! command -v "${PREFIX}twine" &>/dev/null ; then
-    echo "Unable to find the 'twine' command."
-    echo "Install from PyPI, using '${PREFIX}pip install twine'."
-    exit 1
-fi
-
-if ! command -v "${PREFIX}mkdocs" &>/dev/null ; then
-    echo "Unable to find the 'mkdocs' command."
-    echo "Install from PyPI, using '${PREFIX}pip install mkdocs'."
-    exit 1
-fi
+PACKAGE="tartiflette_asgi"
+VERSION=`python -c "import $PACKAGE; print($PACKAGE.__version__)"`
 
 find ${PACKAGE} -type f -name "*.py[co]" -delete
 find ${PACKAGE} -type d -name __pycache__ -delete
 
-scripts/build
 ${PREFIX}twine upload dist/*
 ${PREFIX}mkdocs gh-deploy
-
-echo "You probably want to also tag the version now:"
-echo "git tag -a ${VERSION} -m 'version ${VERSION}'"
-echo "git push --tags"
-
-scripts/clean

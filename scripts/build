@@ -5,12 +5,10 @@ if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
 
-if ! command -v "${PREFIX}wheel" &>/dev/null ; then
-    echo "Unable to find the 'wheel' command."
-    echo "Install from PyPI, using '${PREFIX}pip install wheel'."
-    exit 1
-fi
-
 set -x
 
 ${PREFIX}python setup.py build sdist bdist_wheel
+${PREFIX}twine check dist/*
+rm -r build
+
+${PREFIX}mkdocs build

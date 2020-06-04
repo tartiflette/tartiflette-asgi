@@ -14,3 +14,5 @@ pyee>=6,<8
 pytest
 requests  # Required by the Starlette test client.
 seed-isort-config
+twine
+wheel

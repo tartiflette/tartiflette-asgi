@@ -27,8 +27,8 @@ jobs:
         run: scripts/install
       - name: Run checks
         run: scripts/check
-      - name: Build docs
-        run: scripts/docs
+      - name: Build package and docs
+        run: scripts/build
 
   test:
     name: Test (Python ${{ matrix.python-version }})
