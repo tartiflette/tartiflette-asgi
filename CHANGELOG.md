@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.8.0 - 2020-06-04
+
+### Added
+
+- Add support for Tartiflette 1.2.x. (Pull #115)
+
+### Fixed
+
+- Fix GraphiQL subscriptions endpoint when using ASGI sub-mounting. (Pull #98)
+- Fix protocol mismatch error when serving GraphiQL over HTTPS. (Pull #114)
 
 ## 0.7.1 - 2019-10-28
 
