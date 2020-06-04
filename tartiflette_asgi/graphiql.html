@@ -142,7 +142,7 @@
         parameters.fetcher = graphQLFetcher;
       } else {
         var subscriptionsURL = [
-          "ws://",
+          window.location.protocol === "https:" ? "wss://" : "ws://",
           window.location.hostname,
           window.location.port ? ":" + window.location.port : "",
           subscriptionsEndpoint
