@@ -1,6 +1,6 @@
 import typing
 
-from starlette.routing import Router
+from starlette.routing import Router, BaseRoute, Route, WebSocketRoute
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
@@ -46,17 +46,17 @@ class TartifletteApp:
 
         assert subscriptions is None or isinstance(subscriptions, Subscriptions)
 
-        self.router = Router(on_startup=[self.startup])
+        routes: typing.List[BaseRoute] = []
 
         if graphiql and graphiql.path is not None:
-            self.router.add_route(path=graphiql.path, endpoint=GraphiQLEndpoint)
+            routes.append(Route(graphiql.path, GraphiQLEndpoint))
 
-        self.router.add_route(path=path, endpoint=GraphQLEndpoint)
+        routes.append(Route(path, GraphQLEndpoint))
 
         if subscriptions is not None:
-            self.router.add_websocket_route(
-                path=subscriptions.path, endpoint=SubscriptionEndpoint
-            )
+            routes.append(WebSocketRoute(subscriptions.path, SubscriptionEndpoint))
+
+        self.router = Router(routes=routes, on_startup=[self.startup])
 
         config = GraphQLConfig(
             engine=self.engine,
