@@ -1,5 +1,5 @@
-from .app import TartifletteApp
-from .datastructures import GraphiQL, Subscriptions
+from ._app import TartifletteApp
+from ._datastructures import GraphiQL, Subscriptions
 
 __version__ = "0.8.0"
 __all__ = ["GraphiQL", "Subscriptions", "TartifletteApp"]

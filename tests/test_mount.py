@@ -6,7 +6,7 @@ from starlette.routing import Mount, Route
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_asgi import TartifletteApp, mount
+from tartiflette_asgi import TartifletteApp, _mount as mount
 
 from ._utils import omit_none
 

@@ -8,7 +8,7 @@ from starlette.applications import Starlette
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_asgi import GraphiQL, TartifletteApp, mount
+from tartiflette_asgi import GraphiQL, TartifletteApp, _mount as mount
 
 
 @pytest.fixture(

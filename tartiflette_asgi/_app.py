@@ -1,12 +1,12 @@
 import typing
 
-from starlette.routing import Router, BaseRoute, Route, WebSocketRoute
+from starlette.routing import BaseRoute, Route, Router, WebSocketRoute
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
-from .datastructures import GraphiQL, GraphQLConfig, Subscriptions
-from .endpoints import GraphiQLEndpoint, GraphQLEndpoint, SubscriptionEndpoint
-from .middleware import GraphQLMiddleware
+from ._datastructures import GraphiQL, GraphQLConfig, Subscriptions
+from ._endpoints import GraphiQLEndpoint, GraphQLEndpoint, SubscriptionEndpoint
+from ._middleware import GraphQLMiddleware
 
 
 class TartifletteApp:
