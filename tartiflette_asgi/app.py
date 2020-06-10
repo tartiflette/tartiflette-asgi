@@ -1,6 +1,6 @@
 import typing
 
-from starlette.routing import Lifespan, Router
+from starlette.routing import Router, BaseRoute, Route, WebSocketRoute
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
@@ -46,17 +46,17 @@ class TartifletteApp:
 
         assert subscriptions is None or isinstance(subscriptions, Subscriptions)
 
-        router = Router()
+        routes: typing.List[BaseRoute] = []
 
         if graphiql and graphiql.path is not None:
-            router.add_route(path=graphiql.path, endpoint=GraphiQLEndpoint)
+            routes.append(Route(graphiql.path, GraphiQLEndpoint))
 
-        router.add_route(path=path, endpoint=GraphQLEndpoint)
+        routes.append(Route(path, GraphQLEndpoint))
 
         if subscriptions is not None:
-            router.add_websocket_route(
-                path=subscriptions.path, endpoint=SubscriptionEndpoint
-            )
+            routes.append(WebSocketRoute(subscriptions.path, SubscriptionEndpoint))
+
+        self.router = Router(routes=routes, on_startup=[self.startup])
 
         config = GraphQLConfig(
             engine=self.engine,
@@ -66,8 +66,7 @@ class TartifletteApp:
             subscriptions=subscriptions,
         )
 
-        self.app = GraphQLMiddleware(router, config=config)
-        self.lifespan = Lifespan(on_startup=self.startup)
+        self.app = GraphQLMiddleware(self.router, config=config)
 
         self._started_up = False
 
@@ -77,7 +76,7 @@ class TartifletteApp:
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] == "lifespan":
-            await self.lifespan(scope, receive, send)
+            await self.router.lifespan(scope, receive, send)
         else:
             if not self._started_up:
                 raise RuntimeError(

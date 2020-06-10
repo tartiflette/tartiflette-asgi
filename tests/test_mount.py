@@ -1,5 +1,8 @@
 import pytest
 from starlette.applications import Starlette
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse
+from starlette.routing import Mount, Route
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
@@ -49,3 +52,23 @@ def test_must_register_startup_handler(
     assert ".add_event_handler" in error
     assert "'startup'" in error
     assert ".startup" in error
+
+
+def test_tartiflette_app_as_sub_starlette_app(engine: Engine) -> None:
+    async def home(_request: Request) -> PlainTextResponse:
+        return PlainTextResponse("Hello, world!")
+
+    graphql = TartifletteApp(engine=engine)
+    routes = [
+        Route("/", endpoint=home),
+        Mount("/graphql", app=graphql, name="tartiflette-asgi"),
+    ]
+    app = Starlette(routes=routes, on_startup=[graphql.startup])
+
+    with TestClient(app) as client:
+        response = client.get("/")
+        assert response.status_code == 200
+        assert response.text == "Hello, world!"
+        response = client.get("/graphql?query={ hello }")
+        assert response.status_code == 200
+        assert response.json() == {"data": {"hello": "Hello stranger"}}
