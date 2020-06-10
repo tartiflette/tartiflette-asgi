@@ -1,7 +1,7 @@
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from .datastructures import GraphQLConfig
+from ._datastructures import GraphQLConfig
 
 
 class GraphQLMiddleware:
