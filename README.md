@@ -14,9 +14,9 @@
     </a>
 </p>
 
-`tartiflette-asgi` (previously `tartiflette-starlette`) is a wrapper that provides ASGI support for the [Tartiflette](https://tartiflette.io) Python GraphQL engine.
+`tartiflette-asgi` is a wrapper that provides ASGI support for the [Tartiflette](https://tartiflette.io) Python GraphQL engine.
 
-It is ideal for serving a GraphQL API over HTTP, or adding a GraphQL API endpoint to an existing ASGI application.
+It is ideal for serving a GraphQL API over HTTP, or adding a GraphQL API endpoint to an existing ASGI application (e.g. FastAPI, Starlette, Quart, etc).
 
 Full documentation is available at: https://tartiflette.github.io/tartiflette-asgi
 
@@ -73,7 +73,7 @@ curl http://localhost:8000/graphql -d '{ hello(name: "Chuck") }' -H "Content-Typ
 You should get the following JSON response:
 
 ```json
-{"data": {"hello": "Hello, Chuck!"}}
+{ "data": { "hello": "Hello, Chuck!" } }
 ```
 
 ## Contributing
