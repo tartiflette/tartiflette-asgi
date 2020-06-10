@@ -1,15 +1,18 @@
-from starlette.testclient import TestClient
+import pytest
 from tartiflette import Engine
 
 from tartiflette_asgi import TartifletteApp
 
+from ._utils import get_client
 
-def test_path(engine: Engine) -> None:
+
+@pytest.mark.asyncio
+async def test_path(engine: Engine) -> None:
     app = TartifletteApp(engine=engine, path="/graphql")
 
-    with TestClient(app) as client:
-        assert client.get("/").status_code == 404
-        response = client.get("/graphql?query={ hello }")
-
-    assert response.status_code == 200
-    assert response.json() == {"data": {"hello": "Hello stranger"}}
+    async with get_client(app) as client:
+        response = await client.get("/")
+        assert response.status_code == 404
+        response = await client.get("/graphql?query={ hello }")
+        assert response.status_code == 200
+        assert response.json() == {"data": {"hello": "Hello stranger"}}

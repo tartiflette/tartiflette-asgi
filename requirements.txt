@@ -1,17 +1,21 @@
 -e .
 
+asgi-lifespan
+async-generator; python_version<'3.7'
 autoflake
 black
 flake8
 flake8-bugbear
 flake8-comprehensions
 flake8-pie
+httpx==0.13.*
 isort
 mkdocs
 mkdocs-material
 mypy
 pyee>=6,<8
 pytest
+pytest-asyncio
 requests  # Required by the Starlette test client.
 seed-isort-config
 twine
