@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.0 - 2020-06-10
+
+### Removed
+
+- Drop deprecated `mount` helpers module. Prefer using the mounting mechanism of your ASGI framework. (Pull #119)
+
+### Changed
+
+- Update dependency on Starlette to `0.13.*`. (Pull #106)
+- Convert internal modules to private naming. All public API should be accessed from the top-level `tartiflette_asgi` package. (Pull #117)
+
+### Added
+
+- Add compatibility with Starlette `0.13.*`. (Pull #106)
+
 ## 0.8.0 - 2020-06-04
 
 ### Added
