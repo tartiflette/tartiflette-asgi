@@ -13,7 +13,7 @@
       
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.3">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.a2408e81.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.6e35a1a6.min.css">
       
         <link rel="stylesheet" href="assets/stylesheets/palette.a46bcfb3.min.css">
       
@@ -376,12 +376,12 @@
 </div>
 
 <h1 id="introduction">Introduction</h1>
-<p><code>tartiflette-asgi</code> (previously <code>tartiflette-starlette</code>) is a wrapper that provides ASGI support for the <a href="https://tartiflette.io">Tartiflette</a> Python GraphQL engine.</p>
-<p>It is ideal for serving a GraphQL API over HTTP, or adding a GraphQL API endpoint to an existing ASGI application.</p>
+<p><code>tartiflette-asgi</code> is a wrapper that provides ASGI support for the <a href="https://tartiflette.io">Tartiflette</a> Python GraphQL engine.</p>
+<p>It is ideal for serving a GraphQL API over HTTP, or adding a GraphQL API endpoint to an existing ASGI application (e.g. FastAPI, Starlette, Quart, etc).</p>
 <p>Build a GraphQL API using Tartiflette, then use <code>tartiflette-asgi</code> to achieve the following:</p>
 <ul>
 <li>Serve your GraphQL API as a standalone ASGI application using an ASGI server (e.g. Uvicorn, Daphne or Hypercorn).</li>
-<li>Mount your GraphQL API endpoint onto an existing ASGI application (built using e.g. Starlette, FastAPI, Responder, Quart or Sanic).</li>
+<li>Mount your GraphQL API endpoint onto an existing ASGI application.</li>
 <li>Make interactive queries using the built-in GraphiQL client.</li>
 <li>Implement real-time querying thanks to GraphQL subscriptions over WebSocket.</li>
 </ul>
@@ -424,7 +424,7 @@
 </code></pre></div>
 
 <p>You should get the following JSON response:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, Chuck!&quot;</span><span class="p">}}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span> <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, Chuck!&quot;</span> <span class="p">}</span> <span class="p">}</span>
 </code></pre></div>
                 
               
@@ -479,14 +479,14 @@
     </div>
     
       <script src="assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="assets/javascripts/bundle.a45f732b.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: ".",
           features: [],
           search: Object.assign({
-            worker: "assets/javascripts/worker/search.27c6a5e6.min.js"
+            worker: "assets/javascripts/worker/search.c03f0417.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
