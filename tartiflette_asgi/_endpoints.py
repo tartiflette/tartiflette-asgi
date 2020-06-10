@@ -10,9 +10,9 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 from starlette.websockets import WebSocket
 from tartiflette import Engine
 
-from .errors import format_errors
-from .middleware import get_graphql_config
-from .subscriptions import GraphQLWSProtocol
+from ._errors import format_errors
+from ._middleware import get_graphql_config
+from ._subscriptions import GraphQLWSProtocol
 
 
 class GraphiQLEndpoint(HTTPEndpoint):
