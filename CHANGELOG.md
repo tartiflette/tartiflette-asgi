@@ -16,10 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix GraphiQL subscriptions endpoint when using ASGI sub-mounting. (Pull #98)
 - Fix protocol mismatch error when serving GraphiQL over HTTPS. (Pull #114)
 
-### Changed
-
-- Upgrade Starlette to `starlette==0.13.*`. (Pull #106)
-
 ## 0.7.1 - 2019-10-28
 
 ### Fixed
