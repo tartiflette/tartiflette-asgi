@@ -4,11 +4,10 @@ import re
 import typing
 
 import pytest
-from starlette.applications import Starlette
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_asgi import GraphiQL, TartifletteApp, _mount as mount
+from tartiflette_asgi import GraphiQL, TartifletteApp
 
 
 @pytest.fixture(
@@ -18,19 +17,6 @@ def fixture_graphiql(request: typing.Any) -> typing.Union[GraphiQL, bool]:
     return request.param
 
 
-def build_graphiql_client(ttftt: TartifletteApp) -> TestClient:
-    client = TestClient(ttftt)
-    client.headers.update({"accept": "text/html"})
-    return client
-
-
-@pytest.fixture(name="client")
-def fixture_client(graphiql: typing.Any, engine: Engine) -> typing.Iterator[TestClient]:
-    ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
-    with build_graphiql_client(ttftt) as client:  # type: TestClient  # type: ignore
-        yield client
-
-
 @pytest.fixture(name="path")
 def fixture_path(graphiql: typing.Any) -> str:
     if not graphiql or graphiql is True or graphiql.path is None:
@@ -38,8 +24,10 @@ def fixture_path(graphiql: typing.Any) -> str:
     return graphiql.path
 
 
-def test_graphiql(client: TestClient, graphiql: typing.Any, path: str) -> None:
-    response = client.get(path)
+def test_graphiql(engine: Engine, graphiql: typing.Any, path: str) -> None:
+    app = TartifletteApp(engine=engine, graphiql=graphiql)
+    with TestClient(app) as client:
+        response = client.get(path, headers={"accept": "text/html"})
 
     assert response.status_code == 200 if graphiql else 404
 
@@ -54,8 +42,10 @@ def test_graphiql(client: TestClient, graphiql: typing.Any, path: str) -> None:
         assert response.text == "Not Found"
 
 
-def test_graphiql_not_found(client: TestClient, path: str) -> None:
-    response = client.get(path + "foo")
+def test_graphiql_not_found(engine: Engine, path: str) -> None:
+    app = TartifletteApp(engine=engine)
+    with TestClient(app) as client:
+        response = client.get(path + "foo")
     assert response.status_code == 404
     assert response.text == "Not Found"
 
@@ -83,31 +73,12 @@ def test_defaults(engine: Engine, variables: dict, query: str, headers: dict) ->
     graphiql = GraphiQL(
         default_variables=variables, default_query=query, default_headers=headers
     )
-    ttftt = TartifletteApp(engine=engine, graphiql=graphiql)
+    app = TartifletteApp(engine=engine, graphiql=graphiql)
 
-    with build_graphiql_client(ttftt) as client:
-        response = client.get("/")
+    with TestClient(app) as client:
+        response = client.get("/", headers={"accept": "text/html"})
 
     assert response.status_code == 200
     assert json.dumps(variables) in response.text
     assert inspect.cleandoc(query) in response.text
     assert json.dumps(headers) in response.text
-
-
-@pytest.mark.parametrize("mount_path", ("", "/graphql"))
-def test_endpoint_paths_when_mounted(
-    starlette: Starlette, engine: Engine, mount_path: str
-) -> None:
-    ttftt = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
-    mount.starlette(starlette, mount_path, ttftt)
-
-    with TestClient(starlette) as client:
-        response = client.get(mount_path, headers={"accept": "text/html"})
-
-    assert response.status_code == 200
-
-    graphql_endpoint = mount_path + "/"
-    assert fr"var graphQLEndpoint = `{graphql_endpoint}`;" in response.text
-
-    subscriptions_endpoint = mount_path + "/subscriptions"
-    assert fr"var subscriptionsEndpoint = `{subscriptions_endpoint}`;" in response.text
