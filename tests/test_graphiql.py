@@ -4,10 +4,11 @@ import re
 import typing
 
 import pytest
-from starlette.testclient import TestClient
 from tartiflette import Engine
 
 from tartiflette_asgi import GraphiQL, TartifletteApp
+
+from ._utils import get_client
 
 
 @pytest.fixture(
@@ -24,10 +25,11 @@ def fixture_path(graphiql: typing.Any) -> str:
     return graphiql.path
 
 
-def test_graphiql(engine: Engine, graphiql: typing.Any, path: str) -> None:
+@pytest.mark.asyncio
+async def test_graphiql(engine: Engine, graphiql: typing.Any, path: str) -> None:
     app = TartifletteApp(engine=engine, graphiql=graphiql)
-    with TestClient(app) as client:
-        response = client.get(path, headers={"accept": "text/html"})
+    async with get_client(app) as client:
+        response = await client.get(path, headers={"accept": "text/html"})
 
     assert response.status_code == 200 if graphiql else 404
 
@@ -42,10 +44,11 @@ def test_graphiql(engine: Engine, graphiql: typing.Any, path: str) -> None:
         assert response.text == "Not Found"
 
 
-def test_graphiql_not_found(engine: Engine, path: str) -> None:
+@pytest.mark.asyncio
+async def test_graphiql_not_found(engine: Engine, path: str) -> None:
     app = TartifletteApp(engine=engine)
-    with TestClient(app) as client:
-        response = client.get(path + "foo")
+    async with get_client(app) as client:
+        response = await client.get(path + "foo")
     assert response.status_code == 404
     assert response.text == "Not Found"
 
@@ -69,14 +72,17 @@ def fixture_headers() -> dict:
     return {"Authorization": "Bearer 123"}
 
 
-def test_defaults(engine: Engine, variables: dict, query: str, headers: dict) -> None:
+@pytest.mark.asyncio
+async def test_defaults(
+    engine: Engine, variables: dict, query: str, headers: dict
+) -> None:
     graphiql = GraphiQL(
         default_variables=variables, default_query=query, default_headers=headers
     )
     app = TartifletteApp(engine=engine, graphiql=graphiql)
 
-    with TestClient(app) as client:
-        response = client.get("/", headers={"accept": "text/html"})
+    async with get_client(app) as client:
+        response = await client.get("/", headers={"accept": "text/html"})
 
     assert response.status_code == 200
     assert json.dumps(variables) in response.text
