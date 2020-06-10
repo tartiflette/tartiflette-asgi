@@ -2,24 +2,41 @@ import typing
 
 import pytest
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
+from starlette.routing import Mount
 from starlette.testclient import TestClient
 from tartiflette import Engine
 
-from tartiflette_asgi import TartifletteApp, mount
+from tartiflette_asgi import TartifletteApp
 
 
 @pytest.mark.parametrize(
     "authorization, expected_user", [(None, "a mystery"), ("Bearer 123", "Jane")]
 )
 def test_access_request_from_graphql_context(
-    auth_starlette: Starlette,
-    ttftt: TartifletteApp,
-    authorization: str,
-    expected_user: str,
+    engine: Engine, authorization: str, expected_user: str,
 ) -> None:
-    # See also: `tests/resolvers.py` for the `whoami` resolver.
-    mount.starlette(auth_starlette, "/", ttftt)
-    with TestClient(auth_starlette) as client:
+    class FakeAuthMiddleware(BaseHTTPMiddleware):
+        async def dispatch(
+            self, request: Request, call_next: typing.Callable
+        ) -> Response:
+            request.state.user = (
+                "Jane" if request.headers.get("Authorization") == "Bearer 123" else None
+            )
+            return await call_next(request)
+
+    graphql = TartifletteApp(engine=engine)
+    app = Starlette(
+        routes=[Mount("/", graphql)],
+        middleware=[Middleware(FakeAuthMiddleware)],
+        on_startup=[graphql.startup],
+    )
+
+    with TestClient(app) as client:
+        # See `tests/resolvers.py` for the `whoami` resolver.
         response = client.post(
             "/", json={"query": "{ whoami }"}, headers={"Authorization": authorization}
         )

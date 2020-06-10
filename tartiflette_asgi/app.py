@@ -1,6 +1,6 @@
 import typing
 
-from starlette.routing import Router, BaseRoute, Route, WebSocketRoute
+from starlette.routing import BaseRoute, Route, Router, WebSocketRoute
 from starlette.types import Receive, Scope, Send
 from tartiflette import Engine
 
