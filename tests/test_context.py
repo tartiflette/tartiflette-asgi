@@ -46,9 +46,9 @@ def test_access_request_from_graphql_context(
 
 @pytest.mark.parametrize("context", (None, {"get_foo": lambda: "bar"}))
 def test_extra_context(engine: Engine, context: typing.Optional[dict]) -> None:
-    ttftt = TartifletteApp(engine=engine, context=context)
+    app = TartifletteApp(engine=engine, context=context)
 
-    with TestClient(ttftt) as client:
+    with TestClient(app) as client:
         response = client.post("/", json={"query": "{ foo }"})
 
     assert response.status_code == 200

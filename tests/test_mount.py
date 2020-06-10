@@ -56,8 +56,8 @@ def test_must_register_startup_handler(engine: Engine) -> None:
 
 @pytest.mark.parametrize("mount_path", ("", "/graphql"))
 def test_graphiql_endpoint_paths_when_mounted(engine: Engine, mount_path: str) -> None:
-    ttftt = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
-    app = Starlette(routes=[Mount(mount_path, ttftt)], on_startup=[ttftt.startup])
+    graphql = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
+    app = Starlette(routes=[Mount(mount_path, graphql)], on_startup=[graphql.startup])
 
     with TestClient(app) as client:
         response = client.get(mount_path, headers={"accept": "text/html"})

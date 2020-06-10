@@ -5,9 +5,9 @@ from tartiflette_asgi import TartifletteApp
 
 
 def test_path(engine: Engine) -> None:
-    ttftt = TartifletteApp(engine=engine, path="/graphql")
+    app = TartifletteApp(engine=engine, path="/graphql")
 
-    with TestClient(ttftt) as client:
+    with TestClient(app) as client:
         assert client.get("/").status_code == 404
         response = client.get("/graphql?query={ hello }")
 

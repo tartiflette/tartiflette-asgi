@@ -21,9 +21,9 @@ def test_if_subscriptions_disabled_then_cannot_connect(
     if subscriptions is not MISSING:
         kwargs["subscriptions"] = subscriptions
 
-    ttftt = TartifletteApp(engine=engine, **kwargs)
+    app = TartifletteApp(engine=engine, **kwargs)
 
-    with TestClient(ttftt) as client:  # type: TestClient  # type: ignore
+    with TestClient(app) as client:  # type: TestClient  # type: ignore
         with pytest.raises(WebSocketDisconnect):
             client.websocket_connect("/subscriptions")
 
@@ -84,11 +84,11 @@ def test_subscribe(
     gaspar = Dog(id=1, name="Gaspar", nickname="Rapsag")
     woofy = Dog(id=2, name="Merrygold", nickname="Woofy")
 
-    graphql = TartifletteApp(
+    app = TartifletteApp(
         engine=engine, subscriptions=subscriptions, context={"pubsub": pubsub}
     )
 
-    with TestClient(graphql) as client:  # type: typing.Any
+    with TestClient(app) as client:  # type: typing.Any
         with client.websocket_connect(path) as ws:
             _init(ws)
 

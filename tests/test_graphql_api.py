@@ -67,16 +67,16 @@ def test_post_invalid_media_type(engine: Engine) -> None:
 
 
 def test_put(engine: Engine) -> None:
-    graphql = TartifletteApp(engine=engine)
-    with TestClient(graphql) as client:
+    app = TartifletteApp(engine=engine)
+    with TestClient(app) as client:
         response = client.put("/", json={"query": "{ hello }"})
     assert response.status_code == 405
     assert response.text == "Method Not Allowed"
 
 
 def test_error_handling(engine: Engine) -> None:
-    graphql = TartifletteApp(engine=engine)
-    with TestClient(graphql) as client:
+    app = TartifletteApp(engine=engine)
+    with TestClient(app) as client:
         response = client.post("/", json={"query": "{ dummy }"})
     assert response.status_code == 400
     json = response.json()
