@@ -1,5 +1,10 @@
 -e .
 
+# Packaging
+twine
+wheel
+
+# Testing
 asgi-lifespan
 async-generator; python_version<'3.7'
 autoflake
@@ -18,5 +23,3 @@ pytest
 pytest-asyncio
 requests  # Required by the Starlette test client.
 seed-isort-config
-twine
-wheel

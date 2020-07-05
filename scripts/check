@@ -5,7 +5,7 @@ if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
 
-export SOURCE_FILES="tartiflette_asgi tests setup.py"
+export SOURCE_FILES="src tests setup.py"
 
 set -x
 

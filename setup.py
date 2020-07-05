@@ -4,12 +4,12 @@
 import re
 from pathlib import Path
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 def get_version(package: str) -> str:
     """Return package version as listed in `__version__` in `__init__.py`."""
-    version = Path(package, "__init__.py").read_text()
+    version = Path("src", package, "__init__.py").read_text()
     match = re.search("__version__ = ['\"]([^'\"]+)['\"]", version)
     assert match is not None
     return match.group(1)
@@ -21,11 +21,6 @@ def get_long_description() -> str:
             return readme.read() + "\n\n" + changelog.read()
 
 
-def get_packages(package: str) -> list:
-    """Return root package and all sub-packages."""
-    return [str(path.parent) for path in Path(package).glob("**/__init__.py")]
-
-
 setup(
     name="tartiflette-asgi",
     version=get_version("tartiflette_asgi"),
@@ -35,8 +30,8 @@ setup(
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     url="https://github.com/tartiflette/tartiflette-asgi",
-    packages=get_packages("tartiflette_asgi"),
-    package_data={"tartiflette_asgi": ["py.typed"]},
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     install_requires=["starlette==0.13.*", "tartiflette>=1.0,<1.3"],
