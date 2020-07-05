@@ -9,7 +9,7 @@ flake8-bugbear
 flake8-comprehensions
 flake8-pie
 httpx==0.13.*
-isort
+isort==5.*
 mkdocs
 mkdocs-material
 mypy
