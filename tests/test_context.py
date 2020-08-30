@@ -19,7 +19,9 @@ from ._utils import get_client
     "authorization, expected_user", [("", "a mystery"), ("Bearer 123", "Jane")]
 )
 async def test_access_request_from_graphql_context(
-    engine: Engine, authorization: str, expected_user: str,
+    engine: Engine,
+    authorization: str,
+    expected_user: str,
 ) -> None:
     class FakeAuthMiddleware(BaseHTTPMiddleware):
         async def dispatch(
@@ -40,7 +42,9 @@ async def test_access_request_from_graphql_context(
     async with get_client(app) as client:
         # See `tests/resolvers.py` for the `whoami` resolver.
         response = await client.post(
-            "/", json={"query": "{ whoami }"}, headers={"Authorization": authorization},
+            "/",
+            json={"query": "{ whoami }"},
+            headers={"Authorization": authorization},
         )
 
     assert response.status_code == 200
