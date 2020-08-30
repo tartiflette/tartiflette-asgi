@@ -61,12 +61,13 @@ class GraphQLEndpoint(HTTPEndpoint):
 
         config = get_graphql_config(request)
         background = BackgroundTasks()
-        context = {"req": request, "background": background, **config.context}
+        context_additions = {"req": request, "background": background}
+        config.context.update(context_additions)
 
         engine: Engine = config.engine
         result: dict = await engine.execute(
             query,
-            context=context,
+            context=config.context,
             variables=data.get("variables"),
             operation_name=data.get("operationName"),
         )
