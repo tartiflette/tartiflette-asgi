@@ -67,7 +67,7 @@ class GraphQLEndpoint(HTTPEndpoint):
         engine: Engine = config.engine
         result: dict = await engine.execute(
             query,
-            context=config.context,
+            context=context,
             variables=data.get("variables"),
             operation_name=data.get("operationName"),
         )
