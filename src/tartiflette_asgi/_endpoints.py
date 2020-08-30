@@ -61,8 +61,8 @@ class GraphQLEndpoint(HTTPEndpoint):
 
         config = get_graphql_config(request)
         background = BackgroundTasks()
-        context_additions = {"req": request, "background": background}
-        config.context.update(context_additions)
+        context = config.context.copy()
+        context.update({"req": request, "background": background})
 
         engine: Engine = config.engine
         result: dict = await engine.execute(
