@@ -19,7 +19,9 @@ from ._utils import get_client
     "authorization, expected_user", [("", "a mystery"), ("Bearer 123", "Jane")]
 )
 async def test_access_request_from_graphql_context(
-    engine: Engine, authorization: str, expected_user: str,
+    engine: Engine,
+    authorization: str,
+    expected_user: str,
 ) -> None:
     class FakeAuthMiddleware(BaseHTTPMiddleware):
         async def dispatch(
