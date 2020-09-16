@@ -1,5 +1,6 @@
 import json
 import typing
+import copy
 
 from starlette.background import BackgroundTasks
 from starlette.datastructures import QueryParams
@@ -61,7 +62,7 @@ class GraphQLEndpoint(HTTPEndpoint):
 
         config = get_graphql_config(request)
         background = BackgroundTasks()
-        context = config.context.copy()
+        context = copy.deepcopy(config.context)
         context.update({"req": request, "background": background})
 
         engine: Engine = config.engine
@@ -104,7 +105,7 @@ class SubscriptionEndpoint(WebSocketEndpoint):
     async def on_connect(self, websocket: WebSocket) -> None:
         await websocket.accept(subprotocol=GraphQLWSProtocol.name)
         config = get_graphql_config(websocket)
-        context = config.context.copy()
+        context = copy.deepcopy(config.context)
         self.protocol = GraphQLWSProtocol(
             websocket=websocket, engine=config.engine, context=context
         )
