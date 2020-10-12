@@ -13,7 +13,7 @@ flake8
 flake8-bugbear
 flake8-comprehensions
 flake8-pie
-httpx==0.14.*
+httpx==0.16.*
 isort==5.*
 mkdocs
 mkdocs-material
