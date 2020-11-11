@@ -13,6 +13,7 @@ from .constants import GQL
 if sys.version_info >= (3, 7):
     create_task = asyncio.create_task
 else:
+    _T = typing.TypeVar("_T")
 
     def create_task(coro: typing.Awaitable[_T]) -> "asyncio.Task[_T]":
         loop = asyncio.get_event_loop()
