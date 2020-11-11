@@ -2,12 +2,20 @@
 
 See: https://github.com/apollographql/subscriptions-transport-ws
 """
+import asyncio
 import json
 import typing
-from asyncio import CancelledError, create_task
 from contextlib import suppress
 
 from .constants import GQL
+
+if sys.version_info >= (3, 7):
+    create_task = asyncio.create_task
+else:
+
+    def create_task(coro: typing.Awaitable[_T]) -> "asyncio.Task[_T]":
+        loop = asyncio.get_event_loop()
+        return loop.create_task(coro)
 
 
 class GraphQLWSProtocol:
@@ -73,7 +81,7 @@ class GraphQLWSProtocol:
         if operation is not None:
             task = create_task(operation.__anext__())
             task.cancel()
-            with suppress(CancelledError):
+            with suppress(asyncio.CancelledError):
                 await task
 
     # Client message handlers.
