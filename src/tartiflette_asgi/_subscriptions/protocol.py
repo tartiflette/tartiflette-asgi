@@ -4,6 +4,8 @@ See: https://github.com/apollographql/subscriptions-transport-ws
 """
 import json
 import typing
+from asyncio import CancelledError, create_task
+from contextlib import suppress
 
 from .constants import GQL
 
@@ -68,9 +70,11 @@ class GraphQLWSProtocol:
 
     async def _unsubscribe(self, opid: str) -> None:
         operation = self._operations.pop(opid, None)
-        if operation is None:
-            return
-        await operation.aclose()
+        if operation is not None:
+            task = create_task(operation.__anext__())
+            task.cancel()
+            with suppress(CancelledError):
+                await task
 
     # Client message handlers.
 
