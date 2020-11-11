@@ -71,7 +71,7 @@ class GraphQLWSProtocol:
                 if opid not in self._operations:
                     break
                 await self._send_message(opid, optype="data", payload=item)
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # noqa: PIE786
             await self._send_error("Internal error", opid=opid)
             raise exc
 
@@ -91,7 +91,7 @@ class GraphQLWSProtocol:
     async def _on_connection_init(self, opid: str, payload: dict) -> None:
         try:
             await self._send_message(optype=GQL.CONNECTION_ACK)
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # noqa: PIE786
             await self._send_error(str(exc), opid=opid, error_type=GQL.CONNECTION_ERROR)
             await self.close(1011)
 
