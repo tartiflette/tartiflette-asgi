@@ -2,10 +2,22 @@
 
 See: https://github.com/apollographql/subscriptions-transport-ws
 """
+import asyncio
 import json
+import sys
 import typing
+from contextlib import suppress
 
 from .constants import GQL
+
+if sys.version_info >= (3, 7):
+    create_task = asyncio.create_task
+else:
+    _T = typing.TypeVar("_T")
+
+    def create_task(coro: typing.Awaitable[_T]) -> "asyncio.Task[_T]":
+        loop = asyncio.get_event_loop()
+        return loop.create_task(coro)
 
 
 class GraphQLWSProtocol:
@@ -59,7 +71,7 @@ class GraphQLWSProtocol:
                 if opid not in self._operations:
                     break
                 await self._send_message(opid, optype="data", payload=item)
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # noqa: PIE786
             await self._send_error("Internal error", opid=opid)
             raise exc
 
@@ -68,16 +80,18 @@ class GraphQLWSProtocol:
 
     async def _unsubscribe(self, opid: str) -> None:
         operation = self._operations.pop(opid, None)
-        if operation is None:
-            return
-        await operation.aclose()
+        if operation is not None:
+            task = create_task(operation.__anext__())
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
 
     # Client message handlers.
 
     async def _on_connection_init(self, opid: str, payload: dict) -> None:
         try:
             await self._send_message(optype=GQL.CONNECTION_ACK)
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # noqa: PIE786
             await self._send_error(str(exc), opid=opid, error_type=GQL.CONNECTION_ERROR)
             await self.close(1011)
 
