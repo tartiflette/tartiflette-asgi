@@ -4,6 +4,7 @@ See: https://github.com/apollographql/subscriptions-transport-ws
 """
 import asyncio
 import json
+import sys
 import typing
 from contextlib import suppress
 
