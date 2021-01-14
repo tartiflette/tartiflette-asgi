@@ -80,12 +80,12 @@ class GraphQLEndpoint(HTTPEndpoint):
         result_errors = result.get("errors")
 
         if result_errors:
-            content["errors"] = []
+            content["errors"] = format_errors(result_errors)
             for e in result_errors:
-                content["errors"].append(_format_error(e))
                 if e.get("extensions", {}).get("rule"):
                     status_code = 400
-
+                    break
+                    
         return JSONResponse(content=content, status_code=status_code, background=background)
 
     async def dispatch(self) -> None:
