@@ -1,6 +1,4 @@
 
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -12,8 +10,9 @@
       
       
       
+      
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.3">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.5">
     
     
       
@@ -21,20 +20,22 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6e35a1a6.min.css">
-      
-        <link rel="stylesheet" href="../assets/stylesheets/palette.a46bcfb3.min.css">
-      
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
       
         
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
         
-        <meta name="theme-color" content="">
+          
+          
+          <meta name="theme-color" content="#000000">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -51,8 +52,12 @@
     
     
     
+    
+    
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="orange">
+      
   
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -68,7 +73,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
     <a href=".." title="tartiflette-asgi" class="md-header-nav__button md-logo" aria-label="tartiflette-asgi">
       
@@ -80,18 +87,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             tartiflette-asgi
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               User Guide
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -102,7 +111,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -143,8 +152,6 @@
     
     <div class="md-container" data-md-component="container">
       
-        
-      
       
         
       
@@ -152,10 +159,16 @@
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="tartiflette-asgi" class="md-nav__button md-logo" aria-label="tartiflette-asgi">
       
@@ -186,39 +199,44 @@
       
 
 
-  <li class="md-nav__item">
-    <a href=".." title="Introduction" class="md-nav__link">
-      Introduction
-    </a>
-  </li>
-
-    
-      
-      
-      
-
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
   
 
+    
+      
+      
+      
 
-  <li class="md-nav__item md-nav__item--active">
+
+  
+  
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
       
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         User Guide
-        <span class="md-nav__icon md-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
-        </span>
-      </label>
-    
-    <a href="./" title="User Guide" class="md-nav__link md-nav__link--active">
-      User Guide
-    </a>
-    
+      </a>
       
+        
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -226,9 +244,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -372,8 +388,9 @@
     </ul>
   
 </nav>
-    
-  </li>
+      
+    </li>
+  
 
     
       
@@ -381,11 +398,15 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="../api/" title="API Reference" class="md-nav__link">
-      API Reference
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        API Reference
+      </a>
+    </li>
+  
 
     
       
@@ -393,11 +414,15 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="../faq/" title="FAQ" class="md-nav__link">
-      FAQ
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        FAQ
+      </a>
+    </li>
+  
 
     
       
@@ -405,11 +430,15 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="https://github.com/tartiflette/tartiflette-asgi/tree/master/CONTRIBUTING.md" title="Contributing" class="md-nav__link">
-      Contributing
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/tartiflette/tartiflette-asgi/tree/master/CONTRIBUTING.md" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
 
     
       
@@ -417,11 +446,15 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="https://github.com/tartiflette/tartiflette-asgi/tree/master/CHANGELOG.md" title="Changelog" class="md-nav__link">
-      Changelog
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/tartiflette/tartiflette-asgi/tree/master/CHANGELOG.md" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
 
     
   </ul>
@@ -431,7 +464,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -442,9 +476,7 @@
   
   
     <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </span>
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -598,9 +630,6 @@
               
                 
                 
-                  
-                
-                
                 <h1 id="user-guide">User Guide</h1>
 <h2 id="creating-an-application">Creating an application</h2>
 <p>The main piece of API that <code>tartiflette-asgi</code> brings is <code>TartifletteApp</code>, an ASGI3-compliant ASGI application.</p>
@@ -614,7 +643,6 @@
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">TartifletteApp</span><span class="p">(</span><span class="n">sdl</span><span class="o">=</span><span class="n">sdl</span><span class="p">)</span>
 </code></pre></div>
-
 <ul>
 <li>A Tartiflette <code>Engine</code> instance:</li>
 </ul>
@@ -623,14 +651,12 @@
 <span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">sdl</span><span class="o">=...</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">TartifletteApp</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
 </code></pre></div>
-
 <p>For more information on what values <code>sdl</code> and <code>engine</code> can accept, see the <a href="https://tartiflette.io/docs/api/engine">Engine API reference</a>.</p>
 <h2 id="routing">Routing</h2>
 <p>You can define which URL path the <code>TartifletteApp</code> should be accessible at using the <code>path</code> parameter.</p>
 <p>It is served at <code>/</code> by default, but a popular choice is to serve it at <code>/graphql</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">TartifletteApp</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/graphql&quot;</span><span class="p">)</span>
 </code></pre></div>
-
 <h2 id="making-requests">Making requests</h2>
 <p><code>tartiflette-asgi</code> allows you to pass the query in several ways:</p>
 <ul>
@@ -638,7 +664,6 @@
 </ul>
 <div class="highlight"><pre><span></span><code>curl <span class="s1">&#39;http://localhost:8000/graphql?query=\{hello(name:&quot;Chuck&quot;)\}&#39;</span>
 </code></pre></div>
-
 <ul>
 <li>JSON-encoded body (methods: <code>POST</code>):</li>
 </ul>
@@ -646,7 +671,6 @@
   -d <span class="s1">&#39;{&quot;query&quot;: &quot;{ hello(name: \&quot;Chuck\&quot;) }&quot;}&#39;</span> <span class="se">\</span>
   -H <span class="s2">&quot;Content-Type: application/json&quot;</span>
 </code></pre></div>
-
 <ul>
 <li>Raw body with the <code>application/graphql</code> content type (methods: <code>POST</code>):</li>
 </ul>
@@ -654,7 +678,6 @@
   -d <span class="s1">&#39;{ hello(name: &quot;Chuck&quot;) }&#39;</span> <span class="se">\</span>
   -H <span class="s2">&quot;Content-Type: application/graphql&quot;</span>
 </code></pre></div>
-
 <h2 id="graphiql-client">GraphiQL client</h2>
 <h3 id="default-behavior">Default behavior</h3>
 <p>When you access the GraphQL endpoint in a web browser, <code>TartifletteApp</code> serves a <a href="https://github.com/graphql/graphiql">GraphiQL</a> client, which allows you to make interactive GraphQL queries in the browser.</p>
@@ -684,7 +707,6 @@
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">TartifletteApp</span><span class="p">(</span><span class="n">sdl</span><span class="o">=</span><span class="n">sdl</span><span class="p">,</span> <span class="n">graphiql</span><span class="o">=</span><span class="n">graphiql</span><span class="p">)</span>
 </code></pre></div>
-
 <p>If you run this application, you should see the customized GraphiQL client when accessing <a href="http://localhost:8000/graphiql">http://localhost:8000/graphiql</a>:</p>
 <p><img alt="" src="https://raw.githubusercontent.com/tartiflette/tartiflette-asgi/master/img/graphiql-custom.png" /></p>
 <p>For the full list of options, see <a href="/api/#graphiql"><code>GraphiQL</code></a>.</p>
@@ -711,7 +733,6 @@
 <div class="highlight"><pre><span></span><code><span class="n">graphql</span> <span class="o">=</span> <span class="n">TartifletteApp</span><span class="p">(</span><span class="n">sdl</span><span class="o">=...</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;/graphql&quot;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">graphql</span><span class="p">)</span>
 </code></pre></div>
-
 <p>This is because <code>path</code> is relative to the mount path on the host ASGI application. As a result, mounting at <code>/graphql</code> while setting <code>path="/graphql"</code> would make the GraphQL API accessible at <code>/graphql/graphql</code>, which is typically not what you want.</p>
 <p>If you want to have your GraphQL API accessible at <code>/graphql</code>, you should do as above, i.e.:</p>
 <ul>
@@ -729,7 +750,6 @@
 </ul>
 <div class="highlight"><pre><span></span><code>curl http://localhost:8000/graphql -d <span class="s1">&#39;{ hello(name: &quot;Chuck&quot;) }&#39;</span> -H <span class="s2">&quot;Content-Type: application/graphql&quot;</span>
 </code></pre></div>
-
 <h4 id="starlette">Starlette</h4>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">starlette.applications</span> <span class="kn">import</span> <span class="n">Starlette</span>
 <span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span>
@@ -761,7 +781,6 @@
 <span class="p">]</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Starlette</span><span class="p">(</span><span class="n">routes</span><span class="o">=</span><span class="n">routes</span><span class="p">,</span> <span class="n">on_startup</span><span class="o">=</span><span class="p">[</span><span class="n">graphql</span><span class="o">.</span><span class="n">startup</span><span class="p">])</span>
 </code></pre></div>
-
 <h2 id="advanced-usage">Advanced usage</h2>
 <h3 id="accessing-request-information">Accessing request information</h3>
 <p>All the information about the current HTTP request (URL, headers, query parameters, etc) is available on <code>context["req"]</code>, which returns a Starlette <code>Request</code> object representing the current HTTP request.</p>
@@ -771,7 +790,6 @@
     <span class="n">who</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">who</span>
 </code></pre></div>
-
 <p>For detailed usage notes about the <code>Request</code> object, see <a href="https://www.starlette.io/requests/">Requests</a> in the Starlette documentation.</p>
 <h3 id="shared-graphql-context">Shared GraphQL context</h3>
 <p>If you need to make services, functions or data available to GraphQL resolvers, you can use <code>TartifletteApp(context=...)</code>. Contents of the <code>context</code> argument will be merged into the GraphQL <code>context</code> passed to resolvers.</p>
@@ -790,7 +808,6 @@
   <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;planet&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PLANET&quot;</span><span class="p">,</span> <span class="s2">&quot;Earth&quot;</span><span class="p">)},</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <h3 id="websocket-subscriptions">WebSocket subscriptions</h3>
 <p>This package provides support for <a href="https://graphql.org/blog/subscriptions-in-graphql-and-relay/">GraphQL subscriptions</a> over WebSocket. Subscription queries can be issued via the built-in GraphiQL client, as well as <a href="https://www.apollographql.com/docs/react/advanced/subscriptions/">Apollo GraphQL</a> and any other client that uses the <a href="https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md">subscriptions-transport-ws</a> protocol.</p>
 <p>Example:</p>
@@ -841,7 +858,6 @@
     <span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
-
 <blockquote>
 <p><strong>Note</strong>: the subscriptions endpoint is exposed on <code>/subscriptions</code> by default.</p>
 </blockquote>
@@ -867,7 +883,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href=".." title="Introduction" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -882,7 +898,7 @@
           </a>
         
         
-          <a href="../api/" title="API Reference" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../api/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -915,15 +931,15 @@
       
     </div>
     
-      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="../assets/javascripts/bundle.a45f732b.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "..",
           features: [],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.c03f0417.min.js"
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
