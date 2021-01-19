@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.10.0 - 2021-01-19
+
+### Added
+
+- Add official compatibility with Tartiflette 1.3.x. (Pull #143)
+
 ## 0.9.0 - 2020-06-10
 
 ### Removed
