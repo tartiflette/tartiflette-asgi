@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add official compatibility with Tartiflette 1.3.x. (Pull #143)
+- Add official compatibility with Tartiflette 1.3.x. (Pull #132)
 
 ## 0.9.0 - 2020-06-10
 
