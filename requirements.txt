@@ -12,7 +12,6 @@ black==20.8b1
 flake8
 flake8-bugbear
 flake8-comprehensions
-flake8-pie
 httpx==0.14.*
 isort==5.*
 mkdocs

@@ -19,7 +19,7 @@ def omit_none(dct: dict) -> dict:
 
 
 PubSub = AsyncIOEventEmitter
-pubsub = PubSub()  # pylint: disable=invalid-name
+pubsub = PubSub()
 
 
 class Dog(typing.NamedTuple):
