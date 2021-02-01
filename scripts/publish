@@ -5,8 +5,6 @@ if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
 
-VERSION=`python -c "import $PACKAGE; print($PACKAGE.__version__)"`
-
 find src -type f -name "*.py[co]" -delete
 find src -type d -name __pycache__ -delete
 
