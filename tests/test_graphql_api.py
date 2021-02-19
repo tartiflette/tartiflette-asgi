@@ -92,7 +92,7 @@ async def test_error_handling(engine: Engine) -> None:
         response = await client.post("/", json={"query": "{ dummy }"})
     assert response.status_code == 400
     json = response.json()
-    assert json["data"] is None
+    assert not json["data"]
     assert len(json["errors"]) == 1
     error = json["errors"][0]
     assert error["locations"] == [{"column": 3, "line": 1}]
