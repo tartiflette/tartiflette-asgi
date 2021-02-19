@@ -72,7 +72,7 @@ class GraphQLEndpoint(HTTPEndpoint):
         )
 
         status_code = 200
-        content = {}
+        content = dict(data={})
 
         if result.get("data"):
             content["data"] = result["data"]
