@@ -3,16 +3,32 @@
 See: https://github.com/apollographql/subscriptions-transport-ws
 """
 import json
+import sys
 import typing
 
 from .constants import GQL
+
+if sys.version_info >= (3, 8):  # pragma: no cover
+    from typing import TypedDict
+else:  # pragma: no cover
+    from typing_extensions import TypedDict
+
+
+class Payload(TypedDict):
+    context: dict
+    query: typing.Union[str, bytes]
+    variables: typing.Optional[typing.Dict[str, typing.Any]]
+    operationName: typing.Optional[str]
+
+
+Stream = typing.AsyncGenerator[typing.Dict[str, typing.Any], None]
 
 
 class GraphQLWSProtocol:
     name = "graphql-ws"
 
     def __init__(self) -> None:
-        self._operations: typing.Dict[str, typing.AsyncGenerator] = {}
+        self._operations: typing.Dict[str, Stream] = {}
 
     # Methods whose implementation is left to the implementer.
 
@@ -25,7 +41,7 @@ class GraphQLWSProtocol:
     async def close(self, close_code: int) -> None:
         raise NotImplementedError
 
-    def get_stream(self, opid: str, payload: dict) -> typing.AsyncGenerator:
+    def get_stream(self, opid: str, payload: Payload) -> Stream:
         raise NotImplementedError
 
     # Helpers.
@@ -50,7 +66,7 @@ class GraphQLWSProtocol:
             error_type = GQL.ERROR
         await self._send_message(opid, error_type, {"message": message})
 
-    async def _subscribe(self, opid: str, payload: dict) -> None:
+    async def _subscribe(self, opid: str, payload: Payload) -> None:
         stream = self.get_stream(opid, payload)
         self._operations[opid] = stream
 
@@ -74,22 +90,22 @@ class GraphQLWSProtocol:
 
     # Client message handlers.
 
-    async def _on_connection_init(self, opid: str, payload: dict) -> None:
+    async def _on_connection_init(self, opid: str, payload: Payload) -> None:
         try:
             await self._send_message(optype=GQL.CONNECTION_ACK)
         except Exception as exc:
             await self._send_error(str(exc), opid=opid, error_type=GQL.CONNECTION_ERROR)
             await self.close(1011)
 
-    async def _on_start(self, opid: str, payload: dict) -> None:
+    async def _on_start(self, opid: str, payload: Payload) -> None:
         if opid in self._operations:
             await self._unsubscribe(opid)
         await self._subscribe(opid, payload)
 
-    async def _on_stop(self, opid: str, payload: dict) -> None:
+    async def _on_stop(self, opid: str, payload: Payload) -> None:
         await self._unsubscribe(opid)
 
-    async def _on_connection_terminate(self, opid: str, payload: dict) -> None:
+    async def _on_connection_terminate(self, opid: str, payload: Payload) -> None:
         await self.close(1011)
 
     # Main task.
@@ -105,9 +121,9 @@ class GraphQLWSProtocol:
 
         optype: str = message.get("type")
         opid: str = message.get("id")
-        payload: dict = message.get("payload", {})
+        payload: Payload = message.get("payload", {})
 
-        handler: typing.Callable[[str, dict], typing.Awaitable[None]]
+        handler: typing.Callable[[str, Payload], typing.Awaitable[None]]
 
         if optype == "connection_init":
             handler = self._on_connection_init
