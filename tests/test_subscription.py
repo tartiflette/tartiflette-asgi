@@ -25,7 +25,8 @@ def test_if_subscriptions_disabled_then_cannot_connect(
 
     with TestClient(app) as client:  # type: TestClient  # type: ignore
         with pytest.raises(WebSocketDisconnect):
-            client.websocket_connect("/subscriptions")
+            with client.websocket_connect("/subscriptions"):
+                pass
 
 
 @pytest.fixture(name="pubsub", scope="session")
