@@ -37,7 +37,7 @@ class GraphQLWSProtocol(protocol.GraphQLWSProtocol):
     # GraphQL engine implementation.
 
     def get_stream(self, opid: str, payload: dict) -> typing.AsyncGenerator:
-        context = {**payload.get("context", {}), **self.context}
+        context = {"req": self.websocket, **payload.get("context", {}), **self.context}
         return self.engine.subscribe(
             query=payload.get("query"),
             variables=payload.get("variables"),
