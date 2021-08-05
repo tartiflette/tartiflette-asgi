@@ -3,12 +3,18 @@
 See: https://github.com/apollographql/subscriptions-transport-ws
 """
 import json
+import sys
 import typing
 
 from .constants import GQL
 
+if sys.version_info >= (3, 8):  # pragma: no cover
+    from typing import TypedDict
+else:  # pragma: no cover
+    from typing_extensions import TypedDict
 
-class Payload(typing.TypedDict):
+
+class Payload(TypedDict):
     context: dict
     query: typing.Union[str, bytes]
     variables: typing.Optional[typing.Dict[str, typing.Any]]
