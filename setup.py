@@ -34,7 +34,7 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    install_requires=["starlette==0.13.*", "tartiflette>=1.0,<1.4"],
+    install_requires=["starlette==0.13.*", "tartiflette>=1.0,<1.5"],
     python_requires=">=3.6",
     # https://pypi.org/pypi?%3Aaction=list_classifiers
     license="MIT",
