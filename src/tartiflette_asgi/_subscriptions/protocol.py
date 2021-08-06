@@ -21,14 +21,26 @@ class Payload(TypedDict):
     operationName: typing.Optional[str]
 
 
-Stream = typing.AsyncGenerator[typing.Dict[str, typing.Any], None]
+class Subscription:
+    def __init__(
+        self,
+        agen: typing.AsyncGenerator[typing.Dict[str, typing.Any], None],
+    ) -> None:
+        self._agen = agen
+
+    async def __aiter__(self) -> typing.AsyncIterator[typing.Dict[str, typing.Any]]:
+        async for item in self._agen:
+            yield item
+
+    async def aclose(self) -> None:
+        await self._agen.aclose()
 
 
 class GraphQLWSProtocol:
     name = "graphql-ws"
 
     def __init__(self) -> None:
-        self._operations: typing.Dict[str, Stream] = {}
+        self._subscriptions: typing.Dict[str, Subscription] = {}
 
     # Methods whose implementation is left to the implementer.
 
@@ -41,7 +53,7 @@ class GraphQLWSProtocol:
     async def close(self, close_code: int) -> None:
         raise NotImplementedError
 
-    def get_stream(self, opid: str, payload: Payload) -> Stream:
+    def get_subscription(self, opid: str, payload: Payload) -> Subscription:
         raise NotImplementedError
 
     # Helpers.
@@ -67,12 +79,12 @@ class GraphQLWSProtocol:
         await self._send_message(opid, error_type, {"message": message})
 
     async def _subscribe(self, opid: str, payload: Payload) -> None:
-        stream = self.get_stream(opid, payload)
-        self._operations[opid] = stream
+        subscription = self.get_subscription(opid, payload)
+        self._subscriptions[opid] = subscription
 
         try:
-            async for item in stream:
-                if opid not in self._operations:
+            async for item in subscription:
+                if opid not in self._subscriptions:
                     break
                 await self._send_message(opid, optype="data", payload=item)
         except Exception as exc:
@@ -83,10 +95,10 @@ class GraphQLWSProtocol:
         await self._unsubscribe(opid)
 
     async def _unsubscribe(self, opid: str) -> None:
-        operation = self._operations.pop(opid, None)
-        if operation is None:
+        subscription = self._subscriptions.pop(opid, None)
+        if subscription is None:
             return
-        await operation.aclose()
+        await subscription.aclose()
 
     # Client message handlers.
 
@@ -98,7 +110,7 @@ class GraphQLWSProtocol:
             await self.close(1011)
 
     async def _on_start(self, opid: str, payload: Payload) -> None:
-        if opid in self._operations:
+        if opid in self._subscriptions:
             await self._unsubscribe(opid)
         await self._subscribe(opid, payload)
 
@@ -148,5 +160,5 @@ class GraphQLWSProtocol:
 
     async def on_disconnect(self, close_code: int) -> None:
         # NOTE: load keys in list to prevent "size changed during iteration".
-        for opid in list(self._operations):
+        for opid in list(self._subscriptions):
             await self._unsubscribe(opid)
