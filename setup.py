@@ -35,7 +35,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "starlette==0.13.*",
+        "starlette>=0.13,<1.0",
         "tartiflette>=1.0,<1.5",
         "typing-extensions; python_version<'3.8'",
     ],
