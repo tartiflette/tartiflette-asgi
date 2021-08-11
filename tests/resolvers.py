@@ -3,6 +3,7 @@ import typing
 from queue import Empty, Queue
 
 from starlette.requests import Request
+from starlette.websockets import WebSocket
 from tartiflette import Resolver, Subscription
 
 from ._utils import Dog, PubSub
@@ -51,3 +52,12 @@ async def on_dog_added(
             if dog is None:
                 break
             yield {"dogAdded": dog._asdict()}
+
+
+@Subscription("Subscription.testContext")
+async def on_test_context(
+    parent: typing.Any, args: dict, ctx: dict, info: dict
+) -> typing.AsyncIterator[dict]:
+    ws = ctx["ws"]
+    assert isinstance(ws, WebSocket)
+    yield {"testContext": "OK"}

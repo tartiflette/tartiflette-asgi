@@ -7,6 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Mount
+from starlette.testclient import TestClient
 from tartiflette import Engine
 
 from tartiflette_asgi import TartifletteApp
@@ -62,3 +63,28 @@ async def test_extra_context(engine: Engine, context: typing.Optional[dict]) -> 
     assert response.status_code == 200
     expected_foo = "bar" if context else "default"
     assert response.json() == {"data": {"foo": expected_foo}}
+
+
+def test_subscription_context(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine, subscriptions=True)
+
+    with TestClient(app) as client:
+        with client.websocket_connect("/subscriptions") as ws:
+            ws.send_json({"type": "connection_init"})
+            assert ws.receive_json() == {"type": "connection_ack"}
+
+            ws.send_json(
+                {
+                    "type": "start",
+                    "id": "myquery",
+                    "payload": {"query": "subscription Sub { testContext }"},
+                }
+            )
+
+            assert ws.receive_json() == {
+                "id": "myquery",
+                "type": "data",
+                "payload": {"data": {"testContext": "OK"}},
+            }
+
+            ws.send_json({"type": "connection_terminate"})
