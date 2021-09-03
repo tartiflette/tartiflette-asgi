@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update dependency on Starlette to `0.16.*`. (Pull #154)
-- Refactor internal subscription streams (Pull #156)
 - Update httpx requirement to `0.19.*` (Pull #159)
 
 ## 0.10.0 - 2021-01-19
