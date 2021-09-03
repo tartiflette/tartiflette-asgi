@@ -50,7 +50,9 @@ scripts/serve
 
 To make a new release:
 
-- Bump the version in `__init__.py`.
-- Edit the changelog with the set of changes since the last release.
-- Create a release commit: `$ git commit -m "Release x.y.z"`.
-- Run `$ scripts/publish` to push a new release to PyPI and deploy the docs to GitHub Pages.
+- Create a PR with the following:
+  - Bump the package version by editing `__version__.py`.
+  - Update the changelog with any relevant PRs merged since the last version: bug fixes, new features, changes, deprecations, removals.
+- Merge the PR.
+- Run `$ scripts/build` then `$ scripts/publish` on `master`.
+- Tag the commit and push the tag to the remote.
