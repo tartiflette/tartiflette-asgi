@@ -48,7 +48,7 @@ async def test_post_invalid_json(engine: Engine) -> None:
     app = TartifletteApp(engine=engine)
     async with get_client(app) as client:
         response = await client.post(
-            "/", data="{test", headers={"content-type": "application/json"}
+            "/", content="{test", headers={"content-type": "application/json"}
         )
     assert response.status_code == 400
     assert response.json() == {"error": "Invalid JSON."}
@@ -59,7 +59,7 @@ async def test_post_graphql(engine: Engine) -> None:
     app = TartifletteApp(engine=engine)
     async with get_client(app) as client:
         response = await client.post(
-            "/", data="{ hello }", headers={"content-type": "application/graphql"}
+            "/", content="{ hello }", headers={"content-type": "application/graphql"}
         )
     assert response.status_code == 200
     assert response.json() == {"data": {"hello": "Hello stranger"}}
@@ -70,7 +70,7 @@ async def test_post_invalid_media_type(engine: Engine) -> None:
     app = TartifletteApp(engine=engine)
     async with get_client(app) as client:
         response = await client.post(
-            "/", data="{ hello }", headers={"content-type": "dummy"}
+            "/", content="{ hello }", headers={"content-type": "dummy"}
         )
     assert response.status_code == 415
     assert response.text == "Unsupported Media Type"
