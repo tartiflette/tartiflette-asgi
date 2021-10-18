@@ -24,7 +24,7 @@ Full documentation is available at: https://tartiflette.github.io/tartiflette-as
 
 `tartiflette-asgi` is compatible with:
 
-- Python 3.6, 3.7 or 3.8.
+- Python 3.6+.
 - Tartiflette 1.x.
 
 ## Quickstart
