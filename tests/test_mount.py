@@ -45,7 +45,7 @@ async def test_must_register_startup_handler(engine: Engine) -> None:
 
     async with get_client(app) as client:
         with pytest.raises(RuntimeError) as ctx:
-            await client.get("/graphql")
+            await client.get("/graphql/")
 
     error = str(ctx.value).lower()
     assert "hint" in error
@@ -56,15 +56,15 @@ async def test_must_register_startup_handler(engine: Engine) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("mount_path", ("", "/graphql"))
+@pytest.mark.parametrize("mount_path, url", [("", "/"), ("/graphql", "/graphql/")])
 async def test_graphiql_endpoint_paths_when_mounted(
-    engine: Engine, mount_path: str
+    engine: Engine, mount_path: str, url: str
 ) -> None:
     graphql = TartifletteApp(engine=engine, graphiql=True, subscriptions=True)
     app = Starlette(routes=[Mount(mount_path, graphql)], on_startup=[graphql.startup])
 
     async with get_client(app) as client:
-        response = await client.get(mount_path, headers={"accept": "text/html"})
+        response = await client.get(url, headers={"accept": "text/html"})
 
     assert response.status_code == 200
 
@@ -91,6 +91,6 @@ async def test_tartiflette_app_as_sub_starlette_app(engine: Engine) -> None:
         response = await client.get("/")
         assert response.status_code == 200
         assert response.text == "Hello, world!"
-        response = await client.get("/graphql?query={ hello }")
+        response = await client.get("/graphql/?query={ hello }")
         assert response.status_code == 200
         assert response.json() == {"data": {"hello": "Hello stranger"}}
