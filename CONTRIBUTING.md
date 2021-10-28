@@ -53,6 +53,9 @@ To make a new release:
 - Create a PR with the following:
   - Bump the package version by editing `__version__.py`.
   - Update the changelog with any relevant PRs merged since the last version: bug fixes, new features, changes, deprecations, removals.
-- Merge the PR.
-- Run `$ scripts/build` then `$ scripts/publish` on `master`.
-- Tag the commit and push the tag to the remote.
+- Get the PR reviewed and merged.
+- Once the release PR is reviewed and merged, create a new release on the GitHub UI, including:
+  - Tag version, like `0.11.0`.
+  - Release title, `Version 0.11.0`.
+  - Description copied from the changelog.
+- Once created, the release tag will trigger a 'publish' job on CI, automatically pushing the new version to PyPI.
