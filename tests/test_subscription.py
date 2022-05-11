@@ -49,12 +49,12 @@ def fixture_path(subscriptions: typing.Any) -> str:
 
 
 def _init(ws: WebSocket) -> None:
-    ws.send_json({"type": "connection_init"})
+    ws.send_json({"type": "connection_init"})  # type: ignore
     assert ws.receive_json() == {"type": "connection_ack"}
 
 
 def _terminate(ws: WebSocket) -> None:
-    ws.send_json({"type": "connection_terminate"})
+    ws.send_json({"type": "connection_terminate"})  # type: ignore
 
 
 def test_protocol_connect_disconnect(
