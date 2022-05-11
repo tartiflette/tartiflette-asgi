@@ -16,6 +16,20 @@ async def test_get_querystring(engine: Engine) -> None:
 
 
 @pytest.mark.asyncio
+async def test_get_querystring_variables(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.get(
+            (
+                "/?query=query($name: String) { hello(name: $name) }"
+                '&variables={ "name": "world" }'
+            )
+        )
+    assert response.status_code == 200
+    assert response.json() == {"data": {"hello": "Hello world"}}
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("path", ("/", "/?foo=bar", "/?q={ hello }"))
 async def test_get_no_query(engine: Engine, path: str) -> None:
     app = TartifletteApp(engine=engine)
@@ -23,6 +37,15 @@ async def test_get_no_query(engine: Engine, path: str) -> None:
         response = await client.get(path)
     assert response.status_code == 400
     assert response.text == "No GraphQL query found in the request"
+
+
+@pytest.mark.asyncio
+async def test_get_invalid_json(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.get("/?query={ hello }&variables={test")
+    assert response.status_code == 400
+    assert response.json() == {"error": "Unable to decode variables: Invalid JSON."}
 
 
 @pytest.mark.asyncio
@@ -35,12 +58,52 @@ async def test_post_querystring(engine: Engine) -> None:
 
 
 @pytest.mark.asyncio
+async def test_post_querystring_variables(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.post(
+            (
+                "/?query=query($name: String) { hello(name: $name) }"
+                '&variables={ "name": "world" }'
+            )
+        )
+    assert response.status_code == 200
+    assert response.json() == {"data": {"hello": "Hello world"}}
+
+
+@pytest.mark.asyncio
+async def test_post_querystring_invalid_json(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.post(
+            "/?query=query($name: String) { hello(name: $name) }&variables={test"
+        )
+    assert response.status_code == 400
+    assert response.json() == {"error": "Unable to decode variables: Invalid JSON."}
+
+
+@pytest.mark.asyncio
 async def test_post_json(engine: Engine) -> None:
     app = TartifletteApp(engine=engine)
     async with get_client(app) as client:
         response = await client.post("/", json={"query": "{ hello }"})
     assert response.status_code == 200
     assert response.json() == {"data": {"hello": "Hello stranger"}}
+
+
+@pytest.mark.asyncio
+async def test_post_json_variables(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.post(
+            "/",
+            json={
+                "query": "query($name: String) { hello(name: $name) }",
+                "variables": {"name": "world"},
+            },
+        )
+    assert response.status_code == 200
+    assert response.json() == {"data": {"hello": "Hello world"}}
 
 
 @pytest.mark.asyncio
@@ -63,6 +126,19 @@ async def test_post_graphql(engine: Engine) -> None:
         )
     assert response.status_code == 200
     assert response.json() == {"data": {"hello": "Hello stranger"}}
+
+
+@pytest.mark.asyncio
+async def test_post_graphql_variables(engine: Engine) -> None:
+    app = TartifletteApp(engine=engine)
+    async with get_client(app) as client:
+        response = await client.post(
+            '/?variables={ "name": "world" }',
+            data="query($name: String) { hello(name: $name) }",
+            headers={"content-type": "application/graphql"},
+        )
+    assert response.status_code == 200
+    assert response.json() == {"data": {"hello": "Hello world"}}
 
 
 @pytest.mark.asyncio
