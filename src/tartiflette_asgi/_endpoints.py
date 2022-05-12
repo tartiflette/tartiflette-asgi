@@ -33,16 +33,36 @@ class GraphiQLEndpoint(HTTPEndpoint):
 
 class GraphQLEndpoint(HTTPEndpoint):
     async def get(self, request: Request) -> Response:
-        return await self._get_response(request, data=request.query_params)
+        variables = None
+        if "variables" in request.query_params:
+            try:
+                variables = json.loads(request.query_params["variables"])
+            except json.JSONDecodeError:
+                return JSONResponse(
+                    {"error": "Unable to decode variables: Invalid JSON."}, 400
+                )
+        return await self._get_response(
+            request, data=request.query_params, variables=variables
+        )
 
     async def post(self, request: Request) -> Response:
         content_type = request.headers.get("Content-Type", "")
+
+        variables = None
+        if "variables" in request.query_params:
+            try:
+                variables = json.loads(request.query_params["variables"])
+            except json.JSONDecodeError:
+                return JSONResponse(
+                    {"error": "Unable to decode variables: Invalid JSON."}, 400
+                )
 
         if "application/json" in content_type:
             try:
                 data = await request.json()
             except json.JSONDecodeError:
                 return JSONResponse({"error": "Invalid JSON."}, 400)
+            variables = data.get("variables", variables)
         elif "application/graphql" in content_type:
             body = await request.body()
             data = {"query": body.decode()}
@@ -51,9 +71,11 @@ class GraphQLEndpoint(HTTPEndpoint):
         else:
             return PlainTextResponse("Unsupported Media Type", 415)
 
-        return await self._get_response(request, data=data)
+        return await self._get_response(request, data=data, variables=variables)
 
-    async def _get_response(self, request: Request, data: QueryParams) -> Response:
+    async def _get_response(
+        self, request: Request, data: QueryParams, variables: typing.Optional[dict]
+    ) -> Response:
         try:
             query = data["query"]
         except KeyError:
@@ -67,7 +89,7 @@ class GraphQLEndpoint(HTTPEndpoint):
         result: dict = await engine.execute(
             query,
             context=context,
-            variables=data.get("variables"),
+            variables=variables,
             operation_name=data.get("operationName"),
         )
 
