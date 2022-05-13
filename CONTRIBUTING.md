@@ -51,7 +51,7 @@ scripts/serve
 To make a new release:
 
 - Create a PR with the following:
-  - Bump the package version by editing `__version__.py`.
+  - Bump the package version by editing `__version__` in `__init__.py`.
   - Update the changelog with any relevant PRs merged since the last version: bug fixes, new features, changes, deprecations, removals.
 - Get the PR reviewed and merged.
 - Once the release PR is reviewed and merged, create a new release on the GitHub UI, including:
