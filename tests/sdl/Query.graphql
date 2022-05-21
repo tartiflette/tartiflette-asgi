@@ -13,4 +13,5 @@ type Dog {
 
 type Subscription {
   dogAdded: Dog
+  testContext: String
 }
