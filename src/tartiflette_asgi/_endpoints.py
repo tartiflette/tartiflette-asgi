@@ -93,13 +93,22 @@ class GraphQLEndpoint(HTTPEndpoint):
             operation_name=data.get("operationName"),
         )
 
-        content = {"data": result["data"]}
-        has_errors = "errors" in result
-        if has_errors:
-            content["errors"] = format_errors(result["errors"])
-        status = 400 if has_errors else 200
+        status_code = 200
+        content = dict(data={})
 
-        return JSONResponse(content=content, status_code=status, background=background)
+        if result.get("data"):
+            content["data"] = result["data"]
+
+        result_errors = result.get("errors")
+
+        if result_errors:
+            content["errors"] = format_errors(result_errors)
+            for e in result_errors:
+                if e.get("extensions", {}).get("rule"):
+                    status_code = 400
+                    break
+                    
+        return JSONResponse(content=content, status_code=status_code, background=background)
 
     async def dispatch(self) -> None:
         request = Request(self.scope, self.receive)
